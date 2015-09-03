@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <title>Testes MVC</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/css/font")
+
+</head>
+
+<body class="clearfix">
+
+    <section>
+        <div class="container-fluid">
+            @RenderSection("body", required: true)
+        </div>
+    </section>
+
+    @Scripts.Render("~/Content/Scripts")
+
+    <script>
+        var rootUrl = "@Url.Content("~")";        
+    </script>
+
+    @* <script>
+        $(document).ready(function () { });
+    </script>*@
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

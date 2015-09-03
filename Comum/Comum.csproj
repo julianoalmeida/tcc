@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{31C2D73F-09A3-4BA7-A1D8-888A37882281}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Comum</RootNamespace>
+    <AssemblyName>Comum</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Constantes.cs" />
+    <Compile Include="Contratos\Administrador\IAdministradorBusiness.cs" />
+    <Compile Include="Contratos\Administrador\IAdministradorData.cs" />
+    <Compile Include="Contratos\Cidade\ICidadeBusiness.cs" />
+    <Compile Include="Contratos\Cidade\ICidadeData.cs" />
+    <Compile Include="Contratos\Discentes\IDiscenteBusiness.cs" />
+    <Compile Include="Contratos\Discentes\IDiscenteData.cs" />
+    <Compile Include="Contratos\Disciplina\IDisciplinaBusiness.cs" />
+    <Compile Include="Contratos\Disciplina\IDisciplinaData.cs" />
+    <Compile Include="Contratos\Docente\IDocenteBusiness.cs" />
+    <Compile Include="Contratos\Docente\IDocenteData.cs" />
+    <Compile Include="Contratos\Estado\IEstadoBusiness.cs" />
+    <Compile Include="Contratos\Estado\IEstadoData.cs" />
+    <Compile Include="Contratos\IRepositorio.cs" />
+    <Compile Include="Contratos\Pessoa\IPessoaBusiness.cs" />
+    <Compile Include="Contratos\Pessoa\IPessoaData.cs" />
+    <Compile Include="Contratos\Turmas\ITurmaData.cs" />
+    <Compile Include="Contratos\Turmas\ITurmaBusiness.cs" />
+    <Compile Include="Contratos\Usuario\IUsuarioBusiness.cs" />
+    <Compile Include="Contratos\Usuario\IUsuarioData.cs" />
+    <Compile Include="Excecoes\CampoObrigatorioException.cs" />
+    <Compile Include="Excecoes\CapacidadeVagasUltrapassadaException.cs" />
+    <Compile Include="Excecoes\CpfException.cs" />
+    <Compile Include="Excecoes\DataAtualFuturaException.cs" />
+    <Compile Include="Excecoes\EmailException.cs" />
+    <Compile Include="Excecoes\RegistroDuplicadoException.cs" />
+    <Compile Include="Excecoes\VincularDisciplinaException.cs" />
+    <Compile Include="INegocioBase.cs" />
+    <Compile Include="Mensagens.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Entidades\Entidades.csproj">
+      <Project>{93ff6395-9f0a-4828-a1cd-c9d5189b4a6a}</Project>
+      <Name>Entidades</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SCRIPT_BANCO_DADOS\SCRIPT_TCC_2014.sql" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

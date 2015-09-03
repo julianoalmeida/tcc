@@ -1,0 +1,257 @@
+﻿@using Entidades
+@using Entidades.Enumeracoes
+
+
+@model Discente
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var titulo = Model.Id == 0 ? "Inserir Discente" : "Editar Discente";
+    var cidades = ViewBag.Cidades as List<SelectListItem>;
+    var estados = ViewBag.Estados as List<SelectListItem>;
+
+    var sexo = ViewBag.Sexo as List<SelectListItem>;
+    var estadoCivil = ViewBag.EstadoCivil as List<SelectListItem>;
+    var escolaridades = ViewBag.Escolaridades as List<SelectListItem>;
+}
+
+@section body{
+
+    <div class="TituloPagina">@titulo</div>
+
+    <div id="divErro" class="alert alert-danger hide">
+        <span id="MensagemErro"></span>
+    </div>
+
+    <section class="row-fluid">
+        <div class="span12 fundo">
+            <div class="tab-content">
+                <div class="tab-pane active" id="convidado">
+                    <fieldset>
+                        <div class="alert alert-info camposObrigatorio"><span class="icon-info-sign"></span>Os campos marcados com (*) são de preenchimento obrigatório</div>
+
+                        <form action="#" method="post" id="formDiscente" name="inserir" class="clearfix form-horizontal">
+
+
+                            @Html.HiddenFor(a => a.Id, new { @id = "HiddenIdDiscente" })
+                            @Html.HiddenFor(a => a.Pessoa.Id, new { @id = "HiddenIdPessoa" })
+                            @Html.HiddenFor(a => a.Pessoa.Endereco.Id, new { @id = "HiddenIdEndereco" })
+
+                            @*DADOS PESSOAIS*@
+                            <fieldset>
+
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <fieldset class="interno">
+                                            <legend>Dados Pessoais</legend>
+
+                                            <div class="row-fluid">
+                                                <div class="span6">
+
+                                                    <div class="control-group">
+                                                        <div class="controls span9">
+                                                            <label for="Nome"><span class="camposObrigatorio">*</span> Nome:</label>
+                                                            @Html.TextBoxFor(c => c.Pessoa.Nome, new { @id = "Nome", @class = "span12 required", maxlength = "150", autocomplete = "off" })
+                                                            <span class="text-error hide">Campo obrigatório não informado.</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="control-group">
+                                                        <div class="controls span9">
+                                                            <label for="Email">E-mail:</label>
+                                                            @Html.TextBoxFor(a => a.Pessoa.Email, new { @class = "span12 email", maxlength = "100", name = "email" })
+                                                            <span class="text-error hide">
+                                                                <br>
+                                                                E-mail inválido.
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="control-group">
+                                                        <div class="controls span5">
+                                                            <label for="Sexo"><span class="camposObrigatorio">*</span> Sexo:</label>
+                                                            @Html.DropDownListFor(a => a.Pessoa.Sexo, @sexo, new { @class = "span12 required", @id = "Sexo" })
+                                                            <span class="text-error hide">
+                                                                <br>
+                                                                Campo obrigatório não informado.</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="control-group">
+                                                        <div class="controls span5">
+                                                            <label for="EstadoCivil"><span class="camposObrigatorio">*</span> Estado Civil:</label>
+
+                                                            @Html.DropDownListFor(a => a.Pessoa.EstadoCivil, @estadoCivil, new { @class = "span12 required", @id = "EstadoCivil" })
+                                                            <span class="text-error hide">
+                                                                <br>
+                                                                Campo obrigatório não informado.</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="span6">
+
+                                                    <button id="Preencher" type="submit" class="btn btn-primary">Preenchimento Automatico</button>
+                                                    <br />
+                                                    <br />
+
+                                                    <div class="control-group">
+                                                        <div class="controls span10 input-append custom" data-date-format="dd-mm-yyyy">
+                                                            <label for="DataNascimento">
+                                                                <span class="camposObrigatorio">*</span> Data de Nascimento:<br>
+                                                            </label>
+                                                            @Html.TextBoxFor(a => a.Pessoa.DataNascimento, new { @id = "DataNascimento", @class = "input-small labelDate required-data", maxlength = "10", alt = "data" })
+                                                            <button type="button" class="btn btn-primary"><span class="icon-calendar"></span></button>
+                                                        </div>
+                                                        <span style="float: left" class="text-error hide">Campo obrigatório não informado.</span>
+                                                    </div>
+
+
+                                                    <div class="control-group">
+                                                        <div class="controls span10">
+                                                            <label for="CPF"><span class="camposObrigatorio">*</span> CPF:</label>
+                                                            @Html.TextBoxFor(c => c.Pessoa.Cpf, new { @id = "CPF", @class = "span4 required-data", maxlength = "10", autocomplete = "off", alt = "cpf" })
+                                                        </div>
+                                                        <span style="float: left" class="text-error hide">Campo obrigatório não informado.</span>
+                                                    </div>
+
+                                                    <div class="control-group">
+                                                        <div class="controls span10">
+                                                            <label for="Celular"><span class="camposObrigatorio">*</span> Celular:</label>
+                                                            @Html.TextBoxFor(c => c.Pessoa.Celular, new { @id = "Celular", @class = "span4 required-data", maxlength = "14", autocomplete = "off", alt = "celular" })
+                                                        </div>
+                                                        <span style="float: left" class="text-error hide">Campo obrigatório não informado.</span>
+
+                                                    </div>
+
+                                                    <div class="control-group">
+                                                        <div class="controls span10">
+                                                            <label for="Telefone">Telefone:</label>
+                                                            @Html.TextBoxFor(c => c.Pessoa.Telefone, new { @id = "Telefone", @class = "span4", maxlength = "10", autocomplete = "off", alt = "celular" })
+                                                            <span class="text-error hide">Campo obrigatório não informado.</span>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            @*ACADEMICO*@
+                            <fieldset>
+
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <fieldset class="interno">
+                                            <legend>Acadêmico</legend>
+
+                                            <div class="row-fluid">
+                                                <div class="span6">
+
+                                                    <div class="control-group">
+                                                        <div class="controls span10">
+                                                            <label for="Escolaridade">* Escolaridade :</label>
+                                                            @Html.DropDownListFor(a => a.Escolaridade, @escolaridades, new { @class = "span9 required-data", @id = "Escolaridade" })
+                                                        </div>
+                                                        <span style="float: left" class="text-error hide">Campo obrigatório não informado.</span>
+                                                    </div>
+                                                </div>
+                                                <div class="span6">
+                                                    <div class="control-group">
+                                                        <div class="controls span10">
+                                                            <label for="Matricula">Matricula :</label>
+                                                            @Html.TextBoxFor(a => a.Matricula, new { @class = "span6", @disabled = "disabled" })
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            @*DADOS DE LOCALIZACAO*@
+                            <fieldset>
+
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <fieldset class="interno">
+                                            <legend>Dados de Localização</legend>
+                                            <div class="row-fluid">
+                                                <div class="span6">
+                                                    <div class="control-group">
+                                                        <div class="controls span9">
+                                                            <label for="Estados">Estado:</label>
+                                                            @Html.DropDownListFor(a => a.Pessoa.Endereco.CodigoUf, @estados, new { @class = "span12 required", @id = "Estados" })
+                                                            <span class="text-error hide">Campo obrigatório não informado.</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="control-group">
+                                                        <div class="controls span9">
+                                                            <label for="Logradouro"><span class="camposObrigatorio">*</span> Logradouro:</label>
+                                                            @Html.TextBoxFor(c => c.Pessoa.Endereco.NomeEndereco, new { @id = "Logradouro", @class = "span12 required", maxlength = "150", autocomplete = "off" })
+                                                            <span class="text-error hide">Campo obrigatório não informado.</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="control-group">
+                                                        <div class="controls span9">
+                                                            <label for="Bairro"><span class="camposObrigatorio">*</span> Bairro:</label>
+
+                                                            @Html.TextBoxFor(c => c.Pessoa.Endereco.DescricaoBairro, new { @id = "Bairro", @class = "span12 required", maxlength = "150", autocomplete = "off" })
+                                                            <span class="text-error hide">Campo obrigatório não informado.</span>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="span6">
+
+                                                    <div class="control-group">
+                                                        <div class="controls span9">
+                                                            <label for="Cidades">Cidade:</label>
+                                                            @Html.DropDownListFor(a => a.Pessoa.Endereco.IdCidadeBrasil, @cidades, new { @class = "span12 required", @id = "Cidades" })
+                                                            <span class="text-error hide">Campo obrigatório não informado.</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="control-group">
+                                                        <div class="controls span10">
+                                                            <label for="CEP"><span class="camposObrigatorio">*</span> CEP:</label>
+                                                            @Html.TextBoxFor(c => c.Pessoa.Endereco.Cep, new { @id = "CEP", @class = "span4 required-data", maxlength = "9", autocomplete = "off", alt = "cep" })
+                                                        </div>
+                                                        <span style="float: left" class="text-error hide">Campo obrigatório não informado.</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <div class="text-right">
+                                <button id="btnSalvar" type="submit" class="btn btn-primary" title="Salvar">Salvar</button>
+                                <a id="btnCancelar" class="btn" href="#">Cancelar</a>
+                            </div>
+                        </form>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="backTop"></div>
+}
+
+
+@section scripts {
+    @Scripts.Render("~/Content/Scripts/sistema/Discente/Manter.js")
+}

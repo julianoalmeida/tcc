@@ -1,0 +1,47 @@
+﻿@using Entidades;
+@model  Usuario
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section body{
+    <br />
+    <div class="fundo">
+        <fieldset>
+            <legend title="">
+                <center>Home</center>
+            </legend>
+
+
+            <h2 style="text-align: center">Sistema de Controle Escolar</h2>
+            
+            <center>
+                <h1>
+                    <span class="label label-danger">Test</span>
+                    <span class="label label-success">Driven</span>
+                    <span class="label label-primary">Development</span>
+                </h1>
+            </center>
+            <h1>
+                <center><img id="logoTdd" src="~/Content/Images/background/tdd.png"/></center>
+            </h1>
+            <hr />
+
+
+
+
+
+
+
+        </fieldset>
+    </div>
+
+
+}
+
+@section Scripts{
+    @Scripts.Render("~/Content/Scripts/sistema/Home/Index.js")
+}
+
+

@@ -2,7 +2,7 @@
 $(document).ready(function () {
 
     $("#semCadastro").click(function () {
-        var msg = "Favor entrar em contato com o Administrador do Sistema.";
+        var msg = "Favor entrar em contato com o Administrator do Sistema.";
         ExibirDialogConfirmacao(msg);
     });
 
@@ -40,7 +40,7 @@ function Logar() {
         type: 'post',
         cache: false,
         async: false,
-        data: { login: $("#Login").val(), senha: $("#Senha").val() },
+        data: { login: $("#Login").val(), senha: $("#Password").val() },
         success: function (retorno) {
 
             if (retorno.retorno == 1) {

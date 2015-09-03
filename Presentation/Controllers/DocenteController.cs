@@ -1,13 +1,11 @@
 ﻿using Comum;
-using Comum.Contratos;
-using Comum.Excecoes;
 using Entidades;
 using Entidades.Enumeracoes;
-using Entidades.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Negocio;
 
 namespace Web.Controllers
 {
@@ -15,15 +13,14 @@ namespace Web.Controllers
     {
         #region ATRIBUTOS
 
-        private IPessoaBusiness _servicoPessoa;
-        private IDocenteBusiness _servicoDocente;
-        private IUsuarioBusiness _servicoUsuario;
-        private ICidadeBusiness _servicoCidade;
-        private IEstadoBusiness _servicoEstado;
-        private IDisciplinaBusiness _servicoDisciplina;
-        private const string DISCIPLINA = "Disciplinas";
-
-
+        private readonly IPessoaBusiness _servicoPessoa;
+        private readonly IDocenteBusiness _servicoDocente;
+        private readonly IUsuarioBusiness _servicoUsuario;
+        private readonly ICidadeBusiness _servicoCidade;
+        private readonly IEstadoBusiness _servicoEstado;
+        private readonly IDisciplinaBusiness _servicoDisciplina;
+        private const string DISCIPLINA = "Courses";
+        
         #endregion
 
         #region CONSTRUTOR
@@ -46,31 +43,31 @@ namespace Web.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            return View(Constantes.INDEX);
+            return View(Constants.INDEX);
         }
 
         [HttpGet]
         public ActionResult Manter(int? id)
         {
-            Docente model;
+            Teacher model;
 
             if (id.HasValue)
             {
-                model = _servicoDocente.ObterPorId(id.Value);
+                model = _servicoDocente.GetById(id.Value);
             }
             else
             {
-                model = new Docente { Pessoa = new Pessoa() };
+                model = new Teacher { Person = new Person() };
             }
 
-            var disciplinas = model.Disciplinas;
+            var disciplinas = model.Courses;
 
             TempData[DISCIPLINA] = disciplinas.ToList();
             keepTempData();
 
             CarregarDropDowns(model);
 
-            return View(Constantes.MANTER, model);
+            return View(Constants.MANTER, model);
         }
 
         #endregion
@@ -86,28 +83,28 @@ namespace Web.Controllers
         /// <summary>
         /// Método Responsavel por Popular as DropDownList com os valores cadastrados na base de dados
         /// </summary>
-        /// <param name="model">Docente Atual</param>
-        private void CarregarDropDowns(Docente model)
+        /// <param name="model">Teacher Atual</param>
+        private void CarregarDropDowns(Teacher model)
         {
-            ViewBag.EstadoCivil = ConverteEnumParaListItem<EstadoCivilEnum>(model.Pessoa.EstadoCivil.ToString(), true);
-            ViewBag.Sexo = ConverteEnumParaListItem<SexoEnum>(model.Pessoa.Sexo.ToString(), true);
-            ViewBag.Escolaridades = ConverteEnumParaListItem<EscolaridadeEnum>(model.Escolaridade.ToString(), true);
+            ViewBag.EstadoCivil = ConvertEnumToListItem<MaritalStatusEnum>(model.Person.MaritalState.ToString());
+            ViewBag.Sexo = ConvertEnumToListItem<SexEnum>(model.Person.Sex.ToString());
+            ViewBag.Escolaridades = ConvertEnumToListItem<EducationEnum>(model.Education.ToString());
 
-            var disciplinas = _servicoDisciplina.Listar().ToList();
-            ViewBag.Disciplinas = ConverteListItem(disciplinas, "Descricao", "Id");
+            var disciplinas = _servicoDisciplina.GetAll();
+            ViewBag.Disciplinas = BuildListSelectListItemWith(disciplinas, "Description", "Id");
 
             if (model.Id > 0)
             {
-                var cidades = _servicoCidade.Listar().Where(a => a.Estado.Codigo.Equals(model.Pessoa.Endereco.CodigoUf)).ToList();
-                ViewBag.Cidades = ConverteListItem(cidades, "Nome", "Id", true, model.Pessoa.Endereco.IdCidadeBrasil.ToString());
+                var cidades = _servicoCidade.SelectWithFilter(a => a.State.Code.Equals(model.Person.Address.State)).ToList();
+                ViewBag.Cidades = BuildListSelectListItemWith(cidades, "Name", "Id", model.Person.Address.CityId.ToString());
 
-                var estados = _servicoEstado.Listar().ToList();
-                ViewBag.Estados = ConverteListItem(estados, "Nome", "Codigo", true, model.Pessoa.Endereco.CodigoUf);
+                var estados = _servicoEstado.GetAll().ToList();
+                ViewBag.Estados = BuildListSelectListItemWith(estados, "Name", "Code", model.Person.Address.State);
             }
             else
             {
-                ViewBag.Cidades = ConverteListItem(new List<Cidade>(), "Descricao", "Id");
-                ViewBag.Estados = ConverteListItem(_servicoEstado.Listar().ToList(), "Nome", "Codigo");
+                ViewBag.Cidades = BuildListSelectListItemWith(new List<City>(), "Description", "Id");
+                ViewBag.Estados = BuildListSelectListItemWith(_servicoEstado.GetAll(), "Name", "Code");
             }
 
         }
@@ -118,42 +115,42 @@ namespace Web.Controllers
 
         public JsonResult ListarPaginado(string Nome)
         {
-            var paginaAtual = Convert.ToInt32(Request.Params[Constantes.PAGINA_ATUAL]);
+            var paginaAtual = Convert.ToInt32(Request.Params[Constants.START_PAGE]);
 
-            var docente = new Docente { Pessoa = new Pessoa { Nome = Nome } };
+            var docente = new Teacher { Person = new Person { Name = Nome } };
 
-            var docentes = _servicoDocente.ListarTodos(docente, paginaAtual);
+            var docentes = _servicoDocente.SelectWithPagination(docente, paginaAtual);
 
-            var totalRegistros = _servicoDocente.TotalRegistros(docente);
+            var totalRegistros = _servicoDocente.Total(docente);
 
-            docentes.ForEach(a => a.Disciplinas = null);
+            docentes.ForEach(a => a.Courses = null);
 
-            return RetornaJson(docentes, totalRegistros);
+            return BuildJsonObject(docentes, totalRegistros);
         }
 
         public JsonResult ListarDisciplinas()
         {
-            var disciplinas = TempData[DISCIPLINA] as List<Disciplina> ?? new List<Disciplina>();
+            var disciplinas = TempData[DISCIPLINA] as List<Courses> ?? new List<Courses>();
 
             keepTempData();
 
-            disciplinas.ForEach(a => a.Docentes = null);
+            disciplinas.ForEach(a => a.Teachers = null);
 
-            return RetornaJson(disciplinas, disciplinas.Count);
+            return BuildJsonObject(disciplinas, disciplinas.Count);
         }
 
         public JsonResult AdicionarDisciplina(int idDIsciplina)
         {
-            var disciplina = _servicoDisciplina.ObterPorId(idDIsciplina);
+            var disciplina = _servicoDisciplina.GetById(idDIsciplina);
 
-            var disciplinas = TempData[DISCIPLINA] as List<Disciplina> ?? new List<Disciplina>();
+            var disciplinas = TempData[DISCIPLINA] as List<Courses> ?? new List<Courses>();
 
             var duplicado = disciplinas.Any(a => a.Id == idDIsciplina);
 
             if (!duplicado)
             {
                 disciplinas.Add(disciplina);
-                TempData[DISCIPLINA] = disciplinas.OrderBy(a => a.Descricao).ToList();
+                TempData[DISCIPLINA] = disciplinas.OrderBy(a => a.Description).ToList();
             }
 
             keepTempData();
@@ -163,55 +160,56 @@ namespace Web.Controllers
 
         public JsonResult ListarCidades(string siglaEstado)
         {
-            var retorno = _servicoCidade.Listar().Where(a => a.Estado.Codigo.Equals(siglaEstado)).ToList();
-            retorno.ForEach(a => a.Estado = null);
+            var retorno = _servicoCidade.SelectWithFilter(a => a.State.Code.Equals(siglaEstado)).ToList();
+            retorno.ForEach(a => a.State = null);
             return Json(retorno, JsonRequestBehavior.AllowGet);
         }
 
         [ValidateInput(false)]
-        public JsonResult Salvar(Docente docente)
+        public JsonResult Salvar(Teacher teacher)
         {
             var retorno = 1;
 
-            var login = RecuperarLoginSistema(docente.Pessoa);
-            var mensagem = docente.Id == 0 ? Mensagens.MI001 + login : Mensagens.MI002 + login;
+            var login = GetFormatedUserLoginAndPassword(teacher.Person);
+            var mensagem = teacher.Id == 0 ? Messages.MI001 + login : Messages.MI002 + login;
 
             try
             {
-                var disciplinas = TempData[DISCIPLINA] as List<Disciplina>;
+                var disciplinas = TempData[DISCIPLINA] as List<Courses>;
                 foreach (var item in disciplinas)
                 {
-                    docente.Disciplinas.Add(_servicoDisciplina.ObterPorId(item.Id));
+                    teacher.Courses.Add(_servicoDisciplina.GetById(item.Id));
                 }
 
-                var usuario = _servicoUsuario.Pesquisar(a => a.Pessoa.Id == docente.Pessoa.Id).FirstOrDefault() ?? new Usuario { Pessoa = new Pessoa() };
-                RecuperarUsuario(docente.Pessoa, usuario, (int)PerfilAcessoEnum.Docente);
+                var usuario = _servicoUsuario.SelectWithFilter(a => a.Person.Id == teacher.Person.Id).FirstOrDefault() ?? new User { Person = new Person() };
+                BuildLoggedUser(teacher.Person, usuario, (int)AccessProfileEnum.Docente);
 
-                if (_servicoPessoa.validarPessoa(docente.Pessoa) && _servicoDocente.VerificarPreenchimentoCamposObrigatorios(docente))
+                _servicoPessoa.ValidadePerson(teacher.Person);
+                
+                if (_servicoDocente.IsRequiredFieldsFilled(teacher))
                 {
-                    _servicoDocente.Salvar(docente);
-                    usuario.Pessoa = _servicoPessoa.ObterPorId(docente.Pessoa.Id);
-                    _servicoUsuario.Salvar(usuario);
+                    _servicoDocente.SaveAndReturn(teacher);
+                    usuario.Person = _servicoPessoa.GetById(teacher.Person.Id);
+                    _servicoUsuario.SaveAndReturn(usuario);
                 }
             }
             catch (Exception ex)
             {
-                retorno = RecuperarTipoDeErro(retorno, ex, ref mensagem);
+                retorno = GetErrorType(retorno, ex, ref mensagem);
             }
 
-            return Json(new { retorno = retorno, msg = mensagem, docenteID = docente.Id });
+            return Json(new { retorno, msg = mensagem, docenteID = teacher.Id });
         }
 
         public JsonResult Excluir(int id)
         {
-
             var sucesso = true;
             try
             {
-                var docente = _servicoDocente.ObterPorId(id);
-                var usuario = _servicoUsuario.Pesquisar(a => a.Pessoa.Id == docente.Pessoa.Id).FirstOrDefault();
-                _servicoUsuario.Excluir(usuario.Id);
-                _servicoDocente.Excluir(id);
+                var docente = _servicoDocente.GetById(id);
+                var usuario = _servicoUsuario.SelectWithFilter(a => a.Person.Id == docente.Person.Id).FirstOrDefault();
+                _servicoUsuario.Remove(usuario.Id);
+                _servicoDocente.Remove(id);
             }
             catch
             {
@@ -223,7 +221,7 @@ namespace Web.Controllers
 
         public JsonResult ExcluirDisciplina(int idDisciplina)
         {
-            var disciplinas = TempData[DISCIPLINA] as List<Disciplina> ?? new List<Disciplina>();
+            var disciplinas = TempData[DISCIPLINA] as List<Courses> ?? new List<Courses>();
             disciplinas.RemoveAll(a => a.Id == idDisciplina);
             TempData[DISCIPLINA] = disciplinas;
             keepTempData();

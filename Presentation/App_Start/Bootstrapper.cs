@@ -2,15 +2,13 @@
 using System.Web.Mvc;
 using Autofac;
 using Autofac.Integration.Mvc;
+using AutoFacConfig;
+using AutoFacConfig.Log;
 using log4net;
 using NHibernate;
 using Web.Controllers;
-using ConfiguracaoBackEnd;
-using AutoFacConfig.Log;
-using AutoFacConfig;
 
-
-namespace Web.App_Start
+namespace Web
 {
     public class Bootstrapper
     {

@@ -1,13 +1,9 @@
-﻿using Castle.DynamicProxy;
+﻿using System;
+using Castle.DynamicProxy;
 using log4net;
 using NHibernate;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ConfiguracaoBackEnd.Interceptadores
+namespace AutoFacConfig.Interceptadores
 {
     /// <summary>
     /// Interceptador responsavel por gerenciar a transação do NHibernate durante o escopo do metodo do serviço.

@@ -1884,7 +1884,7 @@
                 var oPrevSearch = oSettings.oPreviousSearch;
                 var aoPrevSearch = oSettings.aoPreSearchCols;
                 var fnSaveFilter = function (oFilter) {
-                    /* Save the filtering values */
+                    /* SaveAndReturn the filtering values */
                     oPrevSearch.sSearch = oFilter.sSearch;
                     oPrevSearch.bRegex = oFilter.bRegex;
                     oPrevSearch.bSmart = oFilter.bSmart;
@@ -3851,7 +3851,7 @@
 
 
             /**
-             * Save the state of a table in a cookie such that the page can be reloaded
+             * SaveAndReturn the state of a table in a cookie such that the page can be reloaded
              *  @param {object} oSettings dataTables settings object
              *  @memberof DataTable#oApi
              */
@@ -8127,7 +8127,7 @@
 
 
             /**
-             * Save the table state. This function allows you to define where and how the state
+             * SaveAndReturn the table state. This function allows you to define where and how the state
              * information for the table is stored - by default it will use a cookie, but you
              * might want to use local storage (HTML5) or a server-side database.
              *  @type function

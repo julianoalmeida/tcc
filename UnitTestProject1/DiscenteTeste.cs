@@ -1,6 +1,5 @@
 ﻿using Comum.Contratos;
 using Comum.Excecoes;
-using Entidades;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Negocio.Servico;

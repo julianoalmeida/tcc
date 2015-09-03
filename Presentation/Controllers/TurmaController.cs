@@ -1,27 +1,20 @@
 ﻿using Comum;
-using Comum.Contratos;
-using Comum.Contratos.Turmas;
 using Entidades;
 using Entidades.Enumeracoes;
 using System;
 using System.Web.Mvc;
 using System.Linq;
-using Comum.Excecoes;
+using Comum.Exceptions;
+using Negocio;
+using NHibernate.Util;
 
 namespace Web.Controllers
 {
     public class TurmaController : BaseController
     {
-        #region Atributos
-
-
-        private ITurmaBusiness _servicoTurma;
-        private IDiscenteBusiness _servicoDiscente;
-        private IDocenteBusiness _servicoDocente;
-
-        #endregion
-
-        #region Construtor
+        private readonly ITurmaBusiness _servicoTurma;
+        private readonly IDiscenteBusiness _servicoDiscente;
+        private readonly IDocenteBusiness _servicoDocente;
 
         public TurmaController(ITurmaBusiness negocio, IDiscenteBusiness discente, IDocenteBusiness docente)
         {
@@ -30,14 +23,10 @@ namespace Web.Controllers
             _servicoDocente = docente;
         }
 
-        #endregion
-
-        #region Action
-
         [HttpGet]
         public ActionResult Index()
         {
-            ViewBag.Turno = ConverteEnumParaListItem<TurnoEnum>(string.Empty, true);
+            ViewBag.Turno = ConvertEnumToListItem<ClassesTimeEnum>(string.Empty);
 
             return View();
         }
@@ -45,103 +34,81 @@ namespace Web.Controllers
         [HttpGet]
         public ActionResult Manter(int? id)
         {
-            var turma = id.HasValue ? _servicoTurma.ObterPorId(id.Value) : new Turma();
+            var turma = id.HasValue ? _servicoTurma.GetById(id.Value) : new Class();
 
-            CarregarDrops(turma);
+            BuildDropDownLists(turma);
 
             return View(turma);
         }
 
-        #endregion
-
-        #region Metodos Auxiliares
-
-        private void RecuperarDiscentesVinculados(Turma model)
+        private void GetSelectedDiscents(Class model)
         {
-            var idDiscentesVinculados = model.IdsSelecionados.Split(',');
-
-            foreach (var idDiscente in idDiscentesVinculados)
-            {
-                model.Discentes.Add(_servicoDiscente.ObterPorId(int.Parse(idDiscente)));
-            }
+            model.SelectedStudentsId.Split(',')
+                .ForEach(idDiscente => model.Students.Add(_servicoDiscente.GetById(int.Parse(idDiscente))));
         }
 
-        private void CarregarDrops(Turma model)
+        private void BuildDropDownLists(Class model)
         {
-            ViewBag.Turno = ConverteEnumParaListItem<TurnoEnum>(model.Turno.ToString(), true);
+            ViewBag.Turno = ConvertEnumToListItem<ClassesTimeEnum>(model.ClassTime.ToString());
 
-            var docentes = _servicoDocente.Listar().ToList();
-            ViewBag.Docentes = ConverteListItem(docentes, "Pessoa.Nome", "Id");
+            var docentes = _servicoDocente.GetAll().ToList();
+            ViewBag.Docentes = BuildListSelectListItemWith(docentes, "Person.Name", "Id");
 
-            var discentesSelecionados = model.Discentes.ToList();
+            var discentesSelecionados = model.Students.ToList();
 
-            var todosDiscentesCadastrados = _servicoDiscente.Listar().ToList();
+            var todosDiscentesCadastrados = _servicoDiscente.GetAll().ToList();
 
-            foreach (var item in discentesSelecionados)
-            {
-                todosDiscentesCadastrados.RemoveAll(a => a.Id == item.Id);
-            }
+            discentesSelecionados
+                .ForEach(
+                    discente =>
+                        todosDiscentesCadastrados.RemoveAll(discenteCadastrado => discente.Id == discenteCadastrado.Id));
 
-            ViewBag.DiscentesNaoSelecionados = ConverteListItem(todosDiscentesCadastrados, "Pessoa.Nome", "Id", false);
+            ViewBag.DiscentesNaoSelecionados = BuildListSelectListItemWith(todosDiscentesCadastrados, "Person.Name", "Id");
 
-            ViewBag.DiscentesSelecionados = ConverteListItem(discentesSelecionados, "Pessoa.Nome", "Id", false);
-
+            ViewBag.DiscentesSelecionados = BuildListSelectListItemWith(discentesSelecionados, "Person.Name", "Id");
         }
-
-        #endregion
-
-        #region Ajax
 
         public JsonResult ListarPaginado(string nome, int? turno)
         {
-            var turma = new Turma { Descricao = nome, Turno = turno.HasValue ? turno.Value : 0 };
+            var turma = new Class { Description = nome, ClassTime = turno.HasValue ? turno.Value : 0 };
 
-            var paginaAtual = Convert.ToInt32(Request.Params[Constantes.PAGINA_ATUAL]);
+            var paginaAtual = Convert.ToInt32(Request.Params[Constants.START_PAGE]);
 
-            var retorno = _servicoTurma.ListarTodos(turma, turno, paginaAtual);
+            var retorno = _servicoTurma.SelectWithPagination(turma, paginaAtual);
 
             foreach (var item in retorno)
             {
-                item.Docente = null;
-                item.Discentes = null;
+                item.Teacher = null;
+                item.Students = null;
             }
 
-            return RetornaJson(retorno, retorno.Count);
+            return BuildJsonObject(retorno, retorno.Count);
         }
 
-        public JsonResult Salvar(Turma model)
+        public JsonResult Salvar(Class model)
         {
-            var retorno = SUCESSO;
-            var msg = model.Id == 0 ? Mensagens.MI001 : Mensagens.MI002;
-
+            var jsonResult = new JsonResult();
             try
             {
-                RecuperarDiscentesVinculados(model);
-                model.Docente = _servicoDocente.ObterPorId(model.Docente.Id);
+                GetSelectedDiscents(model);
+                model.Teacher = _servicoDocente.GetById(model.Teacher.Id);
 
-                retorno = _servicoTurma.ValidarRegrasNegocio(model);
-
-                if (retorno == SUCESSO)
-                {
-                    _servicoTurma.Salvar(model);
-                }
+                _servicoTurma.ValidateTurmaBusinessRules(model);
+                _servicoTurma.SaveAndReturn(model);
             }
             catch (Exception e)
             {
-                if (e.GetType() == typeof(RegistroDuplicadoException))
-                {
-                    retorno = REGISTRO_DUPLICADO;
-                    msg = Mensagens.MI009;
-                }
-                else
-                {
-                    retorno = TOTAL_DISCENTES_MAIOR_QUANTIDADE_VAGAS;
-                    msg = Mensagens.MI008;
-                }
-
+                jsonResult = e.GetType() == typeof(DuplicatedEntityException)
+                    ? BuildJson(REGISTRO_DUPLICADO, Messages.MI009)
+                    : BuildJson(TOTAL_DISCENTES_MAIOR_QUANTIDADE_VAGAS, Messages.MI008);
             }
 
-            return Json(new { sucesso = retorno, msg = msg });
+            return jsonResult;
+        }
+
+        private JsonResult BuildJson(int retorno, string msg)
+        {
+            return Json(new { sucesso = retorno, msg });
         }
 
         public JsonResult Excluir(int id)
@@ -149,11 +116,11 @@ namespace Web.Controllers
             var sucesso = true;
             try
             {
-                var turma = _servicoTurma.ObterPorId(id);
-                turma.Discentes.Clear();
-                _servicoTurma.Salvar(turma);
+                var turma = _servicoTurma.GetById(id);
+                turma.Students.Clear();
+                _servicoTurma.SaveAndReturn(turma);
 
-                _servicoTurma.Excluir(id);
+                _servicoTurma.Remove(id);
             }
             catch
             {
@@ -162,8 +129,5 @@ namespace Web.Controllers
 
             return Json(sucesso);
         }
-
-        #endregion
-
     }
 }

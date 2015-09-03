@@ -1,9 +1,6 @@
 ﻿using Entidades;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Testes.Base
 {
@@ -15,8 +12,7 @@ namespace Testes.Base
         public const int ID = 1;
         public const int ERRO = 0;
         public const int SUCESSO = 1;
-
-
+        
         protected static Pessoa PESSOA_SUCESSO()
         {
             return new Pessoa()
@@ -70,9 +66,9 @@ namespace Testes.Base
 
         protected static List<Disciplina> DISCIPLINAS_SUCESSO()
         {
-            List<Disciplina> retorno = new List<Disciplina>();
+            var retorno = new List<Disciplina>();
 
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
                 var disciplina = new Disciplina();
                 retorno.Add(disciplina);

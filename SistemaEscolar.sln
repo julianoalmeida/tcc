@@ -3,19 +3,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entidades", "Entidades\Entidades.csproj", "{93FF6395-9F0A-4828-A1CD-C9D5189B4A6A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2-Entities", "Entidades\2-Entities.csproj", "{93FF6395-9F0A-4828-A1CD-C9D5189B4A6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{C8EB8023-0F3D-4D4B-96E6-7A40D90268A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "1-Data", "Data\1-Data.csproj", "{C8EB8023-0F3D-4D4B-96E6-7A40D90268A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Negocio", "Business\Negocio.csproj", "{56A3B91D-5AAB-4DA5-8588-931098DC87B4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3-Business", "Business\3-Business.csproj", "{56A3B91D-5AAB-4DA5-8588-931098DC87B4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "Presentation\Web.csproj", "{8458B4D9-EB86-4198-A869-107602E1F9A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Comum", "Comum\Comum.csproj", "{31C2D73F-09A3-4BA7-A1D8-888A37882281}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "1-Common", "Comum\1-Common.csproj", "{31C2D73F-09A3-4BA7-A1D8-888A37882281}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoFacConfig", "ConfiguracaoBackEnd\AutoFacConfig.csproj", "{19AB0088-457E-437E-8326-CA6A89E208A5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "0-IocStartup", "ConfiguracaoBackEnd\0-IocStartup.csproj", "{19AB0088-457E-437E-8326-CA6A89E208A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testes", "UnitTestProject1\Testes.csproj", "{4F8251C5-52EC-46CC-9EEE-071AD6E9A7EF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "0-UnitTests", "UnitTestProject1\0-UnitTests.csproj", "{4F8251C5-52EC-46CC-9EEE-071AD6E9A7EF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6275B587-FB26-41FE-9B0E-34ECEF4B8C07}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "1-AcceptancesTests", "AcceptancesTests\1-AcceptancesTests.csproj", "{CF599BB6-B862-41CF-88F4-95E99DDE7168}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,8 +55,16 @@ Global
 		{4F8251C5-52EC-46CC-9EEE-071AD6E9A7EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F8251C5-52EC-46CC-9EEE-071AD6E9A7EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F8251C5-52EC-46CC-9EEE-071AD6E9A7EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF599BB6-B862-41CF-88F4-95E99DDE7168}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF599BB6-B862-41CF-88F4-95E99DDE7168}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF599BB6-B862-41CF-88F4-95E99DDE7168}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF599BB6-B862-41CF-88F4-95E99DDE7168}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4F8251C5-52EC-46CC-9EEE-071AD6E9A7EF} = {6275B587-FB26-41FE-9B0E-34ECEF4B8C07}
+		{CF599BB6-B862-41CF-88F4-95E99DDE7168} = {6275B587-FB26-41FE-9B0E-34ECEF4B8C07}
 	EndGlobalSection
 EndGlobal

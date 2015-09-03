@@ -36,39 +36,39 @@
 
                             <li id="nano" class="nano">
                                 <div class="content">
-                                    @if (BaseController.RecuperarPerfilLogado() == (int)PerfilAcessoEnum.Administrador)
+                                    @if (BaseController.LoggedUserAccessCode == (int)AccessProfileEnum.Administrador)
                                     {
                                         <figure style="border-left: 5px solid #808080;">
                                             <a href="~/Administrador/Index" class="clearfix">
-                                                <span class="nome">Administrador</span>
+                                                <span class="nome">Administrator</span>
                                                 <span class="desc">Cadastro/Manutenção</span>
                                             </a>
                                         </figure>
                                     }
-                                    @if (BaseController.RecuperarPerfilLogado() == (int)PerfilAcessoEnum.Administrador || BaseController.RecuperarPerfilLogado() == (int)PerfilAcessoEnum.Docente)
+                                    @if (BaseController.LoggedUserAccessCode == (int)AccessProfileEnum.Administrador || BaseController.LoggedUserAccessCode == (int)AccessProfileEnum.Docente)
                                     {
                                         <figure style="border-left: 5px solid #808080;">
                                             <a href="~/Docente/Index" class="clearfix">
-                                                <span class="nome">Docente</span>
+                                                <span class="nome">Teacher</span>
                                                 <span class="desc">Cadastro/Manutenção</span>
                                             </a>
                                         </figure>
                                     }
-                                    @if (BaseController.RecuperarPerfilLogado() == (int)PerfilAcessoEnum.Administrador || BaseController.RecuperarPerfilLogado() == (int)PerfilAcessoEnum.Discente)
+                                    @if (BaseController.LoggedUserAccessCode == (int)AccessProfileEnum.Administrador || BaseController.LoggedUserAccessCode == (int)AccessProfileEnum.Discente)
                                     {
                                         <figure style="border-left: 5px solid #808080;">
                                             <a href="~/Discente/Index" class="clearfix">
-                                                <span class="nome">Discente</span>
+                                                <span class="nome">Student</span>
                                                 <span class="desc">Cadastro/Manutenção</span>
                                             </a>
                                         </figure>
                                     }
-                                    @if (BaseController.RecuperarPerfilLogado() == (int)PerfilAcessoEnum.Administrador)
+                                    @if (BaseController.LoggedUserAccessCode == (int)AccessProfileEnum.Administrador)
                                     {
                                         <figure style="border-left: 5px solid #808080;">
                                             <a href="~/Turma/Index" class="clearfix">
-                                                <span class="nome">Turma</span>
-                                                <span class="desc">Turma</span>
+                                                <span class="nome">Class</span>
+                                                <span class="desc">Class</span>
                                             </a>
                                         </figure>
                                     }
@@ -84,11 +84,11 @@
                             <li class="clearfix">
                                 <img src="~/Content/Images/user/generic.png" class="hidden-phone img-perfil" alt="Imagem do usuário" />
 
-                                <span class="nome">Nome</span>
-                                <span id="nomeLogado" class="desc">@BaseController.RecuperarNomeUsuarioLogado()</span>
+                                <span class="nome">Name</span>
+                                <span id="nomeLogado" class="desc">@BaseController.LoggedUserName</span>
 
                                 <span class="nome">Perfil</span>
-                                <span id="PerfilLogado" class="desc">@BaseController.RecuperaDescrucaoPerfilLogado()</span>
+                                <span id="PerfilLogado" class="desc">@BaseController.LoggedUserName</span>
 
                             </li>
                             <li class="divider"></li>
@@ -112,10 +112,6 @@
     <script>
         var rootUrl = "@Url.Content("~")";        
     </script>
-
-    @* <script>
-        $(document).ready(function () { });
-    </script>*@
 
     @RenderSection("scripts", required: false)
 </body>

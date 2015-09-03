@@ -1,34 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Entidades.Extensions
 {
     public static class ListExtension
     {
-        /// <summary>
-        /// Extensão de IEnumarable<string> para formatar essa lista corretamente com ',' e entre os dois últimos registros com 'e'.
-        /// </summary>
-        /// <param name="camposInvalidos">Lista de campos inválidos.</param>
-        /// <returns>String com os campos formatados.</returns>
-        public static string RecuperarCamposFormatado(this IEnumerable<string> campos)
+        public static string BuildStringFormatedTextFromListWithCollonSplitingElements(this IEnumerable<string> list)
         {
-            campos = campos.Where(a => a != null);
-            if (campos.Count() == 0)
-                return String.Empty;
+            list = list.ToList();
 
-            var mensagemFormatada = campos.First();
+            if (list.ToList().All(a => a == null))
+                return string.Empty;
 
-            if (campos.Count() > 1)
-            {
-                mensagemFormatada = String.Join(", ", campos.ToArray(), 0, campos.Count() - 1);
-                mensagemFormatada += " e ";
-                mensagemFormatada += campos.Last();
-            }
+            var formatedMessage = FormatItensWithcommaExceptTheLasOne(list);
+            return IncreaseEStatementAndAddLastListItem(list, formatedMessage);
+        }
 
-            return mensagemFormatada;
+        private static string IncreaseEStatementAndAddLastListItem(IEnumerable<string> list, string formatedMessage)
+        {
+            var message = formatedMessage + " e ";
+            message += list.Last();
+            return message;
+        }
+
+        private static string FormatItensWithcommaExceptTheLasOne(IEnumerable<string> list)
+        {
+            return string.Join(", ", list.ToArray(), 0, list.Count() - 1);
         }
     }
 }

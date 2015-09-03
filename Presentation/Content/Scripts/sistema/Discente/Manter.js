@@ -12,7 +12,7 @@ Eventos = {
     MontaBinds: function () {
 
         if ($("#HiddenIdDiscente").val() == 0) {
-            $("#Cidades").attr("disabled", "disabled");
+            $("#Cities").attr("disabled", "disabled");
         }
 
         $("#Preencher").bind('click', function (e) {
@@ -24,14 +24,14 @@ Eventos = {
         $('#btnSalvar').bind('click', function (e) {
             e.preventDefault();
 
-            var action = rootUrl + 'Discente/Index';
+            var action = rootUrl + 'Student/Index';
 
             if (validaCampos()) {
 
                 var discente = $("#formDiscente").serialize();
 
                 $.ajax({
-                    url: rootUrl + 'Discente/Salvar',
+                    url: rootUrl + 'Student/SaveAndReturn',
                     dataType: 'json',
                     type: 'post',
                     cache: false,
@@ -57,7 +57,7 @@ Eventos = {
             e.preventDefault();
             var codigo = $(this).attr('alt');
             $.ajax({
-                url: rootUrl + 'Discente/ExcluirDisciplina',
+                url: rootUrl + 'Student/ExcluirDisciplina',
                 dataType: 'json',
                 type: 'post',
                 cache: false,
@@ -69,14 +69,14 @@ Eventos = {
             });
         });
 
-        $('#Estados').bind('change', function (e) {
+        $('#States').bind('change', function (e) {
             e.preventDefault();
             Eventos.CarregaComboCidades();
             return false;
         });
 
         $("#btnCancelar").bind('click', function (e) {
-            window.location.href = rootUrl + "Discente/Index";
+            window.location.href = rootUrl + "Student/Index";
             return false;
         });
 
@@ -85,12 +85,12 @@ Eventos = {
     CarregaComboCidades: function () {
 
         $.ajax({
-            url: rootUrl + 'Discente/ListarCidades',
+            url: rootUrl + 'Student/ListarCidades',
             dataType: 'json',
             type: 'post',
             cache: false,
             async: false,
-            data: { siglaEstado: $("#Estados").val() },
+            data: { siglaEstado: $("#States").val() },
             success: function (objeto) {
 
                 var html = '';
@@ -100,13 +100,13 @@ Eventos = {
                 });
 
                 if (objeto != '') {
-                    $('#Cidades').html(html);
-                    $('#Cidades').removeAttr('disabled');
+                    $('#Cities').html(html);
+                    $('#Cities').removeAttr('disabled');
                 }
                 else {
-                    $('#Cidades').attr('disabled', 'disabled');
+                    $('#Cities').attr('disabled', 'disabled');
                     html = "<option value = ''>Selecione</option>"
-                    $('#Cidades').html(html);
+                    $('#Cities').html(html);
                 }
             },
             erro: function () {
@@ -119,26 +119,26 @@ Eventos = {
 
 function preencherCamposTemp() {
 
-    $("#Nome").val("Nome");
-    $('#DataNascimento').val('29/04/2014');
+    $("#Name").val("Name");
+    $('#BirthDate').val('29/04/2014');
     $("#Pessoa_Email").val('teste@teste.com.br');
     $("#CPF").val(gerarCPF());
-    $("#Sexo").val('1');
-    $("#EstadoCivil").val('1');
-    $("#Celular").val('16982320455').blur();
-    $("#Telefone").val('1698232045').blur();
-    $('#Estados').val('AC');
+    $("#Sex").val('1');
+    $("#MaritalState").val('1');
+    $("#MobileNumber").val('16982320455').blur();
+    $("#PhoneNumber").val('1698232045').blur();
+    $('#States').val('AC');
     Eventos.CarregaComboCidades();
     $("#Escolaridades").val('1');
-    $('#Cidades').val('10');
-    //$('#Cidades').val('120020');
+    $('#Cities').val('10');
+    //$('#Cities').val('120020');
     $("#Logradouro").val('Rua Teste');
     $("#Numero").val('54 - A');
     $("#Bairro").val("Bairro Teste");
     $("#CEP").val('14820-000');
-    $("#HiddenSexo").val($("#Sexo").val());
-    $("#HiddenEstadoCivil").val($("#EstadoCivil").val());
-    $("#HiddenCidade").val($("#Cidades").val());
-    $("#HiddenEstado").val($("#Estados").val());
+    $("#HiddenSexo").val($("#Sex").val());
+    $("#HiddenEstadoCivil").val($("#MaritalState").val());
+    $("#HiddenCidade").val($("#Cities").val());
+    $("#HiddenEstado").val($("#States").val());
     $("#HiddenEscolaridade").val($("#Escolaridades").val());
 }

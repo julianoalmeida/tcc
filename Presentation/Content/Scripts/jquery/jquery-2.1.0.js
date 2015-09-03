@@ -7991,7 +7991,7 @@ jQuery.extend({
 		// Determine if request has content
 		s.hasContent = !rnoContent.test( s.type );
 
-		// Save the URL in case we're toying with the If-Modified-Since
+		// SaveAndReturn the URL in case we're toying with the If-Modified-Since
 		// and/or If-None-Match header later on
 		cacheURL = s.url;
 
@@ -8688,7 +8688,7 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 			// Restore preexisting value
 			window[ callbackName ] = overwritten;
 
-			// Save back as free
+			// SaveAndReturn back as free
 			if ( s[ callbackName ] ) {
 				// make sure that re-using the options doesn't screw things around
 				s.jsonpCallback = originalSettings.jsonpCallback;
@@ -8787,7 +8787,7 @@ jQuery.fn.load = function( url, params, callback ) {
 			data: params
 		}).done(function( responseText ) {
 
-			// Save response for use in complete callback
+			// SaveAndReturn response for use in complete callback
 			response = arguments;
 
 			self.html( selector ?

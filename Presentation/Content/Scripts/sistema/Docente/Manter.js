@@ -14,7 +14,7 @@ Eventos = {
     MontaBinds: function () {
 
         if ($("#HiddenIdDocente").val() == 0) {
-            $("#Cidades").attr("disabled", "disabled");
+            $("#Cities").attr("disabled", "disabled");
         }
 
         $("#Preencher").bind('click', function (e) {
@@ -27,7 +27,7 @@ Eventos = {
             e.preventDefault();
 
             var totalRegistros = $("#tbDisciplinas").dataTable().fnGetData().length;
-            var action = rootUrl + 'Docente/Index';
+            var action = rootUrl + 'Teacher/Index';
             if (totalRegistros == 0) {
                 ExibirDialogConfirmacao();
                 return false;
@@ -37,7 +37,7 @@ Eventos = {
 
                     var docente = $("#formDocente").serialize();
                     $.ajax({
-                        url: rootUrl + 'Docente/Salvar',
+                        url: rootUrl + 'Teacher/SaveAndReturn',
                         dataType: 'json',
                         type: 'post',
                         cache: false,
@@ -70,7 +70,7 @@ Eventos = {
             e.preventDefault();
             var codigo = $(this).attr('alt');
             $.ajax({
-                url: rootUrl + 'Docente/ExcluirDisciplina',
+                url: rootUrl + 'Teacher/ExcluirDisciplina',
                 dataType: 'json',
                 type: 'post',
                 cache: false,
@@ -82,7 +82,7 @@ Eventos = {
             });
         });
 
-        $('#Estados').bind('change', function (e) {
+        $('#States').bind('change', function (e) {
             e.preventDefault();
             $("#HiddenEstado").val($(this).val());
             CarregaComboCidades();
@@ -90,7 +90,7 @@ Eventos = {
         });
 
         $("#btnCancelar").bind('click', function (e) {
-            window.location.href = rootUrl + "Docente/Index";
+            window.location.href = rootUrl + "Teacher/Index";
             return false;
         });
     },
@@ -98,9 +98,9 @@ Eventos = {
 
 function AdicionarDisciplina() {
 
-    var disciplina = $("#Disciplinas").val();
+    var disciplina = $("#Courses").val();
     $.ajax({
-        url: rootUrl + 'Docente/AdicionarDisciplina',
+        url: rootUrl + 'Teacher/AdicionarDisciplina',
         dataType: 'json',
         type: 'post',
         cache: false,
@@ -113,7 +113,7 @@ function AdicionarDisciplina() {
             }
             else {
                 $("#divErro").show();
-                $("#MensagemErro").html("Disciplina já adicionada");
+                $("#MensagemErro").html("Courses já adicionada");
                 SobeScroll();
             }
         },
@@ -123,12 +123,12 @@ function AdicionarDisciplina() {
 function MontaTablePaginada() {
 
     var config = {
-        "sAjaxSource": rootUrl + 'Docente/ListarDisciplinas',
+        "sAjaxSource": rootUrl + 'Teacher/ListarDisciplinas',
         "aSync": false,
         "aoColumns": [
                 {
-                    'mData': 'Descricao',
-                    'sTitle': 'Disciplina',
+                    'mData': 'Description',
+                    'sTitle': 'Courses',
                     'sWidth': '80%',
                     'sClass': 'quebra-linha',
                     'bSortable': false,
@@ -145,7 +145,7 @@ function MontaTablePaginada() {
                     'bSortable': false,
                     'mRender': function (data, type, val) {
                         var html = "<div>"
-                                      + "<a data-toggle='tooltip' id='btnExcluir_' title='Excluir' alt='" + val.Id + "'  ><span class='icon-remove'></span></a>"
+                                      + "<a data-toggle='tooltip' id='btnExcluir_' title='Remove' alt='" + val.Id + "'  ><span class='icon-remove'></span></a>"
                                   + "</div>";
                         return html;
                     }
@@ -164,12 +164,12 @@ function MontaTablePaginada() {
 function CarregaComboCidades() {
 
     $.ajax({
-        url: rootUrl + 'Docente/ListarCidades',
+        url: rootUrl + 'Teacher/ListarCidades',
         dataType: 'json',
         type: 'post',
         cache: false,
         async: false,
-        data: { siglaEstado: $("#Estados").val() },
+        data: { siglaEstado: $("#States").val() },
         success: function (objeto) {
 
             var html = '';
@@ -179,13 +179,13 @@ function CarregaComboCidades() {
             });
 
             if (objeto != '') {
-                $('#Cidades').html(html);
-                $('#Cidades').removeAttr('disabled');
+                $('#Cities').html(html);
+                $('#Cities').removeAttr('disabled');
             }
             else {
-                $('#Cidades').attr('disabled', 'disabled');
+                $('#Cities').attr('disabled', 'disabled');
                 html = "<option value = ''>Selecione</option>"
-                $('#Cidades').html(html);
+                $('#Cities').html(html);
             }
         },
         erro: function () {
@@ -196,34 +196,34 @@ function CarregaComboCidades() {
 
 function preencherCamposTemp() {
 
-    $("#Nome").val("Nome");
-    $('#DataNascimento').val('29/04/2014');
+    $("#Name").val("Name");
+    $('#BirthDate').val('29/04/2014');
     $("#Pessoa_Email").val('teste@teste.com.br');
     $("#CPF").val(gerarCPF());
-    $("#Sexo").val('1');
-    $("#EstadoCivil").val('1');
-    $("#Celular").val('16982320455').blur();
-    $("#Telefone").val('1698232045').blur();
-    $('#Estados').val('AC');
+    $("#Sex").val('1');
+    $("#MaritalState").val('1');
+    $("#MobileNumber").val('16982320455').blur();
+    $("#PhoneNumber").val('1698232045').blur();
+    $('#States').val('AC');
     CarregaComboCidades();
     $("#Escolaridades").val('1');
-    $('#Cidades').val('10');
-    //$('#Cidades').val('120020');
+    $('#Cities').val('10');
+    //$('#Cities').val('120020');
     $("#Logradouro").val('Rua Teste');
     $("#Numero").val('54 - A');
     $("#Bairro").val("Bairro Teste");
     $("#CEP").val('14820-000');
-    $("#HiddenSexo").val($("#Sexo").val());
-    $("#HiddenEstadoCivil").val($("#EstadoCivil").val());
-    $("#HiddenCidade").val($("#Cidades").val());
-    $("#HiddenEstado").val($("#Estados").val());
+    $("#HiddenSexo").val($("#Sex").val());
+    $("#HiddenEstadoCivil").val($("#MaritalState").val());
+    $("#HiddenCidade").val($("#Cities").val());
+    $("#HiddenEstado").val($("#States").val());
     $("#HiddenEscolaridade").val($("#Escolaridades").val());
 }
 
 function ExibirDialogConfirmacao() {
 
     bootbox.dialog({
-        message: '<div class="text-warning">Para cadastrar um docente é necessário vincular ao menos uma disciplina.</div>',
+        message: '<div class="text-warning">Para cadastrar um Teacher é necessário vincular ao menos uma disciplina.</div>',
         title: '<h2 class="text-warning"><span class="icon-exclamation-sign"></span> Aviso</h2>',
         buttons: {
             main: {

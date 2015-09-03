@@ -1,13 +1,12 @@
 ﻿using Comum;
-using Entidades;
 using System.Web.Mvc;
+using Negocio;
 
 namespace Web.Controllers
 {
     public class LoginController : Controller
     {
         private readonly IUsuarioBusiness _usuario;
-
         public LoginController(IUsuarioBusiness usuario)
         {
             _usuario = usuario;
@@ -22,26 +21,22 @@ namespace Web.Controllers
         [ValidateInput(false)]
         public JsonResult Logar(string login, string senha)
         {
-            var retorno = 1;
-            Usuario usuario = _usuario.RecuperarUsuarioLogado(login, senha);
-            if (usuario != null)
-            {
-                TempData[Constantes.USUARIO_LOGADO] = usuario;
-            }
-            else
-            {
-                retorno = 2;
-            }
+            var result = 1;
+            var usuario = _usuario.GetLoggedUser(login, senha);
 
-            TempData.Keep(Constantes.USUARIO_LOGADO);
-            return Json(new { retorno = retorno });
+            if (usuario != null)
+                TempData[Constants.LOGGED_USER] = usuario;
+            else
+                result = 2;
+
+            TempData.Keep(Constants.LOGGED_USER);
+            return Json(new { retorno = result });
         }
 
         public ActionResult Sair()
         {
-            TempData[Constantes.USUARIO_LOGADO] = null;
+            TempData[Constants.LOGGED_USER] = null;
             return RedirectToAction("Index", "Login");
         }
-      
     }
 }

@@ -1,12 +1,11 @@
 ﻿using Comum;
-using Comum.Contratos;
-using Comum.Excecoes;
 using Entidades;
 using Entidades.Enumeracoes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Negocio;
 
 namespace Web.Controllers
 {
@@ -41,22 +40,22 @@ namespace Web.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            return View(Constantes.INDEX);
+            return View(Constants.INDEX);
         }
 
         [HttpGet]
         public ActionResult Manter(int? id)
         {
-            var model = new Discente();
+            var model = new Student();
 
             if (id.HasValue)
             {
-                model = _servicoDiscente.ObterPorId(id.Value);
+                model = _servicoDiscente.GetById(id.Value);
             }
 
             CarregarDropDowns(model);
 
-            return View(Constantes.MANTER, model);
+            return View(Constants.MANTER, model);
         }
 
         #endregion
@@ -66,30 +65,29 @@ namespace Web.Controllers
         /// <summary>
         /// Método Responsavel por Popular as DropDownList com os valores cadastrados na base de dados
         /// </summary>
-        /// <param name="model">Docente Atual</param>
-        private void CarregarDropDowns(Discente model)
+        /// <param name="model">Teacher Atual</param>
+        private void CarregarDropDowns(Student model)
         {
             if (model.Id > 0)
             {
-                ViewBag.EstadoCivil = ConverteEnumParaListItem<EstadoCivilEnum>(model.Pessoa.EstadoCivil.ToString(), true);
-                ViewBag.Sexo = ConverteEnumParaListItem<SexoEnum>(model.Pessoa.Sexo.ToString(), true);
+                ViewBag.EstadoCivil = ConvertEnumToListItem<MaritalStatusEnum>(model.Person.MaritalState.ToString());
+                ViewBag.Sexo = ConvertEnumToListItem<SexEnum>(model.Person.Sex.ToString());
+                
+                var cidades = _servicoCidade.SelectWithFilter(a => a.State.Code.Equals(model.Person.Address.State)).ToList();
+                ViewBag.Cidades = BuildListSelectListItemWith(cidades, "Name", "Id", model.Person.Address.CityId.ToString());
 
+                var estados = _servicoEstado.GetAll().ToList();
+                ViewBag.Estados = BuildListSelectListItemWith(estados, "Name", "Code", model.Person.Address.State);
 
-                var cidades = _servicoCidade.Listar().Where(a => a.Estado.Codigo.Equals(model.Pessoa.Endereco.CodigoUf)).ToList();
-                ViewBag.Cidades = ConverteListItem(cidades, "Nome", "Id", true, model.Pessoa.Endereco.IdCidadeBrasil.ToString());
-
-                var estados = _servicoEstado.Listar().ToList();
-                ViewBag.Estados = ConverteListItem(estados, "Nome", "Codigo", true, model.Pessoa.Endereco.CodigoUf);
-
-                ViewBag.Escolaridades = ConverteEnumParaListItem<EscolaridadeEnum>(model.Escolaridade.ToString(), true);
+                ViewBag.Escolaridades = ConvertEnumToListItem<EducationEnum>(model.Education.ToString());
             }
             else
             {
-                ViewBag.EstadoCivil = ConverteEnumParaListItem<EstadoCivilEnum>(string.Empty, true);
-                ViewBag.Sexo = ConverteEnumParaListItem<SexoEnum>(string.Empty, true);
-                ViewBag.Cidades = ConverteListItem(new List<Cidade>(), "Descricao", "Id");
-                ViewBag.Estados = ConverteListItem(_servicoEstado.Listar().ToList(), "Nome", "Codigo");
-                ViewBag.Escolaridades = ConverteEnumParaListItem<EscolaridadeEnum>(model.Escolaridade.ToString(), true);
+                ViewBag.EstadoCivil = ConvertEnumToListItem<MaritalStatusEnum>(string.Empty);
+                ViewBag.Sexo = ConvertEnumToListItem<SexEnum>(string.Empty);
+                ViewBag.Cidades = BuildListSelectListItemWith(new List<City>(), "Description", "Id");
+                ViewBag.Estados = BuildListSelectListItemWith(_servicoEstado.GetAll().ToList(), "Name", "Code");
+                ViewBag.Escolaridades = ConvertEnumToListItem<EducationEnum>(model.Education.ToString());
             }
         }
 
@@ -99,52 +97,54 @@ namespace Web.Controllers
 
         public JsonResult ListarPaginado(string Nome)
         {
-            var paginaAtual = Convert.ToInt32(Request.Params[Constantes.PAGINA_ATUAL]);
+            var paginaAtual = Convert.ToInt32(Request.Params[Constants.START_PAGE]);
 
-            var discente = new Discente { Pessoa = new Pessoa { Nome = Nome } };
+            var discente = new Student { Person = new Person { Name = Nome } };
 
-            var discentes = _servicoDiscente.ListarTodos(discente, paginaAtual);
+            var discentes = _servicoDiscente.SelectWithPagination(discente, paginaAtual);
 
-            var totalRegistros = _servicoDiscente.TotalRegistros(discente);
+            var totalRegistros = _servicoDiscente.Total(discente);
 
-            discentes.ForEach(a => a.Turmas = null);
-            return RetornaJson(discentes, totalRegistros);
+            discentes.ForEach(a => a.Classes = null);
+            return BuildJsonObject(discentes, totalRegistros);
         }
 
         public JsonResult ListarCidades(string siglaEstado)
         {
-            var retorno = _servicoCidade.Listar().Where(a => a.Estado.Codigo.Equals(siglaEstado)).ToList();
-            retorno.ForEach(a => a.Estado = null);
+            var retorno = _servicoCidade.SelectWithFilter(a => a.State.Code.Equals(siglaEstado)).ToList();
+            retorno.ForEach(a => a.State = null);
             return Json(retorno, JsonRequestBehavior.AllowGet);
         }
 
         [ValidateInput(false)]
-        public JsonResult Salvar(Discente discente)
+        public JsonResult Salvar(Student student)
         {
             var retorno = SUCESSO;
 
-            var login = RecuperarLoginSistema(discente.Pessoa);
-            var mensagem = discente.Id == 0 ? Mensagens.MI001 + login : Mensagens.MI002 + login;
+            var login = GetFormatedUserLoginAndPassword(student.Person);
+            var mensagem = student.Id == 0 ? Messages.MI001 + login : Messages.MI002 + login;
 
             try
             {
-                var usuario = _servicoUsuario.Pesquisar(a => a.Pessoa.Id == discente.Pessoa.Id).FirstOrDefault() ?? new Usuario { Pessoa = new Pessoa() };
-                RecuperarUsuario(discente.Pessoa, usuario, (int)PerfilAcessoEnum.Discente);
+                var usuario = _servicoUsuario.SelectWithFilter(a => a.Person.Id == student.Person.Id).FirstOrDefault() ?? new User { Person = new Person() };
+                BuildLoggedUser(student.Person, usuario, (int)AccessProfileEnum.Discente);
 
-                if (_servicoPessoa.validarPessoa(discente.Pessoa) && _servicoDiscente.VerificarPreenchimentoEscolaridade(discente))
+                _servicoPessoa.ValidadePerson(student.Person);
+
+                if (_servicoDiscente.IsEscolaridadeFilled(student))
                 {
-                    discente.Matricula = _servicoDiscente.GerarNumeroMatricula(discente);
-                    _servicoDiscente.Salvar(discente);
-                    usuario.Pessoa = _servicoPessoa.ObterPorId(discente.Pessoa.Id);
-                    _servicoUsuario.Salvar(usuario);
+                    student.RegistrationNumber = _servicoDiscente.BuildRegistrationNumber(student);
+                    _servicoDiscente.SaveAndReturn(student);
+                    usuario.Person = _servicoPessoa.GetById(student.Person.Id);
+                    _servicoUsuario.SaveAndReturn(usuario);
                 }
             }
             catch (Exception ex)
             {
-                retorno = RecuperarTipoDeErro(retorno, ex, ref mensagem);
+                retorno = GetErrorType(retorno, ex, ref mensagem);
             }
 
-            return Json(new { retorno = retorno, msg = mensagem, discenteID = discente.Id });
+            return Json(new {retorno, msg = mensagem, discenteID = student.Id });
         }
 
         public JsonResult Excluir(int id)
@@ -153,10 +153,10 @@ namespace Web.Controllers
             var sucesso = true;
             try
             {
-                var discente = _servicoDiscente.ObterPorId(id);
-                var usuario = _servicoUsuario.Pesquisar(a => a.Pessoa.Id == discente.Pessoa.Id).FirstOrDefault();
-                _servicoUsuario.Excluir(usuario.Id);
-                _servicoDiscente.Excluir(id);
+                var discente = _servicoDiscente.GetById(id);
+                var usuario = _servicoUsuario.SelectWithFilter(a => a.Person.Id == discente.Person.Id).FirstOrDefault();
+                _servicoUsuario.Remove(usuario.Id);
+                _servicoDiscente.Remove(id);
             }
             catch
             {

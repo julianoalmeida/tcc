@@ -22,9 +22,8 @@ namespace Testes
             ADMINISTRADOR_SUCESSO.Pessoa.Nome = string.Empty;
 
             if (pessoaNegocio.validarPessoa(ADMINISTRADOR_SUCESSO.Pessoa))
-            {
-                pessoaNegocio.Salvar(ADMINISTRADOR_SUCESSO.Pessoa);
-            }
+                pessoaNegocio.SaveAndReturn(ADMINISTRADOR_SUCESSO.Pessoa);
+            
         }
 
         [TestMethod]
@@ -33,10 +32,10 @@ namespace Testes
         {
             var pessoaNegocio = configuradorPessoaBusiness();
             ADMINISTRADOR_SUCESSO.Pessoa.DataNascimento = DateTime.Now;
+
             if (pessoaNegocio.validarPessoa(ADMINISTRADOR_SUCESSO.Pessoa))
-            {
-                pessoaNegocio.Salvar(ADMINISTRADOR_SUCESSO.Pessoa);
-            }
+                pessoaNegocio.SaveAndReturn(ADMINISTRADOR_SUCESSO.Pessoa);
+            
         }
 
         [TestMethod]
@@ -45,10 +44,10 @@ namespace Testes
         {
             var pessoaNegocio = configuradorPessoaBusiness();
             ADMINISTRADOR_SUCESSO.Pessoa.Cpf = "11111111111";
+
             if (pessoaNegocio.validarPessoa(ADMINISTRADOR_SUCESSO.Pessoa))
-            {
-                pessoaNegocio.Salvar(ADMINISTRADOR_SUCESSO.Pessoa);
-            }
+                pessoaNegocio.SaveAndReturn(ADMINISTRADOR_SUCESSO.Pessoa);
+            
         }
 
         [TestMethod]

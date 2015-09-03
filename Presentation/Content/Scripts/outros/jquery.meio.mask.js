@@ -1,4 +1,4 @@
-/**
+﻿/**
  * jquery.meio.mask.js
  * @author: fabiomcosta
  * @version: 1.1.13
@@ -160,7 +160,7 @@
                 },
                 'cpf': {
                     mask: '999.999.999-99'
-                }, // cadastro nacional de pessoa fisica (kind of a brazillian ssn)
+                }, // cadastro nacional de person fisica (kind of a brazillian ssn)
                 'cnpj': {
                     mask: '99.999.999/9999-99'
                 },

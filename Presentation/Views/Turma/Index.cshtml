@@ -4,7 +4,7 @@
 
 @section body{
 
-    <div class="TituloPagina">Listar Turmas</div>
+    <div class="TituloPagina">SelectWithFilter Classs</div>
 
     <section class="row-fluid">
         <div class="span12 fundo">
@@ -15,23 +15,23 @@
                         <div class="span6">
                             <div class="control-group row-fluid">
                                 <div class="controls no_margin">
-                                    <label for="Nome">Nome:</label>
-                                    <input type="text" class="span10" name="Nome" id="Nome" maxlength="70" /><br>
+                                    <label for="Nome">Name:</label>
+                                    <input type="text" class="span10" name="Name" id="Nome" maxlength="70" /><br>
                                 </div>
                             </div>
                         </div>
                         <div class="span6">
                             <div class="control-group row-fluid">
                                 <div class="controls no_margin">
-                                    <label for="Turno">Turno:</label>
-                                    @Html.DropDownList("Turno")
+                                    <label for="ClassTime">ClassTime:</label>
+                                    @Html.DropDownList("ClassTime")
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row-fluid">
                         <div class="span12 text-right">
-                            <button id="btnPesquisar" type="submit" class="btn btn-primary" title="Procurar"><span class="icon-search"></span>&nbsp;&nbsp;Pesquisar</button>
+                            <button id="btnPesquisar" type="submit" class="btn btn-primary" title="SelectWithFilter"><span class="icon-search"></span>&nbsp;&nbsp;Pesquisar</button>
                             <a class="btn btn-success" id="btnIncluir" href="#"><span class="icon-plus-sign"></span>&nbsp;&nbsp;Incluir</a>
                         </div>
                     </div>
@@ -54,5 +54,5 @@
 
 
 @section Scripts{
-    @Scripts.Render("~/Content/Scripts/sistema/Turma/Index.js")
+    @Scripts.Render("~/Content/Scripts/sistema/Class/Index.js")
 }

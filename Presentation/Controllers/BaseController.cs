@@ -1,5 +1,4 @@
 ﻿using Comum;
-using Comum.Excecoes;
 using Entidades;
 using Entidades.Enumeracoes;
 using Entidades.Extensions;
@@ -7,13 +6,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Comum.Exceptions;
 
 namespace Web.Controllers
 {
     public class BaseController : Controller
     {
-        public static int perfilLogado { get; set; }
-        public static string NomeLogado { get; set; }
+        public static int LoggedUserProfileAccessCode { get; set; }
+        public static string LoggerUserProfileName { get; set; }
 
         public const int ERRO = 0;
         public const int SUCESSO = 1;
@@ -24,191 +24,160 @@ namespace Web.Controllers
         public const int EMAIL_INVALIDO = 6;
         public const int DATA_ATUAL_FUTURA = 7;
 
-
         public ActionResult Index()
         {
-            var usuarioLogado = TempData[Constantes.USUARIO_LOGADO] as Usuario;
+            var loggedUser = TempData[Constants.LOGGED_USER] as User;
 
-            perfilLogado = usuarioLogado.PerfilAcesso;
-            NomeLogado = usuarioLogado.Nome;
-            TempData.Keep(Constantes.USUARIO_LOGADO);
+            LoggedUserProfileAccessCode = loggedUser.AccessCode;
+            LoggerUserProfileName = loggedUser.Name;
+            TempData.Keep(Constants.LOGGED_USER);
 
             return RedirectToAction("Index", "Home");
         }
 
-        protected int RecuperarTipoDeErro(int retorno, Exception ex,ref  string msg)
+        protected int GetErrorType(int errorCode, Exception ex, ref string msg)
         {
-            if (ex.GetType() == typeof(DataAtualFuturaException))
+            if (ex.GetType() == typeof(FutureDateException))
             {
-                retorno = DATA_ATUAL_FUTURA;
-                msg = Mensagens.MI003;
+                errorCode = DATA_ATUAL_FUTURA;
+                msg = Messages.MI003;
             }
-            else if (ex.GetType() == typeof(RegistroDuplicadoException))
+            else if (ex.GetType() == typeof(DuplicatedEntityException))
             {
-                retorno = REGISTRO_DUPLICADO;
-                msg = Mensagens.MI009;
+                errorCode = REGISTRO_DUPLICADO;
+                msg = Messages.MI009;
             }
             else if (ex.GetType() == typeof(CpfException))
             {
-                retorno = CPF_INVALIDO;
-                msg = Mensagens.MI004;
+                errorCode = CPF_INVALIDO;
+                msg = Messages.MI004;
 
             }
             else if (ex.GetType() == typeof(EmailException))
             {
-                retorno = EMAIL_INVALIDO;
-                msg = Mensagens.MI006;
+                errorCode = EMAIL_INVALIDO;
+                msg = Messages.MI006;
             }
-            return retorno;
+            return errorCode;
         }
 
-        #region LOGIN
-
-        protected void RecuperarUsuario(Pessoa pessoa, Usuario usuario, int perfilAcesso)
+        protected void BuildLoggedUser(Person person, User user, int accessCode)
         {
-            usuario.Login = DefinirLoginUsuario(pessoa);
-            usuario.Senha = DefinirSenhaUsuario(pessoa);
-            usuario.PerfilAcesso = perfilAcesso;
+            user.Login = BuildLoggedUserLogin(person);
+            user.Password = BuildLoggedUserPassword(person);
+            user.AccessCode = accessCode;
         }
 
-        private string DefinirSenhaUsuario(Pessoa pessoa)
+        private static string BuildLoggedUserPassword(Person person)
         {
-            return string.Concat(pessoa.Nome.RetornaNomeSemEspacos(), pessoa.DataNascimento.Value.Year);
+            return string.Concat(person.Name.RemoveEmptySpaces(), person.BirthDate.Value.Year);
         }
 
-        private string DefinirLoginUsuario(Pessoa pessoa)
+        private static string BuildLoggedUserLogin(Person person)
         {
-            return string.Concat(pessoa.Nome.RetornaNomeSemEspacos(), pessoa.Cpf.RetornaUltimosCaracteresCPF());
+            return string.Concat(person.Name.RemoveEmptySpaces(), person.ZipCode.GetTwoLastCpfCharacters());
         }
 
-        protected string RecuperarLoginSistema(Pessoa pessoa)
+        protected string GetFormatedUserLoginAndPassword(Person person)
         {
-            var login = "<br/><strong>Login de Acesso : </strong>" + DefinirLoginUsuario(pessoa);
-            login += "<br/><strong>Senha : </strong>" + DefinirSenhaUsuario(pessoa);
+            var login = "<br/><strong>Login de Acesso : </strong>" + BuildLoggedUserLogin(person);
+            login += "<br/><strong>Password : </strong>" + BuildLoggedUserPassword(person);
             return login.ToLower();
         }
 
-        public static int RecuperarPerfilLogado()
-        {
-            return perfilLogado;
-        }
+        public static string LoggedUserName => LoggerUserProfileName;
 
-        public static string RecuperarNomeUsuarioLogado()
-        {
-            return NomeLogado;
-        }
+        public static int LoggedUserAccessCode => LoggedUserProfileAccessCode;
 
-        public static string RecuperaDescrucaoPerfilLogado()
+        public static string GetLoggedUserDescription
         {
-            var perfil = string.Empty;
-            switch (perfilLogado)
+            get
             {
-                case (int)PerfilAcessoEnum.Administrador:
-                    perfil = "Administrador";
-                    break;
-                case (int)PerfilAcessoEnum.Discente:
-                    perfil = "Discente";
-                    break;
-                case (int)PerfilAcessoEnum.Docente:
-                    perfil = "Docente";
-                    break;
+                AccessProfileEnum loggedType;
+                Enum.TryParse(LoggedUserProfileAccessCode.ToString(), out loggedType);
+
+                return loggedType.GetEnumDescription();
             }
-            return perfil;
         }
 
-        #endregion
-
-        #region CONVERTER PARA LISTA
-
-        /// <summary>
-        /// Converte uma lista do tipo T em uma lista de ListItem pra carregar uma combo.
-        /// </summary>
-        /// <typeparam name="T">Tipo da lista a ser convertida.</typeparam>
-        /// <param name="listaEntidade">Lista a ser convertida</param>
-        /// <param name="campoTexto">Nome da propriedade a ser usada como text da combo</param>
-        /// /// <param name="campoValor">Nome da propriedade a ser usada como value da combo</param>
-        /// <param name="campoValor">Nome da propriedade a ser usada como value da combo</param>
-        /// <param name="selecionado">Value para vir selecionado.</param>
-        /// <returns>Lista convertida em ListItem</returns>
-        public List<SelectListItem> ConverteListItem<T>(List<T> listaEntidade, string campoTexto, string campoValor, bool selecione = true, string selecionado = "0")
+        public List<SelectListItem> BuildListSelectListItemWith<T>(IEnumerable<T> entityList, string optionDescription, string optionValue, string selectedValue = "0")
         {
-            var itens = new List<SelectListItem>();
+            var itens = new List<SelectListItem> { new SelectListItem { Text = Constants.SELECT, Value = "" } };
 
-            if (selecione)
-                itens.Add(new SelectListItem { Text = Constantes.SELECIONE, Value = "" });
+            var type = typeof(T);
+            var properties = optionDescription.Split('.');
 
-            Type tipo = typeof(T);
-            string[] propriedades = campoTexto.Split('.');
+            if (entityList == null) return itens;
 
-            if (listaEntidade != null)
+            foreach (var item in entityList)
             {
-                foreach (var item in listaEntidade)
+                var property = type.GetProperty(optionDescription);
+
+                string text;
+
+                if (properties.Any())
                 {
-                    var propriedadeText = tipo.GetProperty(campoTexto);
-                    var texto = String.Empty;
-
-                    if (propriedades.Length > 1)
-                    {
-                        Type tipoPropriedade = tipo.GetProperty(propriedades[0]).GetValue(item).GetType();
-                        propriedadeText = tipoPropriedade.GetProperty(propriedades[1]);
-                        texto = propriedadeText.GetValue(item.GetType().GetProperty(propriedades[0]).GetValue(item)).ToString();
-                    }
-                    else
-                        texto = propriedadeText.GetValue(item).ToString();
-
-                    itens.Add(new SelectListItem
-                    {
-                        Value = tipo.GetProperty(campoValor).GetValue(item).ToString(),
-                        Text = texto,
-                        Selected = selecionado == tipo.GetProperty(campoValor).GetValue(item).ToString()
-                    });
+                    var tipoPropriedade = type.GetProperty(properties[0]).GetValue(item).GetType();
+                    property = tipoPropriedade.GetProperty(properties[1]);
+                    text = property.GetValue(item.GetType().GetProperty(properties[0]).GetValue(item)).ToString();
                 }
+                else
+                    text = property.GetValue(item).ToString();
+
+                itens.Add(BuildSelectListItemWith(optionValue, selectedValue, type, item, text));
             }
 
             return itens;
         }
 
-        /// <summary>
-        /// Transforma Enum em uma SelectListItem. 
-        /// </summary>
-        /// <typeparam name="T">Enum a ser convertido.</typeparam>
-        /// <param name="valorSelecionado"></param>
-        /// <param name="selecione">Parametro que indica se haverá adição do item Selecione da Dropdown</param>
-        /// <returns>Retorna uma SelectListItem</returns>
-        public List<SelectListItem> ConverteEnumParaListItem<T>(string valorSelecionado, bool selecione)
+        public List<SelectListItem> ConvertEnumToListItem<T>(string valorSelecionado)
         {
-            List<SelectListItem> itens = new List<SelectListItem>();
-            if (selecione)
-            {
-                itens = new List<SelectListItem>() { new SelectListItem { Text = Constantes.SELECIONE, Value = "" } };
-            }
-            var valoresEnum = Enum.GetValues(typeof(T));
-
-            foreach (var valor in valoresEnum)
-            {
-                var valorConvertido = ((int)valor).ToString();
-                itens.Add(new SelectListItem { Text = ((Enum)valor).GetEnumDescription(), Value = valorConvertido, Selected = valorConvertido == valorSelecionado });
-            }
-            return itens;
+            return ConvertEnumToListItemWithSelectOption<T>(valorSelecionado);
         }
 
-        #endregion
-
-        #region JSON
-
-        public JsonResult RetornaJson<T>(List<T> lista, int totalRegistros)
+        public JsonResult BuildJsonObject<T>(List<T> entityList, int total)
         {
             return Json(new
             {
-                sEcho = Request.Params["sEcho"].ToString(),
-                iTotalRecords = lista.Count(),
-                iTotalDisplayRecords = totalRegistros,
+                sEcho = Request.Params["sEcho"],
+                iTotalRecords = entityList.Count(),
+                iTotalDisplayRecords = total,
                 ValidateRequest = false,
-                aaData = lista
+                aaData = entityList
             }, JsonRequestBehavior.AllowGet);
         }
 
-        #endregion
+        private static SelectListItem BuildSelectListItemWith<T>(string valorSelecionado, object value)
+        {
+            var convertedValue = ((int)value).ToString();
+
+            return new SelectListItem
+            {
+                Text = ((Enum)value).GetEnumDescription(),
+                Value = convertedValue,
+                Selected = convertedValue == valorSelecionado
+            };
+        }
+
+        private static SelectListItem BuildSelectListItemWith<T>(string optionValue, string selectedValue, Type type, T item, string text)
+        {
+            return new SelectListItem
+            {
+                Value = type.GetProperty(optionValue).GetValue(item).ToString(),
+                Text = text,
+                Selected = selectedValue == type.GetProperty(optionValue).GetValue(item).ToString()
+            };
+        }
+
+        private static List<SelectListItem> ConvertEnumToListItemWithSelectOption<T>(string valorSelecionado)
+        {
+            var itens = new List<SelectListItem> { new SelectListItem { Text = Constants.SELECT, Value = "" } };
+            var enumValues = Enum.GetValues(typeof(T));
+
+            itens.AddRange(from object value in enumValues select BuildSelectListItemWith<T>(valorSelecionado, value));
+
+            return itens;
+        }
 
     }
 }

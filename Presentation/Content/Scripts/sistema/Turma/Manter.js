@@ -21,7 +21,7 @@ Eventos = {
         $('#btnSalvar').click(function (e) {
             e.preventDefault();
 
-            var action = rootUrl + 'Turma/Index';
+            var action = rootUrl + 'Class/Index';
             var camposValidos = validaCampos();
             var pickListValido = Validacoes.validaPickList();
             if (camposValidos && !pickListValido) {
@@ -29,7 +29,7 @@ Eventos = {
                 var model = $("#formTurma").serialize();
 
                 $.ajax({
-                    url: rootUrl + 'Turma/Salvar',
+                    url: rootUrl + 'Class/SaveAndReturn',
                     dataType: 'json',
                     type: 'post',
                     cache: false,
@@ -42,7 +42,7 @@ Eventos = {
                         }
                         else if (retorno.sucesso == 2) {
                             $("#divErro").show();
-                            $("#MensagemErro").html('Turma já Cadastrada');
+                            $("#MensagemErro").html('Class já Cadastrada');
                             SobeScroll();
                             return false;
                         }
@@ -80,7 +80,7 @@ Validacoes = {
             erro = true;
         }
 
-        $("#IdsSelecionados").val(discentesSelecionados);
+        $("#SelectedStudentsId").val(discentesSelecionados);
         return erro;
     }
 }

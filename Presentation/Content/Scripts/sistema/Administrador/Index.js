@@ -14,7 +14,7 @@ Eventos = {
         $('body').delegate('[id*="btnExcluir_"]', 'click', function () {
 
             var id = $(this).attr('alt');
-            var metodo = "Administrador/Excluir";
+            var metodo = "Administrator/Remove";
 
             bootbox.dialog({
                 message: '<div class="text-warning">Confirma exclusão?</div>',
@@ -49,7 +49,7 @@ Eventos = {
         $('.cpf').setMask('999.999.999-99');
 
         $("#btnIncluir").bind('click', function () {
-            window.location.href = rootUrl + "Administrador/Manter?id=";
+            window.location.href = rootUrl + "Administrator/Manter?id=";
         });
     },
 
@@ -58,12 +58,12 @@ Eventos = {
 function MontaTablePaginada() {
 
     var config = {
-        "sAjaxSource": rootUrl + 'Administrador/ListarPaginado',
+        "sAjaxSource": rootUrl + 'Administrator/ListarPaginado',
         "aSync": false,
         "aoColumns": [
                 {
-                    'mData': 'Pessoa.Nome',
-                    'sTitle': 'Nome',
+                    'mData': 'Person.Name',
+                    'sTitle': 'Name',
                     'sWidth': '28%',
                     'sClass': 'quebra-linha',
                     'bSortable': false,
@@ -73,7 +73,7 @@ function MontaTablePaginada() {
                     }
                 },
                 {
-                    'mData': 'Pessoa.Cpf',
+                    'mData': 'Person.ZipCode',
                     'sTitle': 'CPF',
                     'sWidth': '28%',
                     'sClass': 'quebra-linha centro cpf',
@@ -91,16 +91,16 @@ function MontaTablePaginada() {
                     'bSortable': false,
                     'mRender': function (data, type, val) {
                         var html = "<div>"
-                                      + "<a onclick=\"location.href = '" + rootUrl + "Administrador/Manter?id=" + val.Id + "'; return false;\" data-toggle='tooltip' title='Editar'><span class='icon-pencil'></span></a>"
-                                      + "<a data-toggle='tooltip' id='btnExcluir_' title='Excluir' alt='" + val.Id + "'  ><span class='icon-remove'></span></a>"
+                                      + "<a onclick=\"location.href = '" + rootUrl + "Administrator/Manter?id=" + val.Id + "'; return false;\" data-toggle='tooltip' title='Editar'><span class='icon-pencil'></span></a>"
+                                      + "<a data-toggle='tooltip' id='btnExcluir_' title='Remove' alt='" + val.Id + "'  ><span class='icon-remove'></span></a>"
                                   + "</div>";
                         return html;
                     }
                 }],
         "fnServerParams": function (aoData) {
             aoData.push({
-                'name': 'Nome',
-                'value': $("#Nome").val()
+                'name': 'Name',
+                'value': $("#Name").val()
             });
         }
     };

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -9,94 +7,46 @@ namespace Entidades.Extensions
 {
     public static class StringExtension
     {
-
-        /// <summary>
-        /// Extensão de string que remove todos caracteres de máscara  { ./-,() }
-        /// </summary>
-        /// <param name="value">String que será modificada.</param>
-        /// <returns>String com os caracteres de máscara removidos.</returns>
-        public static string RemoveCaracteresMascara(this string value)
+        public static string RemoveMaskCharacters(this string value)
         {
-            string texto = string.Empty;
-            if (value != null)
-            {
-                texto = value.ToString();
-                texto = texto.Replace(".", String.Empty).Replace("/", String.Empty).Replace("-", String.Empty)
-                             .Replace(",", String.Empty).Replace("(", String.Empty).Replace(")", String.Empty)
-                             .Replace(" ", String.Empty).Trim();
-            }
-            return texto;
+            if (string.IsNullOrEmpty(value)) return string.Empty;
+
+            var empty = string.Empty;
+            return value.Replace(".", string.Empty)
+                        .Replace("/", empty)
+                        .Replace("-", empty)
+                        .Replace(",", empty)
+                        .Replace("(", empty)
+                        .Replace(")", empty)
+                        .Replace(" ", empty)
+                        .Trim();
         }
 
-        /// <summary>
-        /// Extensão de string que remove todos os acentos possíveis de uma string.
-        /// </summary>
-        /// <param name="text">String que será removido os acentos.</param>
-        /// <returns>String sem os acentos.</returns>
-        public static string RemoveAcentos(this string text)
+        public static string RemoveAccents(this string text)
         {
-            StringBuilder retorno = new StringBuilder();
+            var formatedText = string.Empty;
             var caracteres = text.Normalize(NormalizationForm.FormD).ToCharArray();
 
-            foreach (char caracter in caracteres)
-            {
-                if (CharUnicodeInfo.GetUnicodeCategory(caracter) != UnicodeCategory.NonSpacingMark)
-                    retorno.Append(caracter);
-            }
-            return retorno.ToString();
+            return caracteres.Where(caracter => CharUnicodeInfo.GetUnicodeCategory(caracter) != UnicodeCategory.NonSpacingMark)
+                             .Aggregate(formatedText, (current, caracter) => current + caracter);
         }
 
-        /// <summary>
-        /// Extensão de string que remove todos os espaços possíveis de uma string.
-        /// </summary>
-        /// <param name="texto">String que será removido os espaços.</param>
-        /// <returns>String sem os espaços.</returns>
-        public static string RemoveEspacos(this string texto)
+        public static string RemoveEmptySpaces(this string text)
         {
-            if (!String.IsNullOrEmpty(texto))
-            {
-                var textoFormatado = texto.Trim().ToLower();
-                textoFormatado = Regex.Replace(textoFormatado, @"\s", String.Empty);
-                return textoFormatado;
-            }
-
-            return String.Empty;
+            return string.IsNullOrEmpty(text)
+                ? string.Empty
+                : Regex.Replace(text.Trim().ToLower(), @"\s", string.Empty);
         }
 
-        /// <summary>
-        /// Extensão de string para limpar o texto removendos os acentos e os espaços.
-        /// </summary>
-        /// <param name="texto">String que será alterada.</param>
-        /// <returns>String sem espaços e sem acentos.</returns>
-        public static string LimparTexto(this string texto)
+        public static string RemoveAccentsAndEmptySpaces(this string texto)
         {
-            return RemoveAcentos(RemoveEspacos(texto));
+            return RemoveAccents(RemoveEmptySpaces(texto));
         }
 
-        public static string RetornaUltimosCaracteresCPF(this string texto)
+        public static string GetTwoLastCpfCharacters(this string text)
         {
-            var quantidadeCaracteres = texto.Count();
-            var retorno = texto[quantidadeCaracteres - 2].ToString();
-            retorno += texto[quantidadeCaracteres - 1].ToString();
-            return retorno;
+            var total = text.Count();
+            return text.Substring(0, total - 2);
         }
-
-        public static string RetornaNomeSemEspacos(this string texto)
-        {
-            var msg = texto.Split(' ');
-            var retorno = string.Empty;
-
-            if (msg.Count() > 1)
-            {
-                retorno = msg[0] + msg[1];
-            }
-            else
-            {
-                retorno = msg[0];
-            }
-
-            return retorno;
-        }
-
     }
 }

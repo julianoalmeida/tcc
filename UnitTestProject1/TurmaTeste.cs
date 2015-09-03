@@ -1,15 +1,9 @@
-﻿using Comum.Contratos;
-using Comum.Contratos.Turmas;
+﻿using Comum.Contratos.Turmas;
 using Comum.Excecoes;
 using Entidades;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Negocio.Servico;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Testes.Base;
 
 namespace Testes

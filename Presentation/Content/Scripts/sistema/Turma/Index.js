@@ -11,7 +11,7 @@ Eventos = {
     MontaBinds: function () {
 
         $("#btnIncluir").bind('click', function () {
-            window.location.href = rootUrl + "Turma/Manter?id=";
+            window.location.href = rootUrl + "Class/Manter?id=";
         });
 
         $("#btnPesquisar").bind('click', function () {
@@ -22,7 +22,7 @@ Eventos = {
         $('body').delegate('[id*="btnExcluir_"]', 'click', function () {
 
             var id = $(this).attr('alt');
-            var metodo = "Turma/Excluir";
+            var metodo = "Class/Remove";
 
             bootbox.dialog({
                 message: '<div class="text-warning">Confirma exclusão?</div>',
@@ -56,12 +56,12 @@ Eventos = {
 function MontaTablePaginada() {
 
     var config = {
-        "sAjaxSource": rootUrl + 'Turma/ListarPaginado',
+        "sAjaxSource": rootUrl + 'Class/ListarPaginado',
         "aSync": false,
         "aoColumns": [
                 {
-                    'mData': 'Descricao',
-                    'sTitle': 'Nome',
+                    'mData': 'Description',
+                    'sTitle': 'Name',
                     'sWidth': '28%',
                     'sClass': 'quebra-linha',
                     'bSortable': false,
@@ -71,8 +71,8 @@ function MontaTablePaginada() {
                     }
                 },
                 {
-                    'mData': 'TurnoToString',
-                    'sTitle': 'Turno',
+                    'mData': 'ClassTimeToString',
+                    'sTitle': 'ClassTime',
                     'sWidth': '28%',
                     'sClass': 'quebra-linha centro cpf',
                     'bSortable': false,
@@ -89,8 +89,8 @@ function MontaTablePaginada() {
                     'bSortable': false,
                     'mRender': function (data, type, val) {
                         var html = "<div>"
-                                      + "<a onclick=\"location.href = '" + rootUrl + "Turma/Manter?id=" + val.Id + "'; return false;\" data-toggle='tooltip' title='Editar'><span class='icon-pencil'></span></a>"
-                                      + "<a data-toggle='tooltip' id='btnExcluir_' title='Excluir' alt='" + val.Id + "'  ><span class='icon-remove'></span></a>"
+                                      + "<a onclick=\"location.href = '" + rootUrl + "Class/Manter?id=" + val.Id + "'; return false;\" data-toggle='tooltip' title='Editar'><span class='icon-pencil'></span></a>"
+                                      + "<a data-toggle='tooltip' id='btnExcluir_' title='Remove' alt='" + val.Id + "'  ><span class='icon-remove'></span></a>"
                                   + "</div>";
                         return html;
                     }
@@ -98,11 +98,11 @@ function MontaTablePaginada() {
         "fnServerParams": function (aoData) {
             aoData.push({
                 'name': 'nome',
-                'value': $("#Nome").val()
+                'value': $("#Name").val()
             });
             aoData.push({
                 'name': 'turno',
-                'value': $("#Turno").val()
+                'value': $("#ClassTime").val()
             });
         }
     };

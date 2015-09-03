@@ -1,14 +1,13 @@
 ﻿@using Entidades
-@using Entidades.Enumeracoes
 
-@model Turma
+@model Class
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @{
-    var titulo = Model.Id == 0 ? "Inserir Turma" : "Editar Turma";
+    var titulo = Model.Id == 0 ? "Inserir Class" : "Editar Class";
     var docentes = ViewBag.Docentes as List<SelectListItem>;
     var discentesNaoVinculados = ViewBag.Discentes as List<SelectListItem>;
 }
@@ -31,7 +30,7 @@
 
                         <form action="#" method="post" id="formTurma" name="inserir" class="clearfix form-horizontal">
 
-                            @Html.HiddenFor(a => a.IdsSelecionados)
+                            @Html.HiddenFor(a => a.SelectedStudentsId)
                             @Html.HiddenFor(a => a.Id)
 
                             <fieldset>
@@ -43,21 +42,21 @@
                                                 <div class="span6">
                                                     <div class="control-group">
                                                         <div class="controls span9">
-                                                            <label for="Descricao"><span class="camposObrigatorio">*</span> Nome Turma :</label>
-                                                            @Html.TextBoxFor(c => c.Descricao, new { @class = "span10 required", maxlength = "150", autocomplete = "off" })
+                                                            <label for="Description"><span class="camposObrigatorio">*</span> Name Class :</label>
+                                                            @Html.TextBoxFor(c => c.Description, new { @class = "span10 required", maxlength = "150", autocomplete = "off" })
                                                             <span class="text-error hide">
                                                                 <br />
-                                                                O campo Nome da Turma é de preenchimento obrigatório.</span>
+                                                                O campo Name da Class é de preenchimento obrigatório.</span>
                                                         </div>
                                                     </div>
 
                                                     <div class="control-group">
                                                         <div class="controls span9">
-                                                            <label for="Turno"><span class="camposObrigatorio">*</span> Turno :</label>
-                                                            @Html.DropDownListFor(a => a.Turno, null, new { @class = "span10 required" })
+                                                            <label for="ClassTime"><span class="camposObrigatorio">*</span> ClassTime :</label>
+                                                            @Html.DropDownListFor(a => a.ClassTime, null, new { @class = "span10 required" })
                                                             <span class="text-error hide">
                                                                 <br>
-                                                                O campo Turno é de preenchimento obrigatório.</span>
+                                                                O campo ClassTime é de preenchimento obrigatório.</span>
                                                         </div>
                                                     </div>
 
@@ -78,11 +77,11 @@
 
                                                     <div class="control-group">
                                                         <div class="controls span9">
-                                                            <label for="idDocente"><span class="camposObrigatorio">*</span> Docente :</label>
-                                                            @Html.DropDownListFor(a => a.Docente.Id, @docentes, new { @class = "span10 required", @id = "idDocente" })
+                                                            <label for="idTeacher"><span class="camposObrigatorio">*</span> Teacher :</label>
+                                                            @Html.DropDownListFor(a => a.Teacher.Id, @docentes, new { @class = "span10 required", @id = "idDocente" })
                                                             <span class="text-error hide">
                                                                 <br>
-                                                                O campo Docente é de preenchimento obrigatório.</span>
+                                                                O campo Teacher é de preenchimento obrigatório.</span>
                                                         </div>
                                                     </div>
 
@@ -143,7 +142,7 @@
             </div>
 
             <div class="text-right">
-                <button id="btnSalvar" type="submit" class="btn btn-primary" title="Salvar">Salvar</button>
+                <button id="btnSalvar" type="submit" class="btn btn-primary" title="SaveAndReturn">SaveAndReturn</button>
                 <a id="btnCancelar" class="btn" href="#">Cancelar</a>
             </div>
         </div>
@@ -159,7 +158,7 @@
 
 @section scripts {
     @Scripts.Render("~/Content/Scripts/outros/jshuttle.js")
-    @Scripts.Render("~/Content/Scripts/sistema/Turma/Manter.js")
+    @Scripts.Render("~/Content/Scripts/sistema/Class/Manter.js")
 
 
 }

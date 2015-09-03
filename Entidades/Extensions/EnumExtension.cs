@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Entidades.Extensions
 {
@@ -12,14 +7,11 @@ namespace Entidades.Extensions
     {
         public static string GetEnumDescription(this Enum value)
         {
-            FieldInfo fi = value.GetType().GetField(value.ToString());
+            var field = value.GetType().GetField(value.ToString());
 
-            DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
+            var attributes = (DescriptionAttribute[])field.GetCustomAttributes(typeof(DescriptionAttribute), false);
 
-            if (attributes != null && attributes.Length > 0)
-                return attributes[0].Description;
-            else
-                return value.ToString();
+            return attributes?.Length > 0 ? attributes[0]?.Description : value.ToString();
         }
 
     }

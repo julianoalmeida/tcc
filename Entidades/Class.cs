@@ -14,6 +14,12 @@ namespace Entidades
 
         public int ClassTime { get; set; }
 
+        public int Capacity { get; set; }
+
+        public DateTime? BeginDate { get; set; }
+
+        public DateTime? EndDate { get; set; }
+
         public string ClassTimeToString
         {
             get

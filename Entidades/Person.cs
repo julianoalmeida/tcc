@@ -14,11 +14,11 @@ namespace Entidades
             set { _name = value; }
         }
 
-        private string _zipCode;
-        public virtual string ZipCode
+        private string _cpf;
+        public virtual string Cpf
         {
-            get { return _zipCode == null ? string.Empty : _zipCode.RemoveMaskCharacters(); }
-            set { _zipCode = value; }
+            get { return _cpf == null ? string.Empty : _cpf.RemoveMaskCharacters(); }
+            set { _cpf = value; }
         }
 
         public virtual int Sex { get; set; }

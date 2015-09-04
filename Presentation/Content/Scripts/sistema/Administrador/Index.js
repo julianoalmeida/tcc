@@ -73,7 +73,7 @@ function MontaTablePaginada() {
                     }
                 },
                 {
-                    'mData': 'Person.ZipCode',
+                    'mData': 'Person.Cpf',
                     'sTitle': 'CPF',
                     'sWidth': '28%',
                     'sClass': 'quebra-linha centro cpf',

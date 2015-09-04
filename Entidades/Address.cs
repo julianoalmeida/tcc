@@ -12,11 +12,17 @@ namespace Entidades
 
         public virtual string Neighborhood { get; set; }
 
+        public virtual string Number { get; set; }
+
+        public virtual string Complement { get; set; }
+
         private string _zipCode;
         public virtual string ZipCode
         {
             get { return _zipCode.RemoveMaskCharacters(); }
             set { _zipCode = value; }
         }
+
+
     }
 }

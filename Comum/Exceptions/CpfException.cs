@@ -5,6 +5,6 @@ namespace Comum.Exceptions
     [Serializable]
     public class CpfException : BaseException
     {
-        public CpfException() : base(string.Format(Messages.MI005, "ZipCode")) { }
+        public CpfException() : base(string.Format(Messages.MI005, "Cpf")) { }
     }
 }

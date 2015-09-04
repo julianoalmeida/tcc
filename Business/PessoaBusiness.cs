@@ -68,7 +68,7 @@ namespace Negocio
 
         public void ValidadePerson(Person person)
         {
-            var pessoaBd = _personData.SelectWithFilter(a => a.ZipCode.Equals(person.ZipCode)).FirstOrDefault();
+            var pessoaBd = _personData.SelectWithFilter(a => a.Cpf.Equals(person.Cpf)).FirstOrDefault();
 
             if (pessoaBd?.Id != person.Id)
                 throw new DuplicatedEntityException();
@@ -78,7 +78,7 @@ namespace Negocio
             if (ValidaDataAtualFutura(person.BirthDate.Value))
                 throw new FutureDateException();
 
-            if (!IsValidCpf(person.ZipCode))
+            if (!IsValidCpf(person.Cpf))
                 throw new CpfException();
 
             if (!IsValidEmail(person.Email))

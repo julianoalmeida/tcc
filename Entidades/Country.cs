@@ -2,16 +2,16 @@
 
 namespace Entidades
 {
-    public sealed class Country : BaseEntity
+    public  class Country : BaseEntity
     {
         public Country()
         {
             States = new List<State>();
         }
 
-        public string Codigo { get; set; }
-        public string Name { get; set; }
+        public virtual string Codigo { get; set; }
+        public virtual string Name { get; set; }
 
-        public IList<State> States { get; set; }
+        public virtual IList<State> States { get; set; }
     }
 }

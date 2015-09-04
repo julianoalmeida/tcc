@@ -8,7 +8,7 @@ namespace Data.Map
         public UserMap()
         {
             Table("PERFIL_LOGIN");
-            Id(a => a.Id, "Id_USU").Not.Nullable();
+            Id(a => a.Id, "IdPessoa").Not.Nullable();
             References(a => a.Person, "IdPessoa").Not.Nullable();
             Map(a => a.AccessCode, "IdPerfil").Not.Nullable();
             Map(a => a.Login, "Login").Not.Nullable();

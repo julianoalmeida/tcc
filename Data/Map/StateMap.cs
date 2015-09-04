@@ -7,7 +7,7 @@ namespace Data.Map
     {
         public StateMap()
         {
-            Table("UF");
+            Table("ESTADO");
             Id(x => x.Code, "Id");
             Map(x => x.Name, "Descricao");
             References(x => x.Country, "IdPais");

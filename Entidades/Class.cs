@@ -5,22 +5,22 @@ using Entidades.Extensions;
 
 namespace Entidades
 {
-    public sealed class Class : BaseEntity
+    public class Class : BaseEntity
     {
         public Class()
         {
             Students = new List<Student>();
         }
 
-        public int ClassTime { get; set; }
+        public virtual int ClassTime { get; set; }
 
-        public int Capacity { get; set; }
+        public virtual int Capacity { get; set; }
 
-        public DateTime? BeginDate { get; set; }
+        public virtual DateTime? BeginDate { get; set; }
 
-        public DateTime? EndDate { get; set; }
+        public virtual DateTime? EndDate { get; set; }
 
-        public string ClassTimeToString
+        public virtual string ClassTimeToString
         {
             get
             {
@@ -30,12 +30,12 @@ namespace Entidades
             }
         }
 
-        public string Description { get; set; }
+        public virtual string Description { get; set; }
 
-        public Teacher Teacher { get; set; }
+        public virtual Teacher Teacher { get; set; }
 
-        public IList<Student> Students { get; set; }
+        public virtual IList<Student> Students { get; set; }
 
-        public string SelectedStudentsId { get; set; }
+        public virtual  string SelectedStudentsId { get; set; }
     }
 }

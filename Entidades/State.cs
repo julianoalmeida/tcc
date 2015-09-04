@@ -3,19 +3,19 @@ using System.Linq;
 
 namespace Entidades
 {
-    public sealed class State : BaseEntity
+    public class State : BaseEntity
     {
         public State()
         {
             Cities = new List<City>();
         }
-        public string Code { get; set; }
-        public string Name { get; set; }
+        public virtual string Code { get; set; }
+        public virtual string Name { get; set; }
 
-        public Country Country { get; set; }
+        public virtual Country Country { get; set; }
 
-        public IList<City> Cities { get; set; }
+        public virtual IList<City> Cities { get; set; }
 
-        public List<City> XmlCities => Cities.ToList();
+        public virtual List<City> XmlCities => Cities.ToList();
     }
 }

@@ -1,0 +1,44 @@
+﻿@using Entidades;
+@model  User
+
+@{
+    Layout = "~/Views/Shared/LayoutSemMenu.cshtml";
+}
+
+@section body{
+    <br />
+    @using (Html.BeginForm())
+    {
+        <div class="fundo">
+            <fieldset>
+                <legend title="">Home</legend>
+
+                <div class="componentesCentro">
+                    <label for="Login">Login</label>
+                    @Html.TextBoxFor(a => a.Login, new { @class = "span3", autocomplete = "off", onpaste = "return false", ondrop = "return false" })
+
+                    <label for="Password">Password</label>
+                    @Html.PasswordFor(a => a.Password, new { @class = "span3", maxlength = "20", autocomplete = "off", onpaste = "return false", ondrop = "return false" })
+                </div>
+
+                <div class="componentesCentro">
+
+                    <input type="submit" name="submitButton" id="btnLogar" value="Acessar" class="btn btn btn-primary" />
+                </div>
+
+                <div class="clear">&nbsp;</div>
+
+                <div class="componentesCentro">
+                    <a href="javascript:;" id="semCadastro">Ainda não sou cadastrado</a>
+                </div>
+            </fieldset>
+        </div>
+    }
+
+}
+
+@section Scripts{
+    @Scripts.Render("~/Content/Scripts/sistema/Login/Index.js")
+}
+
+

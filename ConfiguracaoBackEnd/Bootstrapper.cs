@@ -49,7 +49,7 @@ namespace AutoFacConfig
 
         private static void RegisterRepositoryAssembly(ContainerBuilder builder)
         {
-            builder.RegisterAssemblyTypes(typeof(RepositorioNHibernate<>).Assembly)
+            builder.RegisterAssemblyTypes(typeof(NHibernateRepository<>).Assembly)
                 .Where(t => t.Name.EndsWith("Data"))
                 .AsImplementedInterfaces();
         }

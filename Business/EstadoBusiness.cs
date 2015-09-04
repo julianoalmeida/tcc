@@ -7,11 +7,11 @@ namespace Negocio
 
     public class EstadoBusiness : BaseBusiness<State>, IEstadoBusiness
     {
-        private readonly IEstadoData _estadoData;
-        public EstadoBusiness(IEstadoData data)
+        private readonly IStateData _stateData;
+        public EstadoBusiness(IStateData data)
             : base(data)
         {
-            _estadoData = data;
+            _stateData = data;
         }
     }
 }

@@ -16,16 +16,16 @@ namespace Negocio
 
     public class PessoaBusiness : BaseBusiness<Person>, IPessoaBusiness
     {
-        private readonly IPessoaData _pessoaData;
-        public PessoaBusiness(IPessoaData data)
+        private readonly IPersonData _personData;
+        public PessoaBusiness(IPersonData data)
             : base(data)
         {
-            _pessoaData = data;
+            _personData = data;
         }
 
         public void ValidateDuplicatedPerson(Person person)
         {
-            _pessoaData.IsDuplicated(person);
+            _personData.IsDuplicated(person);
         }
         
         public void ValidateRequiredFields(Person person)
@@ -68,7 +68,7 @@ namespace Negocio
 
         public void ValidadePerson(Person person)
         {
-            var pessoaBd = _pessoaData.SelectWithFilter(a => a.ZipCode.Equals(person.ZipCode)).FirstOrDefault();
+            var pessoaBd = _personData.SelectWithFilter(a => a.ZipCode.Equals(person.ZipCode)).FirstOrDefault();
 
             if (pessoaBd?.Id != person.Id)
                 throw new DuplicatedEntityException();

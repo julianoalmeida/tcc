@@ -6,13 +6,13 @@ using NHibernate;
 
 namespace Data
 {
-    public interface IAdministratorData : IRepositorio<Administrator>
+    public interface IAdministratorData : INHibernateRepository<Administrator>
     {
         int Total(Administrator administrator);
         List<Administrator> SelectWithPagination(Administrator administrator, int startPage);
     }
 
-    public class AdministratorData : RepositorioNHibernate<Administrator>, IAdministratorData
+    public class AdministratorData : NHibernateRepository<Administrator>, IAdministratorData
     {
         public AdministratorData(ISession session)
             : base(session)

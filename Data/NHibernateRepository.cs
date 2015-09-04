@@ -8,7 +8,7 @@ using NHibernate.Linq;
 
 namespace Data
 {
-    public interface IRepositorio<TEntity> where TEntity : BaseEntity
+    public interface INHibernateRepository<TEntity> where TEntity : BaseEntity
     {
         void Remove(int id);
         TEntity GetById(int id);
@@ -17,12 +17,12 @@ namespace Data
         IEnumerable<TEntity> SelectWithFilter(Expression<Func<TEntity, bool>> filterCondition);
     }
 
-    public abstract class RepositorioNHibernate<T> : IRepositorio<T>
+    public abstract class NHibernateRepository<T> : INHibernateRepository<T>
        where T : BaseEntity
     {
         protected ISession Session { get; set; }
 
-        protected RepositorioNHibernate(ISession session)
+        protected NHibernateRepository(ISession session)
         {
             Session = session;
         }

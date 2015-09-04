@@ -21,7 +21,7 @@ namespace Negocio
     public abstract class BaseBusiness<TEntidade> : INegocioBase<TEntidade>
          where TEntidade : BaseEntity
     {
-        protected readonly IRepositorio<TEntidade> Repositorio;
+        protected readonly INHibernateRepository<TEntidade> InHibernateRepository;
 
         protected IList<string> _errorList = new List<string>();
 
@@ -37,34 +37,34 @@ namespace Negocio
             "55555555555", "66666666666", "77777777777","88888888888", "99999999999"
         };
 
-        protected BaseBusiness(IRepositorio<TEntidade> repositorio)
+        protected BaseBusiness(INHibernateRepository<TEntidade> inHibernateRepository)
         {
-            Repositorio = repositorio;
+            InHibernateRepository = inHibernateRepository;
         }
         
         public virtual TEntidade GetById(int id)
         {
-            return Repositorio.GetById(id);
+            return InHibernateRepository.GetById(id);
         }
 
         public virtual IEnumerable<TEntidade> GetAll()
         {
-            return Repositorio.GetAll();
+            return InHibernateRepository.GetAll();
         }
 
         public virtual IEnumerable<TEntidade> SelectWithFilter(Expression<Func<TEntidade, bool>> filterCondition)
         {
-            return Repositorio.SelectWithFilter(filterCondition);
+            return InHibernateRepository.SelectWithFilter(filterCondition);
         }
 
         public virtual void Remove(int id)
         {
-            Repositorio.Remove(id);
+            InHibernateRepository.Remove(id);
         }
 
         public virtual TEntidade SaveAndReturn(TEntidade entidade)
         {
-            return Repositorio.SaveAndReturn(entidade);
+            return InHibernateRepository.SaveAndReturn(entidade);
         }
 
         protected bool IsValidEmail(string email)

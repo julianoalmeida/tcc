@@ -15,21 +15,21 @@ namespace Negocio
 
     public class DocenteBusiness : BaseBusiness<Teacher>, IDocenteBusiness
     {
-        private readonly IDocenteData _docenteData;
-        public DocenteBusiness(IDocenteData data)
+        private readonly ITeacherData _teacherData;
+        public DocenteBusiness(ITeacherData data)
             : base(data)
         {
-            _docenteData = data;
+            _teacherData = data;
         }
 
         public List<Teacher> SelectWithPagination(Teacher teacher, int paginaAtual)
         {
-            return _docenteData.SelectWithPagination(teacher, paginaAtual);
+            return _teacherData.SelectWithPagination(teacher, paginaAtual);
         }
 
         public int Total(Teacher teacher)
         {
-            return _docenteData.Total(teacher);
+            return _teacherData.Total(teacher);
         }
 
         private static bool IsEscolaridadeFilled(Teacher teacher)

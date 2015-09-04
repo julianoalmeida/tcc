@@ -4,14 +4,14 @@ using NHibernate;
 
 namespace Data
 {
-    public interface IUsuarioData : IRepositorio<User>
+    public interface IUserData : INHibernateRepository<User>
     {
         User GetLoggedUser(string login, string senha);
     }
 
-    public class UsuarioData : RepositorioNHibernate<User>, IUsuarioData
+    public class UserData : NHibernateRepository<User>, IUserData
     {
-        public UsuarioData(ISession session)
+        public UserData(ISession session)
             : base(session)
         { }
         

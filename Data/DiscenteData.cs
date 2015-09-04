@@ -6,13 +6,13 @@ using NHibernate;
 
 namespace Data
 {
-    public interface IDiscenteData : IRepositorio<Student>
+    public interface IDiscenteData : INHibernateRepository<Student>
     {
         int Total(Student docente);
         List<Student> SelectWithPagination(Student docente, int paginaAtual);
     }
 
-    public class DiscenteData : RepositorioNHibernate<Student>, IDiscenteData
+    public class DiscenteData : NHibernateRepository<Student>, IDiscenteData
     {
         public DiscenteData(ISession session)
             : base(session)

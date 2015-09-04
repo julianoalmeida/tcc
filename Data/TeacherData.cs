@@ -6,15 +6,15 @@ using NHibernate;
 
 namespace Data
 {
-    public interface IDocenteData : IRepositorio<Teacher>
+    public interface ITeacherData : INHibernateRepository<Teacher>
     {
         int Total(Teacher teacher);
         List<Teacher> SelectWithPagination(Teacher teacher, int paginaAtual);
     }
 
-    public class DocenteData : RepositorioNHibernate<Teacher>, IDocenteData
+    public class TeacherData : NHibernateRepository<Teacher>, ITeacherData
     {
-        public DocenteData(ISession session)
+        public TeacherData(ISession session)
             : base(session)
         { }
 

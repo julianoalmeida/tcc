@@ -3,14 +3,14 @@ using NHibernate;
 
 namespace Data
 {
-    public interface IPessoaData : IRepositorio<Person>
+    public interface IPersonData : INHibernateRepository<Person>
     {
         bool IsDuplicated(Person person);
     }
 
-    public class PessoaData : RepositorioNHibernate<Person>, IPessoaData
+    public class PersonData : NHibernateRepository<Person>, IPersonData
     {
-        public PessoaData(ISession session)
+        public PersonData(ISession session)
             : base(session)
         { }
 

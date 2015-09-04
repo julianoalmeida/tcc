@@ -10,16 +10,16 @@ namespace Negocio
 
     public class UsuarioBusiness : BaseBusiness<User>, IUsuarioBusiness
     {
-        private readonly IUsuarioData _usuarioData;
-        public UsuarioBusiness(IUsuarioData data)
+        private readonly IUserData _userData;
+        public UsuarioBusiness(IUserData data)
             : base(data)
         {
-            _usuarioData = data;
+            _userData = data;
         }
 
         public User GetLoggedUser(string login, string senha)
         {
-            return _usuarioData.GetLoggedUser(login, senha);
+            return _userData.GetLoggedUser(login, senha);
         }
     }
 }

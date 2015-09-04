@@ -15,21 +15,21 @@ namespace Negocio
 
     public class TurmaBusiness : BaseBusiness<Class>, ITurmaBusiness
     {
-        private readonly ITurmaData _turmaData;
-        public TurmaBusiness(ITurmaData repositorio)
+        private readonly IClassData _classData;
+        public TurmaBusiness(IClassData repositorio)
             : base(repositorio)
         {
-            _turmaData = repositorio;
+            _classData = repositorio;
         }
 
         public List<Class> SelectWithPagination(Class model, int paginaAtual)
         {
-            return _turmaData.SelectWithPagination(model,  paginaAtual);
+            return _classData.SelectWithPagination(model,  paginaAtual);
         }
 
         public int Total(Class model)
         {
-            return _turmaData.Total(model);
+            return _classData.Total(model);
         }
 
         public void ValidateTurmaBusinessRules(Class model)
@@ -52,7 +52,7 @@ namespace Negocio
 
         private void ValidateTurmaIsNoteDuplicated(Class model)
         {
-            var turma = _turmaData.SelectWithFilter(a => a.Description.ToLower().Equals(model.Description.ToLower()))
+            var turma = _classData.SelectWithFilter(a => a.Description.ToLower().Equals(model.Description.ToLower()))
                                   .FirstOrDefault();
 
             if (turma?.Id != model.Id)

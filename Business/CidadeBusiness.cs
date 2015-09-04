@@ -7,11 +7,11 @@ namespace Negocio
 
     public class CidadeBusiness : BaseBusiness<City>, ICidadeBusiness
     {
-        private readonly ICidadeData _cidade;
-        public CidadeBusiness(ICidadeData cidade)
-            : base(cidade)
+        private readonly ICityData _city;
+        public CidadeBusiness(ICityData city)
+            : base(city)
         {
-            _cidade = cidade;
+            _city = city;
         }
     }
 }

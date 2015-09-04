@@ -6,15 +6,15 @@ using NHibernate;
 
 namespace Data
 {
-    public interface ITurmaData : IRepositorio<Class>
+    public interface IClassData : INHibernateRepository<Class>
     {
         int Total(Class model);
         List<Class> SelectWithPagination(Class model, int startPage);
     }
 
-    public class TurmaData : RepositorioNHibernate<Class>, ITurmaData
+    public class ClassData : NHibernateRepository<Class>, IClassData
     {
-        public TurmaData(ISession session)
+        public ClassData(ISession session)
             : base(session)
         { }
 
@@ -25,7 +25,7 @@ namespace Data
                 .Take(Constants.TOTAL_REGISTRO_POR_PAGINAS)
                 .ToList();
         }
-        
+
         public int Total(Class model)
         {
             return Filter(model).Count();

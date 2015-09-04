@@ -7,11 +7,11 @@ namespace Negocio
 
     public class DisciplinaBusiness : BaseBusiness<Courses>, IDisciplinaBusiness
     {
-        private readonly IDisciplinaData _disciplinaData;
-        public DisciplinaBusiness(IDisciplinaData data)
+        private readonly ICoursesData _coursesData;
+        public DisciplinaBusiness(ICoursesData data)
             : base(data)
         {
-            _disciplinaData = data;
+            _coursesData = data;
         }
     }
 }

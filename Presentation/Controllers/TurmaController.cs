@@ -1,6 +1,6 @@
 ﻿using Comum;
 using Entidades;
-using Entidades.Enumeracoes;
+using Entidades.Enums;
 using System;
 using System.Web.Mvc;
 using System.Linq;
@@ -26,7 +26,7 @@ namespace Web.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            ViewBag.Turno = ConvertEnumToListItem<ClassesTimeEnum>(string.Empty);
+            ViewBag.Turno = BuildListItemfromEnum<ClassesTimeEnum>(string.Empty);
 
             return View();
         }
@@ -49,7 +49,7 @@ namespace Web.Controllers
 
         private void BuildDropDownLists(Class model)
         {
-            ViewBag.Turno = ConvertEnumToListItem<ClassesTimeEnum>(model.ClassTime.ToString());
+            ViewBag.Turno = BuildListItemfromEnum<ClassesTimeEnum>(model.ClassTime.ToString());
 
             var docentes = _servicoDocente.GetAll().ToList();
             ViewBag.Docentes = BuildListSelectListItemWith(docentes, "Person.Name", "Id");
@@ -99,8 +99,8 @@ namespace Web.Controllers
             catch (Exception e)
             {
                 jsonResult = e.GetType() == typeof(DuplicatedEntityException)
-                    ? BuildJson(REGISTRO_DUPLICADO, Messages.MI009)
-                    : BuildJson(TOTAL_DISCENTES_MAIOR_QUANTIDADE_VAGAS, Messages.MI008);
+                    ? BuildJson(0, Messages.MI009)
+                    : BuildJson(0, Messages.MI008);
             }
 
             return jsonResult;

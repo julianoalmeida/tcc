@@ -234,6 +234,7 @@
     <Content Include="Content\Scripts\sistema\Turma\Index.js" />
     <Content Include="Content\Scripts\sistema\Turma\Manter.js" />
     <Content Include="Global.asax" />
+    <Content Include="Content\Images\background\stardust.png" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

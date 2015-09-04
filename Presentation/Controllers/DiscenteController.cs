@@ -1,10 +1,10 @@
 ﻿using Comum;
 using Entidades;
-using Entidades.Enumeracoes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Entidades.Enums;
 using Negocio;
 
 namespace Web.Controllers
@@ -70,24 +70,24 @@ namespace Web.Controllers
         {
             if (model.Id > 0)
             {
-                ViewBag.EstadoCivil = ConvertEnumToListItem<MaritalStatusEnum>(model.Person.MaritalState.ToString());
-                ViewBag.Sexo = ConvertEnumToListItem<SexEnum>(model.Person.Sex.ToString());
-                
+                ViewBag.EstadoCivil = BuildListItemfromEnum<MaritalStatusEnum>(model.Person.MaritalState.ToString());
+                ViewBag.Sexo = BuildListItemfromEnum<SexEnum>(model.Person.Sex.ToString());
+
                 var cidades = _servicoCidade.SelectWithFilter(a => a.State.Code.Equals(model.Person.Address.State)).ToList();
                 ViewBag.Cidades = BuildListSelectListItemWith(cidades, "Name", "Id", model.Person.Address.CityId.ToString());
 
                 var estados = _servicoEstado.GetAll().ToList();
                 ViewBag.Estados = BuildListSelectListItemWith(estados, "Name", "Code", model.Person.Address.State);
 
-                ViewBag.Escolaridades = ConvertEnumToListItem<EducationEnum>(model.Education.ToString());
+                ViewBag.Escolaridades = BuildListItemfromEnum<EducationEnum>(model.Education.ToString());
             }
             else
             {
-                ViewBag.EstadoCivil = ConvertEnumToListItem<MaritalStatusEnum>(string.Empty);
-                ViewBag.Sexo = ConvertEnumToListItem<SexEnum>(string.Empty);
+                ViewBag.EstadoCivil = BuildListItemfromEnum<MaritalStatusEnum>(string.Empty);
+                ViewBag.Sexo = BuildListItemfromEnum<SexEnum>(string.Empty);
                 ViewBag.Cidades = BuildListSelectListItemWith(new List<City>(), "Description", "Id");
                 ViewBag.Estados = BuildListSelectListItemWith(_servicoEstado.GetAll().ToList(), "Name", "Code");
-                ViewBag.Escolaridades = ConvertEnumToListItem<EducationEnum>(model.Education.ToString());
+                ViewBag.Escolaridades = BuildListItemfromEnum<EducationEnum>(model.Education.ToString());
             }
         }
 
@@ -119,8 +119,6 @@ namespace Web.Controllers
         [ValidateInput(false)]
         public JsonResult Salvar(Student student)
         {
-            var retorno = SUCESSO;
-
             var login = GetFormatedUserLoginAndPassword(student.Person);
             var mensagem = student.Id == 0 ? Messages.MI001 + login : Messages.MI002 + login;
 
@@ -141,10 +139,10 @@ namespace Web.Controllers
             }
             catch (Exception ex)
             {
-                retorno = GetErrorType(retorno, ex, ref mensagem);
+                mensagem = GetErrorMessageFromExceptionType(ex);
             }
 
-            return Json(new {retorno, msg = mensagem, discenteID = student.Id });
+            return Json(new { mensagem, studentID = student.Id });
         }
 
         public JsonResult Excluir(int id)

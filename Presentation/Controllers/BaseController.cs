@@ -1,12 +1,12 @@
 ﻿using Comum;
 using Entidades;
-using Entidades.Enumeracoes;
 using Entidades.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Comum.Exceptions;
+using Entidades.Enums;
 
 namespace Web.Controllers
 {
@@ -14,15 +14,6 @@ namespace Web.Controllers
     {
         public static int LoggedUserProfileAccessCode { get; set; }
         public static string LoggerUserProfileName { get; set; }
-
-        public const int ERRO = 0;
-        public const int SUCESSO = 1;
-        public const int REGISTRO_DUPLICADO = 2;
-        public const int CAMPO_OBRIGATORIO_NAO_INFORMADO = 3;
-        public const int TOTAL_DISCENTES_MAIOR_QUANTIDADE_VAGAS = 4;
-        public const int CPF_INVALIDO = 5;
-        public const int EMAIL_INVALIDO = 6;
-        public const int DATA_ATUAL_FUTURA = 7;
 
         public ActionResult Index()
         {
@@ -35,30 +26,28 @@ namespace Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        protected int GetErrorType(int errorCode, Exception ex, ref string msg)
+        protected string GetSuccessMensagemForSaveOrUpdate(int entityId)
         {
-            if (ex.GetType() == typeof(FutureDateException))
-            {
-                errorCode = DATA_ATUAL_FUTURA;
-                msg = Messages.MI003;
-            }
-            else if (ex.GetType() == typeof(DuplicatedEntityException))
-            {
-                errorCode = REGISTRO_DUPLICADO;
-                msg = Messages.MI009;
-            }
-            else if (ex.GetType() == typeof(CpfException))
-            {
-                errorCode = CPF_INVALIDO;
-                msg = Messages.MI004;
+            return entityId == 0 ? Messages.MI001 : Messages.MI002;
+        }
 
-            }
+        protected string GetErrorMessageFromExceptionType(Exception ex)
+        {
+            var errorMessage = string.Empty;
+
+            if (ex.GetType() == typeof(FutureDateException))
+                errorMessage = Messages.MI003;
+
+            else if (ex.GetType() == typeof(DuplicatedEntityException))
+                errorMessage = Messages.MI009;
+
+            else if (ex.GetType() == typeof(CpfException))
+                errorMessage = Messages.MI004;
+
             else if (ex.GetType() == typeof(EmailException))
-            {
-                errorCode = EMAIL_INVALIDO;
-                msg = Messages.MI006;
-            }
-            return errorCode;
+                errorMessage = Messages.MI006;
+
+            return errorMessage;
         }
 
         protected void BuildLoggedUser(Person person, User user, int accessCode)
@@ -102,35 +91,35 @@ namespace Web.Controllers
 
         public List<SelectListItem> BuildListSelectListItemWith<T>(IEnumerable<T> entityList, string optionDescription, string optionValue, string selectedValue = "0")
         {
-            var itens = new List<SelectListItem> { new SelectListItem { Text = Constants.SELECT, Value = "" } };
+            var options = new List<SelectListItem> { new SelectListItem { Text = Constants.SELECT, Value = "" } };
 
-            var type = typeof(T);
+            var listItemType = typeof(T);
             var properties = optionDescription.Split('.');
 
-            if (entityList == null) return itens;
+            if (entityList == null) return options;
 
-            foreach (var item in entityList)
+                foreach (var item in entityList)
             {
-                var property = type.GetProperty(optionDescription);
+                var typeProperty = listItemType.GetProperty(optionDescription);
 
                 string text;
 
                 if (properties.Any())
                 {
-                    var tipoPropriedade = type.GetProperty(properties[0]).GetValue(item).GetType();
-                    property = tipoPropriedade.GetProperty(properties[1]);
-                    text = property.GetValue(item.GetType().GetProperty(properties[0]).GetValue(item)).ToString();
+                    var tipoPropriedade = listItemType.GetProperty(properties[0]).GetValue(item).GetType();
+                    typeProperty = tipoPropriedade.GetProperty(properties[1]);
+                    text = typeProperty.GetValue(item.GetType().GetProperty(properties[0]).GetValue(item)).ToString();
                 }
                 else
-                    text = property.GetValue(item).ToString();
+                    text = typeProperty.GetValue(item).ToString();
 
-                itens.Add(BuildSelectListItemWith(optionValue, selectedValue, type, item, text));
+                options.Add(BuildSelectListItemWith(optionValue, selectedValue, listItemType, item, text));
             }
 
-            return itens;
+            return options;
         }
 
-        public List<SelectListItem> ConvertEnumToListItem<T>(string valorSelecionado)
+        public List<SelectListItem> BuildListItemfromEnum<T>(string valorSelecionado)
         {
             return ConvertEnumToListItemWithSelectOption<T>(valorSelecionado);
         }
@@ -140,7 +129,7 @@ namespace Web.Controllers
             return Json(new
             {
                 sEcho = Request.Params["sEcho"],
-                iTotalRecords = entityList.Count(),
+                iTotalRecords = entityList.Count,
                 iTotalDisplayRecords = total,
                 ValidateRequest = false,
                 aaData = entityList
@@ -178,6 +167,5 @@ namespace Web.Controllers
 
             return itens;
         }
-
     }
 }

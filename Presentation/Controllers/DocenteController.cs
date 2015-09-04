@@ -1,10 +1,10 @@
 ﻿using Comum;
 using Entidades;
-using Entidades.Enumeracoes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Entidades.Enums;
 using Negocio;
 
 namespace Web.Controllers
@@ -20,7 +20,7 @@ namespace Web.Controllers
         private readonly IEstadoBusiness _servicoEstado;
         private readonly IDisciplinaBusiness _servicoDisciplina;
         private const string DISCIPLINA = "Courses";
-        
+
         #endregion
 
         #region CONSTRUTOR
@@ -86,9 +86,9 @@ namespace Web.Controllers
         /// <param name="model">Teacher Atual</param>
         private void CarregarDropDowns(Teacher model)
         {
-            ViewBag.EstadoCivil = ConvertEnumToListItem<MaritalStatusEnum>(model.Person.MaritalState.ToString());
-            ViewBag.Sexo = ConvertEnumToListItem<SexEnum>(model.Person.Sex.ToString());
-            ViewBag.Escolaridades = ConvertEnumToListItem<EducationEnum>(model.Education.ToString());
+            ViewBag.EstadoCivil = BuildListItemfromEnum<MaritalStatusEnum>(model.Person.MaritalState.ToString());
+            ViewBag.Sexo = BuildListItemfromEnum<SexEnum>(model.Person.Sex.ToString());
+            ViewBag.Escolaridades = BuildListItemfromEnum<EducationEnum>(model.Education.ToString());
 
             var disciplinas = _servicoDisciplina.GetAll();
             ViewBag.Disciplinas = BuildListSelectListItemWith(disciplinas, "Description", "Id");
@@ -185,7 +185,7 @@ namespace Web.Controllers
                 BuildLoggedUser(teacher.Person, usuario, (int)AccessProfileEnum.Docente);
 
                 _servicoPessoa.ValidadePerson(teacher.Person);
-                
+
                 if (_servicoDocente.IsRequiredFieldsFilled(teacher))
                 {
                     _servicoDocente.SaveAndReturn(teacher);
@@ -195,7 +195,7 @@ namespace Web.Controllers
             }
             catch (Exception ex)
             {
-                retorno = GetErrorType(retorno, ex, ref mensagem);
+                mensagem = GetErrorMessageFromExceptionType(ex);
             }
 
             return Json(new { retorno, msg = mensagem, docenteID = teacher.Id });

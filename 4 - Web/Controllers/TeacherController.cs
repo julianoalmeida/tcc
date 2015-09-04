@@ -1,15 +1,15 @@
-﻿using Comum;
-using Entidades;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Comum;
+using Entidades;
 using Entidades.Enums;
 using Negocio;
 
-namespace Web.Controllers
+namespace _4___Web.Controllers
 {
-    public class DocenteController : BaseController
+    public class TeacherController : BaseController
     {
         #region ATRIBUTOS
 
@@ -25,7 +25,7 @@ namespace Web.Controllers
 
         #region CONSTRUTOR
 
-        public DocenteController(IPersonBusiness person,
+        public TeacherController(IPersonBusiness person,
             ITeacherBusiness teacher, ICourseBusiness course, IUserBusiness user, ICityBusiness city,
             IStateBusiness state, ICourseBusiness courses)
         {

@@ -156,7 +156,7 @@ function MontaTablePaginada() {
     };
 
     //config.bInfo = false;
-    config.sZeroRecords = "Nenhuma disciplina vinculada";
+    config.sZeroRecords = "Nenhuma course vinculada";
     $.extend(config, RecuperaConfiguracoesDataTable(config));
     $("#tbDisciplinas").dataTable(config);
 }
@@ -223,7 +223,7 @@ function preencherCamposTemp() {
 function ExibirDialogConfirmacao() {
 
     bootbox.dialog({
-        message: '<div class="text-warning">Para cadastrar um Teacher é necessário vincular ao menos uma disciplina.</div>',
+        message: '<div class="text-warning">Para cadastrar um Teacher é necessário vincular ao menos uma course.</div>',
         title: '<h2 class="text-warning"><span class="icon-exclamation-sign"></span> Aviso</h2>',
         buttons: {
             main: {

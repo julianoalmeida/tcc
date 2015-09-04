@@ -1,17 +1,16 @@
-﻿using Comum;
-using Entidades;
-using Entidades.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Comum;
+using Entidades;
+using Entidades.Enums;
 using Negocio;
 using NHibernate.Util;
 
-namespace Web.Controllers
-{
-    [ValidateInput(false)]
-    public class AdministradorController : BaseController
+namespace _4___Web.Controllers
+{   
+    public class AdmController : BaseController
     {
         private readonly IPersonBusiness _personBusiness;
         private readonly IAdmBusiness _admBusiness;
@@ -19,7 +18,7 @@ namespace Web.Controllers
         private readonly ICityBusiness _cityBusiness;
         private readonly IStateBusiness _stateBusiness;
 
-        public AdministradorController(IPersonBusiness person,
+        public AdmController(IPersonBusiness person,
             IAdmBusiness adm, IUserBusiness user, ICityBusiness city,
             IStateBusiness state)
         {

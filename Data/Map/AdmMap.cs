@@ -3,9 +3,9 @@ using FluentNHibernate.Mapping;
 
 namespace Data.Map
 {
-    public class AdministratorMap : ClassMap<Administrator>
+    public class AdmMap : ClassMap<Adm>
     {
-        public AdministratorMap()
+        public AdmMap()
         {
             Table("ADMINISTRADOR");
             Id(a => a.Id, "Id");

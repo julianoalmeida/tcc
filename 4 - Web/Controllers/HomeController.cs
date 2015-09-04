@@ -4,6 +4,11 @@ namespace _4___Web.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index() => View();
+        [HttpGet]
+        public ActionResult Index()
+        {
+            return View();
+        }
+
     }
 }

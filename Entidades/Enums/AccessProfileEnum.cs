@@ -4,7 +4,7 @@ namespace Entidades.Enums
 {
     public enum AccessProfileEnum
     {
-        [Description("Administrator")]
+        [Description("Administrador")]
         Administrador = 1,
 
         [Description("Teacher")]

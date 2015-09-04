@@ -1,22 +1,22 @@
-﻿using Comum;
+﻿using System;
+using System.Linq;
+using System.Web.Mvc;
+using Comum;
+using Comum.Exceptions;
 using Entidades;
 using Entidades.Enums;
-using System;
-using System.Web.Mvc;
-using System.Linq;
-using Comum.Exceptions;
 using Negocio;
 using NHibernate.Util;
 
-namespace Web.Controllers
+namespace _4___Web.Controllers
 {
-    public class TurmaController : BaseController
+    public class ClassController : BaseController
     {
         private readonly IClassBusiness _servicoClass;
         private readonly IStudentBusiness _servicoStudent;
         private readonly ITeacherBusiness _servicoTeacher;
 
-        public TurmaController(IClassBusiness negocio, IStudentBusiness student, ITeacherBusiness teacher)
+        public ClassController(IClassBusiness negocio, IStudentBusiness student, ITeacherBusiness teacher)
         {
             _servicoClass = negocio;
             _servicoStudent = student;

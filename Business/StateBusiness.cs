@@ -3,12 +3,12 @@ using Entidades;
 
 namespace Negocio
 {
-    public interface IEstadoBusiness : INegocioBase<State> { }
+    public interface IStateBusiness : INegocioBase<State> { }
 
-    public class EstadoBusiness : BaseBusiness<State>, IEstadoBusiness
+    public class StateBusiness : BaseBusiness<State>, IStateBusiness
     {
         private readonly IStateData _stateData;
-        public EstadoBusiness(IStateData data)
+        public StateBusiness(IStateData data)
             : base(data)
         {
             _stateData = data;

@@ -1,6 +1,6 @@
 ﻿namespace Entidades
 {
-    public class Administrator : BaseEntity
+    public class Adm : BaseEntity
     {
         public virtual Person Person { get; set; }
     }

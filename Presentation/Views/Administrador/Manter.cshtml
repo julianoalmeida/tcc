@@ -1,13 +1,13 @@
 ﻿@using Entidades
 
-@model Administrator
+@model Adm
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @{
-    var titulo = Model.Id == 0 ? "Inserir Administrator" : "Editar Administrator";
+    var titulo = Model.Id == 0 ? "Inserir Adm" : "Editar Adm";
     var cidades = ViewBag.Cidades as List<SelectListItem>;
     var estados = ViewBag.Estados as List<SelectListItem>;
 
@@ -33,7 +33,7 @@
 
                         <form action="#" method="post" id="formAdm" name="inserir" class="clearfix form-horizontal">
 
-                            @Html.HiddenFor(a => a.Id, new { @id = "HiddenIdAdministrator" })
+                            @Html.HiddenFor(a => a.Id, new { @id = "HiddenIdAdm" })
                             @Html.HiddenFor(a => a.Person.Id, new { @id = "HiddenIdPerson" })
                             @Html.HiddenFor(a => a.Person.Address.Id, new { @id = "HiddenIdAddress" })
 
@@ -212,5 +212,5 @@
 
 
 @section scripts {
-    @Scripts.Render("~/Content/Scripts/sistema/Administrator/Manter.js")
+    @Scripts.Render("~/Content/Scripts/sistema/Adm/Manter.js")
 }

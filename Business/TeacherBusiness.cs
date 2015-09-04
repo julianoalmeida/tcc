@@ -6,25 +6,25 @@ using Data;
 
 namespace Negocio
 {
-    public interface IDocenteBusiness : INegocioBase<Teacher>
+    public interface ITeacherBusiness : INegocioBase<Teacher>
     {
         int Total(Teacher teacher);
         List<Teacher> SelectWithPagination(Teacher teacher, int paginaAtual);
         bool IsRequiredFieldsFilled(Teacher teacher);
     }
 
-    public class DocenteBusiness : BaseBusiness<Teacher>, IDocenteBusiness
+    public class TeacherBusiness : BaseBusiness<Teacher>, ITeacherBusiness
     {
         private readonly ITeacherData _teacherData;
-        public DocenteBusiness(ITeacherData data)
+        public TeacherBusiness(ITeacherData data)
             : base(data)
         {
             _teacherData = data;
         }
 
-        public List<Teacher> SelectWithPagination(Teacher teacher, int paginaAtual)
+        public List<Teacher> SelectWithPagination(Teacher entity, int paginaAtual)
         {
-            return _teacherData.SelectWithPagination(teacher, paginaAtual);
+            return _teacherData.SelectWithPagination(entity, paginaAtual);
         }
 
         public int Total(Teacher teacher)
@@ -32,25 +32,25 @@ namespace Negocio
             return _teacherData.Total(teacher);
         }
 
-        private static bool IsEscolaridadeFilled(Teacher teacher)
+        private static bool IsEscolaridadeFilled(Teacher entity)
         {
-            if (teacher.Education > 0)
+            if (entity.Education > 0)
                 return true;
 
             throw new RequiredFieldException("Education");
         }
 
-        private static bool IsDisciplinasFilled(Teacher teacher)
+        private static bool IsDisciplinasFilled(Teacher entity)
         {
-            if (teacher.Courses.Any())
+            if (entity.Courses.Any())
                 return true;
 
             throw new RequiredFieldException("Courses");
         }
 
-        public bool IsRequiredFieldsFilled(Teacher teacher)
+        public bool IsRequiredFieldsFilled(Teacher entity)
         {
-            return IsEscolaridadeFilled(teacher) && IsDisciplinasFilled(teacher);
+            return IsEscolaridadeFilled(entity) && IsDisciplinasFilled(entity);
         }
     }
 }

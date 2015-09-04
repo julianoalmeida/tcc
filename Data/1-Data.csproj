@@ -50,7 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Map\AdministratorMap.cs" />
+    <Compile Include="Map\AdmMap.cs" />
     <Compile Include="Map\CityMap.cs" />
     <Compile Include="Map\StudentMap.cs" />
     <Compile Include="Map\CourseMap.cs" />
@@ -62,7 +62,7 @@
     <Compile Include="Map\ClassMap.cs" />
     <Compile Include="SetupSessionFactory\FluentSessionFactory.cs" />
     <Compile Include="Map\UserMap.cs" />
-    <Compile Include="AdministratorData.cs" />
+    <Compile Include="AdmData.cs" />
     <Compile Include="CityData.cs" />
     <Compile Include="DiscenteData.cs" />
     <Compile Include="CoursesData.cs" />

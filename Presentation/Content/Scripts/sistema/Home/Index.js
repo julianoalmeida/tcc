@@ -10,7 +10,7 @@ $(document).ready(function () {
 function ExibirDialogConfirmacao() {
 
     bootbox.dialog({
-        message: '<div class="text-warning">Favor entrar em contato com o Administrator do Sistema.</div>',
+        message: '<div class="text-warning">Favor entrar em contato com o Adm do Sistema.</div>',
         title: '<h2 class="text-warning"><span class="icon-exclamation-sign"></span> Aviso</h2>',
         buttons: {
             main: {

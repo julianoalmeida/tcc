@@ -7,17 +7,17 @@ using Data;
 
 namespace Negocio
 {
-    public interface IPessoaBusiness : INegocioBase<Person>
+    public interface IPersonBusiness : INegocioBase<Person>
     {
         void ValidadePerson(Person person);
         void ValidateRequiredFields(Person person);
         void ValidateDuplicatedPerson(Person person);
     }
 
-    public class PessoaBusiness : BaseBusiness<Person>, IPessoaBusiness
+    public class PersonBusiness : BaseBusiness<Person>, IPersonBusiness
     {
         private readonly IPersonData _personData;
-        public PessoaBusiness(IPersonData data)
+        public PersonBusiness(IPersonData data)
             : base(data)
         {
             _personData = data;
@@ -27,52 +27,51 @@ namespace Negocio
         {
             _personData.IsDuplicated(person);
         }
-        
+
         public void ValidateRequiredFields(Person person)
         {
-            var camposPreenchidos = false;
+            var hasError = false;
 
             if (string.IsNullOrEmpty(person.Name))
-                camposPreenchidos = true;
+                hasError = true;
 
             else if (!person.BirthDate.HasValue)
-                camposPreenchidos = true;
+                hasError = true;
 
             else if (person.Sex == 0)
-                camposPreenchidos = true;
+                hasError = true;
 
             else if (person.MaritalState == 0)
-                camposPreenchidos = true;
+                hasError = true;
 
             else if (string.IsNullOrEmpty(person.MobileNumber.RemoveMaskCharacters()))
-                camposPreenchidos = true;
+                hasError = true;
 
             else if (string.IsNullOrEmpty(person.Address.State))
-                camposPreenchidos = true;
+                hasError = true;
 
             else if (person.Address.CityId == 0)
-                camposPreenchidos = true;
+                hasError = true;
 
             else if (string.IsNullOrEmpty(person.Address.StreetName))
-                camposPreenchidos = true;
+                hasError = true;
 
             else if (string.IsNullOrEmpty(person.Address.Neighborhood))
-                camposPreenchidos = true;
+                hasError = true;
 
             else if (string.IsNullOrEmpty(person.Address.ZipCode))
-                camposPreenchidos = true;
+                hasError = true;
 
-            if (camposPreenchidos)
+            if (hasError)
                 throw new RequiredFieldException();
         }
 
         public void ValidadePerson(Person person)
         {
-            var pessoaBd = _personData.SelectWithFilter(a => a.Cpf.Equals(person.Cpf)).FirstOrDefault();
+            var databasePerson = _personData.SelectWithFilter(a => a.Cpf.Equals(person.Cpf))
+                                            .FirstOrDefault();
 
-            if (pessoaBd?.Id != person.Id)
-                throw new DuplicatedEntityException();
-
+            ValidateDuplicatedPerson(person, databasePerson);
             ValidateRequiredFields(person);
 
             if (ValidaDataAtualFutura(person.BirthDate.Value))
@@ -83,6 +82,12 @@ namespace Negocio
 
             if (!IsValidEmail(person.Email))
                 throw new EmailException();
+        }
+
+        private static void ValidateDuplicatedPerson(Person person, Person databasePerson)
+        {
+            if (databasePerson?.Id != person.Id)
+                throw new DuplicatedEntityException();
         }
 
         private static bool ValidaDataAtualFutura(DateTime data)

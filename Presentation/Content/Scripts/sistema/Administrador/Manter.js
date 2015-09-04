@@ -18,14 +18,14 @@ Eventos = {
         $('#btnSalvar').bind('click', function (e) {
             e.preventDefault();
 
-            var action = rootUrl + "Administrator/Index";
+            var action = rootUrl + "Adm/Index";
 
             if (validaCampos()) {
 
                 var adm = $("#formAdm").serialize();
 
                 $.ajax({
-                    url: rootUrl + 'Administrator/SaveAndReturn',
+                    url: rootUrl + 'Adm/SaveAndReturn',
                     dataType: 'json',
                     type: 'post',
                     cache: false,
@@ -58,7 +58,7 @@ Eventos = {
         }
 
         $("#btnCancelar").bind('click', function (e) {
-            window.location.href = rootUrl + "Administrator/Index";
+            window.location.href = rootUrl + "Adm/Index";
             return false;
         });
 
@@ -68,7 +68,7 @@ Eventos = {
 function CarregaComboCidades() {
 
     $.ajax({
-        url: rootUrl + 'Administrator/ListarCidades',
+        url: rootUrl + 'Adm/ListarCidades',
         dataType: 'json',
         type: 'post',
         cache: false,

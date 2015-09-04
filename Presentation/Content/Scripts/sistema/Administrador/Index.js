@@ -14,7 +14,7 @@ Eventos = {
         $('body').delegate('[id*="btnExcluir_"]', 'click', function () {
 
             var id = $(this).attr('alt');
-            var metodo = "Administrator/Remove";
+            var metodo = "Adm/Remove";
 
             bootbox.dialog({
                 message: '<div class="text-warning">Confirma exclusão?</div>',
@@ -49,7 +49,7 @@ Eventos = {
         $('.cpf').setMask('999.999.999-99');
 
         $("#btnIncluir").bind('click', function () {
-            window.location.href = rootUrl + "Administrator/Manter?id=";
+            window.location.href = rootUrl + "Adm/Manter?id=";
         });
     },
 
@@ -58,7 +58,7 @@ Eventos = {
 function MontaTablePaginada() {
 
     var config = {
-        "sAjaxSource": rootUrl + 'Administrator/ListarPaginado',
+        "sAjaxSource": rootUrl + 'Adm/ListarPaginado',
         "aSync": false,
         "aoColumns": [
                 {
@@ -91,7 +91,7 @@ function MontaTablePaginada() {
                     'bSortable': false,
                     'mRender': function (data, type, val) {
                         var html = "<div>"
-                                      + "<a onclick=\"location.href = '" + rootUrl + "Administrator/Manter?id=" + val.Id + "'; return false;\" data-toggle='tooltip' title='Editar'><span class='icon-pencil'></span></a>"
+                                      + "<a onclick=\"location.href = '" + rootUrl + "Adm/Manter?id=" + val.Id + "'; return false;\" data-toggle='tooltip' title='Editar'><span class='icon-pencil'></span></a>"
                                       + "<a data-toggle='tooltip' id='btnExcluir_' title='Remove' alt='" + val.Id + "'  ><span class='icon-remove'></span></a>"
                                   + "</div>";
                         return html;

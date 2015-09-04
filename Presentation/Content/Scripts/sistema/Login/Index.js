@@ -2,7 +2,7 @@
 $(document).ready(function () {
 
     $("#semCadastro").click(function () {
-        var msg = "Favor entrar em contato com o Administrator do Sistema.";
+        var msg = "Favor entrar em contato com o Adm do Sistema.";
         ExibirDialogConfirmacao(msg);
     });
 

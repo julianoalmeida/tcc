@@ -3,12 +3,12 @@ using Entidades;
 
 namespace Negocio
 {
-    public interface ICidadeBusiness : INegocioBase<City> { }
+    public interface ICityBusiness : INegocioBase<City> { }
 
-    public class CidadeBusiness : BaseBusiness<City>, ICidadeBusiness
+    public class CityBusiness : BaseBusiness<City>, ICityBusiness
     {
         private readonly ICityData _city;
-        public CidadeBusiness(ICityData city)
+        public CityBusiness(ICityData city)
             : base(city)
         {
             _city = city;

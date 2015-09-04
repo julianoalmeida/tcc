@@ -48,29 +48,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Map\AdministradorMap.cs" />
-    <Compile Include="Map\CidadeMap.cs" />
-    <Compile Include="Map\DiscenteMap.cs" />
-    <Compile Include="Map\DisciplinaMap.cs" />
-    <Compile Include="Map\DocenteMap.cs" />
-    <Compile Include="Map\EnderecoMap.cs" />
-    <Compile Include="Map\EstadoMap.cs" />
-    <Compile Include="Map\PaisMap.cs" />
-    <Compile Include="Map\PessoaMap.cs" />
-    <Compile Include="Map\TurmaMap.cs" />
+    <Compile Include="Map\AdministratorMap.cs" />
+    <Compile Include="Map\CityMap.cs" />
+    <Compile Include="Map\StudentMap.cs" />
+    <Compile Include="Map\CourseMap.cs" />
+    <Compile Include="Map\TeacherMap.cs" />
+    <Compile Include="Map\AddressMap.cs" />
+    <Compile Include="Map\StateMap.cs" />
+    <Compile Include="Map\CountryMap.cs" />
+    <Compile Include="Map\PersonMap.cs" />
+    <Compile Include="Map\ClassMap.cs" />
     <Compile Include="SetupSessionFactory\FluentSessionFactory.cs" />
-    <Compile Include="Map\UsuarioMap.cs" />
+    <Compile Include="Map\UserMap.cs" />
     <Compile Include="AdministratorData.cs" />
-    <Compile Include="CidadeData.cs" />
+    <Compile Include="CityData.cs" />
     <Compile Include="DiscenteData.cs" />
-    <Compile Include="DisciplinaData.cs" />
-    <Compile Include="DocenteData.cs" />
-    <Compile Include="EstadoData.cs" />
-    <Compile Include="PessoaData.cs" />
+    <Compile Include="CoursesData.cs" />
+    <Compile Include="TeacherData.cs" />
+    <Compile Include="StateData.cs" />
+    <Compile Include="PersonData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RepositorioNHibernate.cs" />
-    <Compile Include="TurmaData.cs" />
-    <Compile Include="UsuarioData.cs" />
+    <Compile Include="NHibernateRepository.cs" />
+    <Compile Include="ClassData.cs" />
+    <Compile Include="UserData.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Comum\1-Common.csproj">

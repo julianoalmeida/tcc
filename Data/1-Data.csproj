@@ -79,9 +79,9 @@
       <Project>{31c2d73f-09a3-4ba7-a1d8-888a37882281}</Project>
       <Name>1-Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Entidades\2-Entities.csproj">
+    <ProjectReference Include="..\Entidades\2-Entity.csproj">
       <Project>{93ff6395-9f0a-4828-a1cd-c9d5189b4a6a}</Project>
-      <Name>2-Entities</Name>
+      <Name>2-Entity</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

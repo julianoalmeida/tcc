@@ -221,9 +221,9 @@
       <Project>{19ab0088-457e-437e-8326-ca6a89e208a5}</Project>
       <Name>0-IocStartup</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Entidades\2-Entities.csproj">
+    <ProjectReference Include="..\Entidades\2-Entity.csproj">
       <Project>{93ff6395-9f0a-4828-a1cd-c9d5189b4a6a}</Project>
-      <Name>2-Entities</Name>
+      <Name>2-Entity</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

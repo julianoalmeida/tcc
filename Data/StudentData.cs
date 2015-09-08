@@ -6,21 +6,21 @@ using NHibernate;
 
 namespace Data
 {
-    public interface IDiscenteData : INHibernateRepository<Student>
+    public interface IStudentData : INHibernateRepository<Student>
     {
         int Total(Student docente);
         List<Student> SelectWithPagination(Student docente, int paginaAtual);
     }
 
-    public class DiscenteData : NHibernateRepository<Student>, IDiscenteData
+    public class StudentData : NHibernateRepository<Student>, IStudentData
     {
-        public DiscenteData(ISession session)
+        public StudentData(ISession session)
             : base(session)
         { }
 
         public List<Student> SelectWithPagination(Student student, int startPage)
         {
-            return Filter(student).Skip(startPage).Take(Constants.TOTAL_REGISTRO_POR_PAGINAS).ToList();
+            return Filter(student).Skip(startPage).Take(Constants.TOTAL_PAGE_REGISTERS).ToList();
         }
 
         public int Total(Student student)

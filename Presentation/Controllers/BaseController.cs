@@ -28,7 +28,7 @@ namespace Web.Controllers
 
         protected string GetSuccessMensagemForSaveOrUpdate(int entityId)
         {
-            return entityId == 0 ? Messages.MI001 : Messages.MI002;
+            return entityId == 0 ? Messages.SUCCESSFULLY_INSERTED_RECORD : Messages.SUCCESSFULLY_UPDATED_RECORD;
         }
 
         protected string GetErrorMessageFromExceptionType(Exception ex)
@@ -36,16 +36,16 @@ namespace Web.Controllers
             var errorMessage = string.Empty;
 
             if (ex.GetType() == typeof(FutureDateException))
-                errorMessage = Messages.MI003;
+                errorMessage = Messages.INVALID_DATE;
 
             else if (ex.GetType() == typeof(DuplicatedEntityException))
-                errorMessage = Messages.MI009;
+                errorMessage = Messages.REGISTER_ALREADY_IN_PLACE;
 
             else if (ex.GetType() == typeof(CpfException))
-                errorMessage = Messages.MI004;
+                errorMessage = Messages.INVALID_CPF;
 
             else if (ex.GetType() == typeof(EmailException))
-                errorMessage = Messages.MI006;
+                errorMessage = Messages.INVALID_EMAIL;
 
             return errorMessage;
         }

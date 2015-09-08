@@ -5,6 +5,6 @@ namespace Comum.Exceptions
     [Serializable]
     public class VincularDisciplinaException : BaseException
     {
-        public VincularDisciplinaException() : base(Messages.MI007) { }
+        public VincularDisciplinaException() : base(Messages.COURSE_REQUIRED) { }
     }
 }

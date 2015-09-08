@@ -99,8 +99,8 @@ namespace _4___Web.Controllers
             catch (Exception e)
             {
                 jsonResult = e.GetType() == typeof(DuplicatedEntityException)
-                    ? BuildJson(0, Messages.MI009)
-                    : BuildJson(0, Messages.MI008);
+                    ? BuildJson(0, Messages.REGISTER_ALREADY_IN_PLACE)
+                    : BuildJson(0, Messages.CLASS_STUDENT_OVERFLOW);
             }
 
             return jsonResult;

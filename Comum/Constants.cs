@@ -2,7 +2,7 @@
 {
     public static class Constants
     {
-        public const int TOTAL_REGISTRO_POR_PAGINAS = 10;
+        public const int TOTAL_PAGE_REGISTERS = 10;
      
         public const string START_PAGE = "iDisplayStart";
         

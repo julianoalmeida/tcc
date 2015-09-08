@@ -20,7 +20,7 @@ namespace Data
 
         public List<Adm> SelectWithPagination(Adm adm, int startPage)
         {
-            return Filter(adm).Skip(startPage).Take(Constants.TOTAL_REGISTRO_POR_PAGINAS).ToList();
+            return Filter(adm).Skip(startPage).Take(Constants.TOTAL_PAGE_REGISTERS).ToList();
         }
         
         public int Total(Adm adm)

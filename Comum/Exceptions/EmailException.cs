@@ -6,7 +6,7 @@ namespace Comum.Exceptions
     public class EmailException : BaseException
     {
         public EmailException()
-            : base(Messages.MI006)
+            : base(Messages.INVALID_EMAIL)
         { }
     }
 }

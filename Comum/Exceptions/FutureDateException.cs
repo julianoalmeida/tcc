@@ -5,6 +5,6 @@ namespace Comum.Exceptions
     [Serializable]
     public class FutureDateException : BaseException
     {
-        public FutureDateException() : base(Messages.MI003) { }
+        public FutureDateException() : base(Messages.INVALID_DATE) { }
     }
 }

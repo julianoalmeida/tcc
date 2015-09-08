@@ -171,7 +171,7 @@ namespace Web.Controllers
             var retorno = 1;
 
             var login = GetFormatedUserLoginAndPassword(teacher.Person);
-            var mensagem = teacher.Id == 0 ? Messages.MI001 + login : Messages.MI002 + login;
+            var mensagem = teacher.Id == 0 ? Messages.SUCCESSFULLY_INSERTED_RECORD + login : Messages.SUCCESSFULLY_UPDATED_RECORD + login;
 
             try
             {

@@ -20,7 +20,7 @@ namespace Data
 
         public List<Teacher> SelectWithPagination(Teacher teacher, int paginaAtual)
         {
-            return Filter(teacher).Skip(paginaAtual).Take(Constants.TOTAL_REGISTRO_POR_PAGINAS).ToList();
+            return Filter(teacher).Skip(paginaAtual).Take(Constants.TOTAL_PAGE_REGISTERS).ToList();
         }
         
         public int Total(Teacher teacher)

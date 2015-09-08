@@ -16,8 +16,8 @@ namespace Negocio
 
     public class StudentBusiness : BaseBusiness<Student>, IStudentBusiness
     {
-        private readonly IDiscenteData _studentData;
-        public StudentBusiness(IDiscenteData studentData)
+        private readonly IStudentData _studentData;
+        public StudentBusiness(IStudentData studentData)
             : base(studentData)
         {
             _studentData = studentData;

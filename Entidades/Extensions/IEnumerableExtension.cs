@@ -28,16 +28,16 @@ namespace Entidades.Extensions
             _list.RemoveAll(string.IsNullOrEmpty);
         }
 
+        private static string FormatItensWithcommaExceptTheLasOne()
+        {
+            return string.Join(", ", _list.ToArray(), 0, _list.Count() - 1);
+        }
+
         private static string IncreaseEStatementAndAddLastListItem(string formatedMessage)
         {
             var message = formatedMessage + " e ";
             message += _list.Last();
             return message;
-        }
-
-        private static string FormatItensWithcommaExceptTheLasOne()
-        {
-            return string.Join(", ", _list.ToArray(), 0, _list.Count() - 1);
         }
     }
 }

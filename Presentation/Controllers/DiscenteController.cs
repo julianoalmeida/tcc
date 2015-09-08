@@ -120,7 +120,7 @@ namespace Web.Controllers
         public JsonResult Salvar(Student student)
         {
             var login = GetFormatedUserLoginAndPassword(student.Person);
-            var mensagem = student.Id == 0 ? Messages.MI001 + login : Messages.MI002 + login;
+            var mensagem = student.Id == 0 ? Messages.SUCCESSFULLY_INSERTED_RECORD + login : Messages.SUCCESSFULLY_UPDATED_RECORD + login;
 
             try
             {

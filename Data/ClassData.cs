@@ -22,7 +22,7 @@ namespace Data
         {
             return Filter(model)
                 .Skip(startPage)
-                .Take(Constants.TOTAL_REGISTRO_POR_PAGINAS)
+                .Take(Constants.TOTAL_PAGE_REGISTERS)
                 .ToList();
         }
 

@@ -22,7 +22,5 @@ namespace Entidades
             get { return _zipCode.RemoveMaskCharacters(); }
             set { _zipCode = value; }
         }
-
-
     }
 }

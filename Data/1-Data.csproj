@@ -64,7 +64,7 @@
     <Compile Include="Map\UserMap.cs" />
     <Compile Include="AdmData.cs" />
     <Compile Include="CityData.cs" />
-    <Compile Include="DiscenteData.cs" />
+    <Compile Include="StudentData.cs" />
     <Compile Include="CoursesData.cs" />
     <Compile Include="TeacherData.cs" />
     <Compile Include="StateData.cs" />

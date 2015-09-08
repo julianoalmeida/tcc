@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
 
 namespace Entidades.Extensions
 {
@@ -7,11 +10,28 @@ namespace Entidades.Extensions
     {
         public static string GetEnumDescription(this Enum value)
         {
-            var field = value.GetType().GetField(value.ToString());
+            return GetDescription(value.ToString(), GetCustomAttributes(GetFieldInfo(value)));
+        }
 
-            var attributes = (DescriptionAttribute[])field.GetCustomAttributes(typeof(DescriptionAttribute), false);
+        public static List<string> GetEnumDescriptions(this Enum value)
+        {
+            return (from object itemValue in value.GetType().GetEnumValues()
+                    select GetDescription(itemValue.ToString(), GetCustomAttributes(GetFieldInfo(itemValue)))).ToList();
+        }
 
-            return attributes?.Length > 0 ? attributes[0]?.Description : value.ToString();
+        private static string GetDescription(string enumValue, IReadOnlyList<DescriptionAttribute> attributes)
+        {
+            return attributes?.Count > 0 ? attributes[0]?.Description : enumValue;
+        }
+
+        private static DescriptionAttribute[] GetCustomAttributes(FieldInfo field)
+        {
+            return (DescriptionAttribute[])field.GetCustomAttributes(typeof(DescriptionAttribute), false);
+        }
+
+        private static FieldInfo GetFieldInfo(object item)
+        {
+            return item.GetType().GetField(item.ToString());
         }
     }
 }

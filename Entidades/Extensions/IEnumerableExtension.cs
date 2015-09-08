@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Entidades.Extensions
 {
-    public static class ListExtension
+    public static class EnumerableExtension
     {
         private static List<string> _list;
 

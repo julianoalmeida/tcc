@@ -1,6 +1,6 @@
-﻿using Entidades.Enums;
+﻿using NUnit.Framework;
+using Entidades.Enums;
 using Entidades.Extensions;
-using NUnit.Framework;
 
 namespace UnitTests.ExtensionsTests
 {

@@ -7,7 +7,7 @@ namespace Entidades.Enums
         [Description("Administrador")]
         Administrador = 1,
 
-        [Description("Teacher")]
+        [Description("Professor")]
         Docente = 2,
 
         [Description("Discente")]

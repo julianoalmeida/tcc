@@ -24,6 +24,8 @@ namespace Entidades.Extensions
 
         public static string RemoveAccents(this string text)
         {
+            if (string.IsNullOrEmpty(text)) return string.Empty;
+
             var formatedText = string.Empty;
             var caracteres = text.Normalize(NormalizationForm.FormD).ToCharArray();
 
@@ -35,18 +37,17 @@ namespace Entidades.Extensions
         {
             return string.IsNullOrEmpty(text)
                 ? string.Empty
-                : Regex.Replace(text.Trim().ToLower(), @"\s", string.Empty);
+                : text.Trim();
         }
 
-        public static string RemoveAccentsAndEmptySpaces(this string texto)
+        public static string RemoveAccentsAndEmptySpaces(this string text)
         {
-            return RemoveAccents(RemoveEmptySpaces(texto));
+            return RemoveAccents(RemoveEmptySpaces(text));
         }
 
-        public static string GetTwoLastCpfCharacters(this string text)
+        public static string GetTwoLastCharacters(this string text)
         {
-            var total = text.Count();
-            return text.Substring(0, total - 2);
+            return string.IsNullOrEmpty(text) ? string.Empty : text.Substring(text.Count() - 2);
         }
     }
 }

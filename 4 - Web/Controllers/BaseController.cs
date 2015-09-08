@@ -65,7 +65,7 @@ namespace _4___Web.Controllers
 
         private static string BuildLoggedUserLogin(Person person)
         {
-            return string.Concat(person.Name.RemoveEmptySpaces(), person.Cpf.GetTwoLastCpfCharacters());
+            return string.Concat(person.Name.RemoveEmptySpaces(), person.Cpf.GetTwoLastCharacters());
         }
 
         protected string GetFormatedUserLoginAndPassword(Person person)

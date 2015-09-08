@@ -5,27 +5,39 @@ namespace Entidades.Extensions
 {
     public static class ListExtension
     {
+        private static List<string> _list;
+
         public static string BuildStringFormatedTextFromListWithCollonSplitingElements(this IEnumerable<string> list)
         {
-            list = list.ToList();
+            _list = list.ToList();
 
-            if (list.ToList().All(a => a == null))
+            RemoveNullAndEmptySpaces();
+
+            if (!_list.Any())
                 return string.Empty;
 
-            var formatedMessage = FormatItensWithcommaExceptTheLasOne(list);
-            return IncreaseEStatementAndAddLastListItem(list, formatedMessage);
+            if (_list.Count == 1)
+                return _list.First();
+
+            var formatedMessage = FormatItensWithcommaExceptTheLasOne();
+            return IncreaseEStatementAndAddLastListItem(formatedMessage);
         }
 
-        private static string IncreaseEStatementAndAddLastListItem(IEnumerable<string> list, string formatedMessage)
+        private static void RemoveNullAndEmptySpaces()
+        {
+            _list.RemoveAll(string.IsNullOrEmpty);
+        }
+
+        private static string IncreaseEStatementAndAddLastListItem(string formatedMessage)
         {
             var message = formatedMessage + " e ";
-            message += list.Last();
+            message += _list.Last();
             return message;
         }
 
-        private static string FormatItensWithcommaExceptTheLasOne(IEnumerable<string> list)
+        private static string FormatItensWithcommaExceptTheLasOne()
         {
-            return string.Join(", ", list.ToArray(), 0, list.Count() - 1);
+            return string.Join(", ", _list.ToArray(), 0, _list.Count() - 1);
         }
     }
 }

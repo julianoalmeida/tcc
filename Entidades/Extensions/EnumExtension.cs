@@ -13,6 +13,5 @@ namespace Entidades.Extensions
 
             return attributes?.Length > 0 ? attributes[0]?.Description : value.ToString();
         }
-
     }
 }

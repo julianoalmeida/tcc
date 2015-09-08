@@ -13,7 +13,7 @@ namespace Entidades.Enums
         [Description("Ensino Superior")]
         EnsinoSuperior = 3,
 
-        [Description("Pós Graduacao")]
+        [Description("Pós Graduação")]
         PosGraduacao = 4
     }
 }

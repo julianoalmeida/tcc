@@ -23,11 +23,7 @@ namespace Negocio
     {
         protected readonly INHibernateRepository<TEntidade> InHibernateRepository;
 
-        protected IList<string> _errorList = new List<string>();
-
-        //private readonly IList<string> _errorList = new SelectWithFilter<string>();
-
-        internal static readonly Regex ValidEmail =
+        internal readonly Regex ValidEmail =
             new Regex(@"^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$");
 
         internal readonly Regex SingleLineCpf = new Regex(@"^\d{11}$", RegexOptions.Singleline);
@@ -41,7 +37,7 @@ namespace Negocio
         {
             InHibernateRepository = inHibernateRepository;
         }
-        
+
         public virtual TEntidade GetById(int id)
         {
             return InHibernateRepository.GetById(id);
@@ -84,7 +80,6 @@ namespace Negocio
             var fmtCpf = cpf;
 
             var total = 0;
-            var digitoVerificador = 0;
 
             total += (int.Parse(fmtCpf.Substring(0, 1)) * 10);
             total += (int.Parse(fmtCpf.Substring(1, 1)) * 9);
@@ -96,7 +91,7 @@ namespace Negocio
             total += (int.Parse(fmtCpf.Substring(7, 1)) * 3);
             total += (int.Parse(fmtCpf.Substring(8, 1)) * 2);
 
-            digitoVerificador = total % 11;
+            var digitoVerificador = total % 11;
 
             if (digitoVerificador < 2)
                 digitoVerificador = 0;

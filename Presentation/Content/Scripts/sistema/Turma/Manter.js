@@ -1,15 +1,14 @@
 ﻿
 var discentesSelecionados = [];
 
-$(document).ready(function () {
+$(document).ready(function() {
 
     Eventos.MontaBinds();
 
 });
 
 Eventos = {
-
-    MontaBinds: function () {
+    MontaBinds: function() {
 
         $.jshuttle("#DiscentesNaoSelecionados", "#DiscentesSelecionados", {
             add: "#btnAdd",
@@ -18,10 +17,10 @@ Eventos = {
             removeAll: "#btnRemoveAll"
         });
 
-        $('#btnSalvar').click(function (e) {
+        $("#btnSalvar").click(function(e) {
             e.preventDefault();
 
-            var action = rootUrl + 'Class/Index';
+            var action = rootUrl + "Class/Index";
             var camposValidos = validaCampos();
             var pickListValido = Validacoes.validaPickList();
             if (camposValidos && !pickListValido) {
@@ -29,24 +28,22 @@ Eventos = {
                 var model = $("#formTurma").serialize();
 
                 $.ajax({
-                    url: rootUrl + 'Class/SaveAndReturn',
-                    dataType: 'json',
-                    type: 'post',
+                    url: rootUrl + "Class/SaveAndReturn",
+                    dataType: "json",
+                    type: "post",
                     cache: false,
                     async: false,
                     data: model,
-                    success: function (retorno) {
-                        msg = '<div class="text-success">' + retorno.msg + '</div>';
+                    success: function(retorno) {
+                        msg = "<div class=\"text-success\">" + retorno.msg + "</div>";
                         if (retorno.sucesso == 1) {
                             dialogSucesso(action, msg);
-                        }
-                        else if (retorno.sucesso == 2) {
+                        } else if (retorno.sucesso == 2) {
                             $("#divErro").show();
-                            $("#MensagemErro").html('Class já Cadastrada');
+                            $("#MensagemErro").html("Class já Cadastrada");
                             SobeScroll();
                             return false;
-                        }
-                        else if (retorno.sucesso == 4) {
+                        } else if (retorno.sucesso == 4) {
                             $("#divErro").show();
                             $("#MensagemErro").html(retorno.msg);
                             SobeScroll();
@@ -58,30 +55,27 @@ Eventos = {
         });
 
     },
-}
-
+};
 Validacoes = {
-
-    validaPickList: function () {
+    validaPickList: function() {
         discentesSelecionados = [];
         var erro = false;
-        if ($('#DiscentesSelecionados').children().length) {
-            $('#DiscentesSelecionados').children().each(function () {
-                $(this).prop('selected', true);
-                $('#DiscentesSelecionados').next().addClass('hide');
-                $(this).parent().parent().removeClass('error');
+        if ($("#DiscentesSelecionados").children().length) {
+            $("#DiscentesSelecionados").children().each(function() {
+                $(this).prop("selected", true);
+                $("#DiscentesSelecionados").next().addClass("hide");
+                $(this).parent().parent().removeClass("error");
                 discentesSelecionados.push($(this).val());
-                $(".discenteObrigatorio").removeClass('discenteObrigatorio')
+                $(".discenteObrigatorio").removeClass("discenteObrigatorio");
             });
         } else {
-            $('#DiscentesSelecionados').parent().parent().addClass('error');
-            $('#DiscentesSelecionados').next().removeClass('hide');
-            $(".discenteObrigatorio").addClass('discenteObrigatorio');
+            $("#DiscentesSelecionados").parent().parent().addClass("error");
+            $("#DiscentesSelecionados").next().removeClass("hide");
+            $(".discenteObrigatorio").addClass("discenteObrigatorio");
             erro = true;
         }
 
         $("#SelectedStudentsId").val(discentesSelecionados);
         return erro;
     }
-}
-
+};

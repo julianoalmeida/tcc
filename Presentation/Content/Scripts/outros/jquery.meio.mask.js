@@ -31,16 +31,16 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-(function ($) {
+(function($) {
 
     // https://github.com/jquery/jquery-migrate/blob/master/src/core.js#L50
     if (!$.browser) {
-        var uaMatch = function (ua) {
+        var uaMatch = function(ua) {
             ua = ua.toLowerCase();
 
-            var match = /(chrome)[ \/]([\w.]+)/.exec(ua) || /(webkit)[ \/]([\w.]+)/.exec(ua) || /(opera)(?:.*version|)[ \/]([\w.]+)/.exec(ua) || /(msie) ([\w.]+)/.exec(ua) || ua.indexOf('compatible') < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec(ua) || [];
+            var match = /(chrome)[ \/]([\w.]+)/.exec(ua) || /(webkit)[ \/]([\w.]+)/.exec(ua) || /(opera)(?:.*version|)[ \/]([\w.]+)/.exec(ua) || /(msie) ([\w.]+)/.exec(ua) || ua.indexOf("compatible") < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec(ua) || [];
 
-            return match[2] || '0';
+            return match[2] || "0";
         };
 
         $.browser = {
@@ -48,7 +48,7 @@
             webkit: /webkit/.test(navigator.userAgent.toLowerCase()),
             opera: /opera/.test(navigator.userAgent.toLowerCase()),
             msie: /msie/.test(navigator.userAgent.toLowerCase()),
-            android: (navigator.userAgent.toLowerCase().indexOf('mozilla/5.0') > -1 && navigator.userAgent.toLowerCase().indexOf('android ') > -1 && navigator.userAgent.toLowerCase().indexOf('applewebkit') > -1),
+            android: (navigator.userAgent.toLowerCase().indexOf("mozilla/5.0") > -1 && navigator.userAgent.toLowerCase().indexOf("android ") > -1 && navigator.userAgent.toLowerCase().indexOf("applewebkit") > -1),
             version: uaMatch(navigator.userAgent)
         };
     }
@@ -56,28 +56,28 @@
     var isMobile = (window.orientation != null);
 
     // browsers like firefox2 and before and opera doesnt have the onPaste event, but the paste feature can be done with the onInput event.
-    var pasteEvent = (($.browser.opera || ($.browser.mozilla && parseFloat($.browser.version.substr(0, 3)) < 1.9)) ? 'input' : 'paste');
+    var pasteEvent = (($.browser.opera || ($.browser.mozilla && parseFloat($.browser.version.substr(0, 3)) < 1.9)) ? "input" : "paste");
 
     // the timeout is set because we can't get the value from the input without it
-    var pasteHandler = function (e) {
+    var pasteHandler = function(e) {
         e = $.event.fix(e || window.event);
-        e.type = 'paste';
+        e.type = "paste";
         var el = e.target;
 
-        setTimeout(function () {
+        setTimeout(function() {
             $.event.dispatch.call(el, e);
         }, 1);
     };
 
     $.event.special.paste = {
-        setup: function () {
+        setup: function() {
             if (this.addEventListener) this.addEventListener(pasteEvent, pasteHandler, false);
-            else if (this.attachEvent) this.attachEvent('on' + pasteEvent, pasteHandler);
+            else if (this.attachEvent) this.attachEvent("on" + pasteEvent, pasteHandler);
         },
 
-        teardown: function () {
+        teardown: function() {
             if (this.removeEventListener) this.removeEventListener(pasteEvent, pasteHandler, false);
-            else if (this.detachEvent) this.detachEvent('on' + pasteEvent, pasteHandler);
+            else if (this.detachEvent) this.detachEvent("on" + pasteEvent, pasteHandler);
         }
     };
 
@@ -97,40 +97,40 @@
             // these keys will be ignored by the mask.
             // all these numbers where obtained on the keydown event
             keyRepresentation: {
-                8: 'backspace',
-                9: 'tab',
-                13: 'enter',
-                16: 'shift',
-                17: 'control',
-                18: 'alt',
-                27: 'esc',
-                33: 'page up',
-                34: 'page down',
-                35: 'end',
-                36: 'home',
-                37: 'left',
-                38: 'up',
-                39: 'right',
-                40: 'down',
-                45: 'insert',
-                46: 'delete',
-                116: 'f5',
-                123: 'f12',
-                224: 'command'
+                8: "backspace",
+                9: "tab",
+                13: "enter",
+                16: "shift",
+                17: "control",
+                18: "alt",
+                27: "esc",
+                33: "page up",
+                34: "page down",
+                35: "end",
+                36: "home",
+                37: "left",
+                38: "up",
+                39: "right",
+                40: "down",
+                45: "insert",
+                46: "delete",
+                116: "f5",
+                123: "f12",
+                224: "command"
             },
 
             signals: {
-                '+': '',
-                '-': '-'
+                '+': "",
+                '-': "-"
             },
 
             // default settings for the plugin
             options: {
-                attr: 'alt', // an attr to look for the mask name or the mask itself
+                attr: "alt", // an attr to look for the mask name or the mask itself
                 mask: null, // the mask to be used on the input
-                type: 'fixed', // the mask of this mask
+                type: "fixed", // the mask of this mask
                 maxLength: -1, // the maxLength of the mask
-                defaultValue: '', // the default value for this input
+                defaultValue: "", // the default value for this input
                 signal: false, // this should not be set, to use signal at masks put the signal you want ('-' or '+') at the default value of this mask.
                 // See the defined masks for a better understanding.
 
@@ -138,13 +138,13 @@
                 selectCharsOnFocus: true, // select all chars from input on its focus
                 autoTab: true, // auto focus the next form element when you type the mask completely
                 setSize: false, // sets the input size based on the length of the mask (work with fixed and reverse masks only)
-                fixedChars: '[(),.:/ -]', // fixed chars to be used on the masks. You may change it for your needs!
+                fixedChars: "[(),.:/ -]", // fixed chars to be used on the masks. You may change it for your needs!
 
-                onInvalid: function () { },
-                onValid: function () { },
-                onOverflow: function () { },
-                onFocus: function (input, evt) { },
-                onBlur: function (input, evt) { }
+                onInvalid: function() {},
+                onValid: function() {},
+                onOverflow: function() {},
+                onFocus: function(input, evt) {},
+                onBlur: function(input, evt) {}
             },
 
             // masks. You may add yours!
@@ -153,59 +153,59 @@
             // <input type="text" name="some_name" id="some_name" alt="msk" />
             masks: {
                 'phone': {
-                    mask: '(99) 9999-9999'
+                    mask: "(99) 9999-9999"
                 },
                 'phone-us': {
-                    mask: '(999) 999-9999'
+                    mask: "(999) 999-9999"
                 },
                 'cpf': {
-                    mask: '999.999.999-99'
+                    mask: "999.999.999-99"
                 }, // cadastro nacional de person fisica (kind of a brazillian ssn)
                 'cnpj': {
-                    mask: '99.999.999/9999-99'
+                    mask: "99.999.999/9999-99"
                 },
                 'date': {
-                    mask: '39/19/9999'
+                    mask: "39/19/9999"
                 }, // uk date
                 'date-us': {
-                    mask: '19/39/9999'
+                    mask: "19/39/9999"
                 },
                 'cep': {
-                    mask: '99999-999'
+                    mask: "99999-999"
                 },
                 'time': {
-                    mask: '29:59'
+                    mask: "29:59"
                 },
                 'cc': {
-                    mask: '9999 9999 9999 9999'
+                    mask: "9999 9999 9999 9999"
                 }, // credit card
                 'integer': {
-                    mask: '999.999.999.999',
-                    type: 'reverse'
+                    mask: "999.999.999.999",
+                    type: "reverse"
                 },
                 'decimal': {
-                    mask: '99,999.999.999.999',
-                    type: 'reverse',
-                    defaultValue: '000'
+                    mask: "99,999.999.999.999",
+                    type: "reverse",
+                    defaultValue: "000"
                 },
                 'decimal-us': {
-                    mask: '99.999,999,999,999',
-                    type: 'reverse',
-                    defaultValue: '000'
+                    mask: "99.999,999,999,999",
+                    type: "reverse",
+                    defaultValue: "000"
                 },
                 'signed-decimal': {
-                    mask: '99,999.999.999.999',
-                    type: 'reverse',
-                    defaultValue: '+000'
+                    mask: "99,999.999.999.999",
+                    type: "reverse",
+                    defaultValue: "+000"
                 },
                 'signed-decimal-us': {
-                    mask: '99,999.999.999.999',
-                    type: 'reverse',
-                    defaultValue: '+000'
+                    mask: "99,999.999.999.999",
+                    type: "reverse",
+                    defaultValue: "+000"
                 }
             },
 
-            init: function () {
+            init: function() {
                 // if has not inited...
                 if (!this.hasInit) {
 
@@ -216,12 +216,12 @@
                     this.ignore = false;
 
                     // constructs number rules
-                    for (i = 0; i <= 9; i++) this.rules[i] = new RegExp('[0-' + i + ']');
+                    for (i = 0; i <= 9; i++) this.rules[i] = new RegExp("[0-" + i + "]");
 
                     this.keyRep = keyRep;
                     // ignore keys array creation for iphone or the normal ones
                     this.ignoreKeys = [];
-                    $.each(keyRep, function (key) {
+                    $.each(keyRep, function(key) {
                         self.ignoreKeys.push(parseInt(key, 10));
                     });
 
@@ -229,33 +229,33 @@
                 }
             },
 
-            set: function (el, options) {
+            set: function(el, options) {
 
                 var maskObj = this,
                     $el = $(el),
-                    mlStr = 'maxLength';
+                    mlStr = "maxLength";
 
                 options = options || {};
                 this.init();
 
-                return $el.each(function () {
+                return $el.each(function() {
 
                     if (options.attr) maskObj.options.attr = options.attr;
 
                     var $this = $(this),
                         o = $.extend({}, maskObj.options),
                         attrValue = $this.attr(o.attr),
-                        tmpMask = '';
+                        tmpMask = "";
 
                     // then we look for the 'attr' option
-                    tmpMask = (typeof options == 'string') ? options : (attrValue !== '') ? attrValue : null;
+                    tmpMask = (typeof options == "string") ? options : (attrValue !== "") ? attrValue : null;
                     if (tmpMask) o.mask = tmpMask;
 
                     // then we see if it's a defined mask
                     if (maskObj.masks[tmpMask]) o = $.extend(o, maskObj.masks[tmpMask]);
 
                     // then it looks if the options is an object, if it is we will overwrite the actual options
-                    if (typeof options == 'object' && options.constructor != Array) o = $.extend(o, options);
+                    if (typeof options == "object" && options.constructor != Array) o = $.extend(o, options);
 
                     //then we look for some metadata on the input
                     if ($.metadata) o = $.extend(o, $this.metadata());
@@ -263,131 +263,131 @@
                     if (o.mask != null) {
 
                         // prevents javascript automatic type convertion
-                        o.mask += '';
+                        o.mask += "";
 
-                        if ($this.data('mask')) maskObj.unset($this);
+                        if ($this.data("mask")) maskObj.unset($this);
 
                         var defaultValue = o.defaultValue,
-                            reverse = (o.type === 'reverse'),
-                            fixedCharsRegG = new RegExp(o.fixedChars, 'g');
+                            reverse = (o.type === "reverse"),
+                            fixedCharsRegG = new RegExp(o.fixedChars, "g");
 
                         if (o.maxLength === -1) o.maxLength = $this.attr(mlStr);
 
                         o = $.extend({}, o, {
                             fixedCharsReg: new RegExp(o.fixedChars),
                             fixedCharsRegG: fixedCharsRegG,
-                            maskArray: o.mask.split(''),
-                            maskNonFixedCharsArray: o.mask.replace(fixedCharsRegG, '').split('')
+                            maskArray: o.mask.split(""),
+                            maskNonFixedCharsArray: o.mask.replace(fixedCharsRegG, "").split("")
                         });
 
                         // setSize option (this is kept when the mask is removed)
-                        if ((o.type == 'fixed' || reverse) && o.setSize && !$this.attr('size')) $this.attr('size', o.mask.length);
+                        if ((o.type == "fixed" || reverse) && o.setSize && !$this.attr("size")) $this.attr("size", o.mask.length);
 
                         // sets text-align right for reverse masks
-                        if (reverse && o.textAlign) $this.css('text-align', 'right');
+                        if (reverse && o.textAlign) $this.css("text-align", "right");
 
-                        if (this.value !== '' || defaultValue !== '') {
+                        if (this.value !== "" || defaultValue !== "") {
                             // apply mask to the current value of the input or to the default value
-                            var val = maskObj.string((this.value !== '') ? this.value : defaultValue, o);
+                            var val = maskObj.string((this.value !== "") ? this.value : defaultValue, o);
                             //setting defaultValue fixes the reset button from the form
                             this.defaultValue = val;
                             $this.val(val);
                         }
 
                         // compatibility patch for infinite mask, that is now repeat
-                        if (o.type == 'infinite') o.type = 'repeat';
+                        if (o.type == "infinite") o.type = "repeat";
 
-                        $this.data('mask', o);
+                        $this.data("mask", o);
 
                         // removes the maxLength attribute (it will be set again if you use the unset method)
                         $this.removeAttr(mlStr);
 
                         // setting the input events
-                        $this.bind('keydown.mask', {
-                            func: maskObj._onKeyDown,
-                            thisObj: maskObj
-                        }, maskObj._onMask)
-                            .bind('keypress.mask', {
+                        $this.bind("keydown.mask", {
+                                func: maskObj._onKeyDown,
+                                thisObj: maskObj
+                            }, maskObj._onMask)
+                            .bind("keypress.mask", {
                                 func: maskObj._onKeyPress,
                                 thisObj: maskObj
                             }, maskObj._onMask)
-                            .bind('keyup.mask', {
+                            .bind("keyup.mask", {
                                 func: maskObj._onKeyUp,
                                 thisObj: maskObj
                             }, maskObj._onMask)
-                            .bind('paste.mask', {
+                            .bind("paste.mask", {
                                 func: maskObj._onPaste,
                                 thisObj: maskObj
                             }, maskObj._onMask)
-                            .bind('drop.mask', {
+                            .bind("drop.mask", {
                                 func: maskObj._onPaste,
                                 thisObj: maskObj
                             }, maskObj._onMask)
-                            .bind('focus.mask', maskObj._onFocus)
-                            .bind('blur.mask', maskObj._onBlur)
-                            .bind('change.mask', maskObj._onChange);
+                            .bind("focus.mask", maskObj._onFocus)
+                            .bind("blur.mask", maskObj._onBlur)
+                            .bind("change.mask", maskObj._onChange);
                     }
                 });
             },
 
             //unsets the mask from el
-            unset: function (el) {
+            unset: function(el) {
                 var $el = $(el);
 
-                return $el.each(function () {
+                return $el.each(function() {
                     var $this = $(this);
-                    if ($this.data('mask')) {
-                        var maxLength = $this.data('mask').maxLength;
-                        if (maxLength != -1) $this.attr('maxLength', maxLength);
-                        $this.unbind('.mask')
-                            .removeData('mask');
+                    if ($this.data("mask")) {
+                        var maxLength = $this.data("mask").maxLength;
+                        if (maxLength != -1) $this.attr("maxLength", maxLength);
+                        $this.unbind(".mask")
+                            .removeData("mask");
                     }
                 });
             },
 
             //masks a string
-            string: function (str, options) {
+            string: function(str, options) {
                 this.init();
                 var o = {};
-                if (typeof str != 'string') str = String(str);
+                if (typeof str != "string") str = String(str);
                 switch (typeof options) {
-                    case 'string':
-                        // then we see if it's a defined mask
-                        if (this.masks[options]) o = $.extend(o, this.masks[options]);
-                        else o.mask = options;
-                        break;
-                    case 'object':
-                        o = options;
+                case "string":
+                    // then we see if it's a defined mask
+                    if (this.masks[options]) o = $.extend(o, this.masks[options]);
+                    else o.mask = options;
+                    break;
+                case "object":
+                    o = options;
                 }
                 if (!o.fixedChars) o.fixedChars = this.options.fixedChars;
 
                 var fixedCharsReg = new RegExp(o.fixedChars),
-                    fixedCharsRegG = new RegExp(o.fixedChars, 'g');
+                    fixedCharsRegG = new RegExp(o.fixedChars, "g");
 
                 // insert signal if any
-                if ((o.type === 'reverse') && o.defaultValue) {
-                    if (typeof this.signals[o.defaultValue.charAt(0)] != 'undefined') {
+                if ((o.type === "reverse") && o.defaultValue) {
+                    if (typeof this.signals[o.defaultValue.charAt(0)] != "undefined") {
                         var maybeASignal = str.charAt(0);
-                        o.signal = (typeof this.signals[maybeASignal] != 'undefined') ? this.signals[maybeASignal] : this.signals[o.defaultValue.charAt(0)];
+                        o.signal = (typeof this.signals[maybeASignal] != "undefined") ? this.signals[maybeASignal] : this.signals[o.defaultValue.charAt(0)];
                         o.defaultValue = o.defaultValue.substring(1);
                     }
                 }
 
-                return this.__maskArray(str.split(''),
-                o.mask.replace(fixedCharsRegG, '').split(''),
-                o.mask.split(''),
-                o.type,
-                o.maxLength,
-                o.defaultValue,
-                fixedCharsReg,
-                o.signal);
+                return this.__maskArray(str.split(""),
+                    o.mask.replace(fixedCharsRegG, "").split(""),
+                    o.mask.split(""),
+                    o.type,
+                    o.maxLength,
+                    o.defaultValue,
+                    fixedCharsReg,
+                    o.signal);
             },
 
             // all the 3 events below are here just to fix the change event on reversed masks.
             // It isn't fired in cases that the keypress event returns false (needed).
-            _onFocus: function (e) {
+            _onFocus: function(e) {
                 var $this = $(this),
-                    dataObj = $this.data('mask');
+                    dataObj = $this.data("mask");
                 dataObj.inputFocusValue = $this.val();
                 dataObj.changed = false;
                 if (dataObj.selectCharsOnFocus) $this.select();
@@ -395,27 +395,27 @@
                 dataObj.onFocus(this, e);
             },
 
-            _onBlur: function (e) {
+            _onBlur: function(e) {
                 var $this = $(this),
-                    dataObj = $this.data('mask');
-                if (dataObj.inputFocusValue != $this.val() && !dataObj.changed) $this.trigger('change');
+                    dataObj = $this.data("mask");
+                if (dataObj.inputFocusValue != $this.val() && !dataObj.changed) $this.trigger("change");
                 // trigger  mask function
                 dataObj.onBlur(this, e);
             },
 
-            _onChange: function (e) {
-                $(this).data('mask').changed = true;
+            _onChange: function(e) {
+                $(this).data("mask").changed = true;
             },
 
-            _onMask: function (e) {
+            _onMask: function(e) {
                 var thisObj = e.data.thisObj,
                     o = {};
 
                 o._this = e.target;
                 o.$this = $(o._this);
-                o.data = o.$this.data('mask');
+                o.data = o.$this.data("mask");
 
-                if (o.$this.attr('readonly') || !o.data) {
+                if (o.$this.attr("readonly") || !o.data) {
                     return true;
                 }
 
@@ -423,21 +423,21 @@
                 o.value = o.$this.val();
                 o.nKey = thisObj.__getKeyNumber(e);
                 o.range = thisObj.__getRange(o._this);
-                o.valueArray = o.value.split('');
+                o.valueArray = o.value.split("");
                 return e.data.func.call(thisObj, e, o);
             },
 
-            _onKeyDown: function (e, o) {
+            _onKeyDown: function(e, o) {
                 // lets say keypress at desktop == keydown at iphone (theres no keypress at iphone)
                 this.ignore = $.inArray(o.nKey, this.ignoreKeys) > -1 || ((e.ctrlKey || e.metaKey || e.altKey) && e.key);
                 if (this.ignore) {
                     var rep = this.keyRep[o.nKey];
-                    o.data.onValid.call(o._this, rep || '', o.nKey);
+                    o.data.onValid.call(o._this, rep || "", o.nKey);
                 }
                 return true;
             },
 
-            _onKeyUp: function (e, o) {
+            _onKeyUp: function(e, o) {
                 //9=TAB_KEY 16=SHIFT_KEY
                 //this is a little bug, when you go to an input with tab key
                 //it would remove the range selected by default, and that's not a desired behavior
@@ -451,19 +451,19 @@
                 return this._onPaste(e, o);
             },
 
-            _onPaste: function (e, o) {
+            _onPaste: function(e, o) {
                 // changes the signal at the data obj from the input
                 if (o.reverse) this.__changeSignal(e.type, o);
 
                 var $thisVal = this.__maskArray(
-                o.valueArray,
-                o.data.maskNonFixedCharsArray,
-                o.data.maskArray,
-                o.data.type,
-                o.data.maxLength,
-                o.data.defaultValue,
-                o.data.fixedCharsReg,
-                o.data.signal);
+                    o.valueArray,
+                    o.data.maskNonFixedCharsArray,
+                    o.data.maskArray,
+                    o.data.type,
+                    o.data.maxLength,
+                    o.data.defaultValue,
+                    o.data.fixedCharsReg,
+                    o.data.signal);
 
                 o.$this.val($thisVal);
                 // this makes the caret stay at first position when
@@ -479,7 +479,7 @@
                 return true;
             },
 
-            _onKeyPress: function (e, o) {
+            _onKeyPress: function(e, o) {
 
                 if (this.ignore) return true;
 
@@ -505,7 +505,7 @@
                     }
                 }
 
-                var valueArray = rawValue.replace(o.data.fixedCharsRegG, '').split(''),
+                var valueArray = rawValue.replace(o.data.fixedCharsRegG, "").split(""),
                     // searches for fixed chars begining from the range start position, till it finds a non fixed
                     extraPos = this.__extraPositionsTill(rangeStart, maskArray, o.data.fixedCharsReg);
 
@@ -522,8 +522,7 @@
                     o.data.onOverflow.call(o._this, c, o.nKey);
                     return false;
                 }
-
-                    // if the new character is not obeying the law...
+// if the new character is not obeying the law...
                 else if (!this.rules[maskArray[o.rsEp]].test(c)) {
                     o.data.onInvalid.call(o._this, c, o.nKey);
                     return false;
@@ -532,15 +531,15 @@
                 }
 
                 var $thisVal = this.__maskArray(
-                valueArray,
-                o.data.maskNonFixedCharsArray,
-                maskArray,
-                o.data.type,
-                o.data.maxLength,
-                o.data.defaultValue,
-                o.data.fixedCharsReg,
-                o.data.signal,
-                extraPos);
+                    valueArray,
+                    o.data.maskNonFixedCharsArray,
+                    maskArray,
+                    o.data.type,
+                    o.data.maxLength,
+                    o.data.defaultValue,
+                    o.data.fixedCharsReg,
+                    o.data.signal,
+                    extraPos);
 
                 if (!o.repeat) {
                     o.$this.val($thisVal);
@@ -549,7 +548,7 @@
                 return (o.reverse) ? this._keyPressReverse(e, o) : (o.fixed) ? this._keyPressFixed(e, o) : true;
             },
 
-            _keyPressFixed: function (e, o) {
+            _keyPressFixed: function(e, o) {
 
                 if (o.range.start == o.range.end) {
                     // the 0 thing is because theres an unwanted behavior when you put a default
@@ -562,7 +561,7 @@
                 return true;
             },
 
-            _keyPressReverse: function (e, o) {
+            _keyPressReverse: function(e, o) {
                 // fix for ie
                 // this bug was pointed by Pedro Martins
                 // it fixes a strange behavior that ie was having after a char was inputted in a text input that
@@ -571,56 +570,56 @@
                 return false;
             },
 
-            __autoTab: function (o) {
+            __autoTab: function(o) {
                 if (o.data.autoTab && (
                 (
-                o.$this.val().length >= o.data.maskArray.length && !o.repeat) || (
-                o.data.maxLength != -1 && o.valueArray.length >= o.data.maxLength && o.repeat))) {
+                    o.$this.val().length >= o.data.maskArray.length && !o.repeat) || (
+                    o.data.maxLength != -1 && o.valueArray.length >= o.data.maxLength && o.repeat))) {
                     var nextEl = this.__getNextInput(o._this, o.data.autoTab);
                     if (nextEl) {
-                        o.$this.trigger('blur');
+                        o.$this.trigger("blur");
                         nextEl.focus().select();
                     }
                 }
             },
 
             // changes the signal at the data obj from the input
-            __changeSignal: function (eventType, o) {
+            __changeSignal: function(eventType, o) {
                 if (o.data.signal !== false) {
-                    var inputChar = (eventType === 'paste') ? o.value.charAt(0) : String.fromCharCode(o.nKey);
-                    if (this.signals && (typeof this.signals[inputChar] !== 'undefined')) {
+                    var inputChar = (eventType === "paste") ? o.value.charAt(0) : String.fromCharCode(o.nKey);
+                    if (this.signals && (typeof this.signals[inputChar] !== "undefined")) {
                         o.data.signal = this.signals[inputChar];
                     }
                 }
             },
 
-            __getKeyNumber: function (e) {
+            __getKeyNumber: function(e) {
                 return (e.charCode || e.keyCode || e.which);
             },
 
             // this function is totaly specific to be used with this plugin, youll never need it
             // it gets the array representing an unmasked string and masks it depending on the type of the mask
-            __maskArray: function (valueArray, maskNonFixedCharsArray, maskArray, type, maxlength, defaultValue, fixedCharsReg, signal, extraPos) {
-                if (type === 'reverse') valueArray.reverse();
-                valueArray = this.__removeInvalidChars(valueArray, maskNonFixedCharsArray, type === 'repeat' || type === 'infinite');
+            __maskArray: function(valueArray, maskNonFixedCharsArray, maskArray, type, maxlength, defaultValue, fixedCharsReg, signal, extraPos) {
+                if (type === "reverse") valueArray.reverse();
+                valueArray = this.__removeInvalidChars(valueArray, maskNonFixedCharsArray, type === "repeat" || type === "infinite");
                 if (defaultValue) valueArray = this.__applyDefaultValue.call(valueArray, defaultValue);
                 valueArray = this.__applyMask(valueArray, maskArray, extraPos, fixedCharsReg);
                 switch (type) {
-                    case 'reverse':
-                        valueArray.reverse();
-                        return (signal || '') + valueArray.join('').substring(valueArray.length - maskArray.length);
-                    case 'infinite':
-                    case 'repeat':
-                        var joinedValue = valueArray.join('');
-                        return (maxlength !== -1 && valueArray.length >= maxlength) ? joinedValue.substring(0, maxlength) : joinedValue;
-                    default:
-                        return valueArray.join('').substring(0, maskArray.length);
+                case "reverse":
+                    valueArray.reverse();
+                    return (signal || "") + valueArray.join("").substring(valueArray.length - maskArray.length);
+                case "infinite":
+                case "repeat":
+                    var joinedValue = valueArray.join("");
+                    return (maxlength !== -1 && valueArray.length >= maxlength) ? joinedValue.substring(0, maxlength) : joinedValue;
+                default:
+                    return valueArray.join("").substring(0, maskArray.length);
                 }
-                return '';
+                return "";
             },
 
             // applyes the default value to the result string
-            __applyDefaultValue: function (defaultValue) {
+            __applyDefaultValue: function(defaultValue) {
                 var defLen = defaultValue.length,
                     thisLen = this.length,
                     i;
@@ -631,16 +630,17 @@
                     } else break;
                 }
                 // apply the default value
-                for (i = 0; i < defLen; i++) if (!this[i]) {
-                    this[i] = defaultValue.charAt(i);
-                }
+                for (i = 0; i < defLen; i++)
+                    if (!this[i]) {
+                        this[i] = defaultValue.charAt(i);
+                    }
 
                 return this;
             },
 
             // Removes values that doesnt match the mask from the valueArray
             // Returns the array without the invalid chars.
-            __removeInvalidChars: function (valueArray, maskNonFixedCharsArray, repeatType) {
+            __removeInvalidChars: function(valueArray, maskNonFixedCharsArray, repeatType) {
                 // removes invalid chars
                 for (var i = 0, y = 0; i < valueArray.length; i++) {
                     if (maskNonFixedCharsArray[y] && this.rules[maskNonFixedCharsArray[y]] && !this.rules[maskNonFixedCharsArray[y]].test(valueArray[i])) {
@@ -654,8 +654,8 @@
             },
 
             // Apply the current input mask to the valueArray and returns it.
-            __applyMask: function (valueArray, maskArray, plus, fixedCharsReg) {
-                if (typeof plus == 'undefined') plus = 0;
+            __applyMask: function(valueArray, maskArray, plus, fixedCharsReg) {
+                if (typeof plus == "undefined") plus = 0;
                 // apply the current mask to the array of chars
                 for (var i = 0; i < valueArray.length + plus; i++) {
                     if (maskArray[i] && fixedCharsReg.test(maskArray[i])) valueArray.splice(i, 0, maskArray[i]);
@@ -664,7 +664,7 @@
             },
 
             // searches for fixed chars begining from the range start position, till it finds a non fixed
-            __extraPositionsTill: function (rangeStart, maskArray, fixedCharsReg) {
+            __extraPositionsTill: function(rangeStart, maskArray, fixedCharsReg) {
                 var extraPos = 0;
                 while (fixedCharsReg.test(maskArray[rangeStart++])) {
                     extraPos++;
@@ -672,7 +672,7 @@
                 return extraPos;
             },
 
-            __getNextInput: function (input, selector) {
+            __getNextInput: function(input, selector) {
                 var form = input.form;
 
                 if (form == null) {
@@ -695,7 +695,9 @@
 
                 var forms = document.forms,
                     initialFormIndex = $.inArray(input.form, forms) + 1,
-                    y, tmpFormEls, _len = forms.length;
+                    y,
+                    tmpFormEls,
+                    _len = forms.length;
                 // look for the next forms for the next input
                 for (y = initialFormIndex; y < _len; y++) {
                     tmpFormEls = forms[y].elements;
@@ -710,14 +712,14 @@
                 return null;
             },
 
-            __isNextInput: function ($formEl, selector) {
+            __isNextInput: function($formEl, selector) {
                 var formEl = $formEl.get(0);
-                return formEl && (formEl.offsetWidth > 0 || formEl.offsetHeight > 0) && formEl.nodeName != 'FIELDSET' && (selector === true || (typeof selector == 'string' && $formEl.is(selector)));
+                return formEl && (formEl.offsetWidth > 0 || formEl.offsetHeight > 0) && formEl.nodeName != "FIELDSET" && (selector === true || (typeof selector == "string" && $formEl.is(selector)));
             },
 
             // http://www.bazon.net/mishoo/articles.epl?art_id=1292
-            __setRange: function (input, start, end) {
-                if (typeof end == 'undefined') {
+            __setRange: function(input, start, end) {
+                if (typeof end == "undefined") {
                     end = start;
                 }
                 if (input.setSelectionRange) {
@@ -726,45 +728,46 @@
                     // assumed IE
                     var range = input.createTextRange();
                     range.collapse();
-                    range.moveStart('character', start);
-                    range.moveEnd('character', end - start);
+                    range.moveStart("character", start);
+                    range.moveEnd("character", end - start);
                     range.select();
                 }
             },
 
             // adaptation from http://digitarald.de/project/autocompleter/
-            __getRange: function (input) {
-                if (!$.browser.msie && !$.browser.android) return {
-                    start: input.selectionStart,
-                    end: input.selectionEnd
-                };
+            __getRange: function(input) {
+                if (!$.browser.msie && !$.browser.android)
+                    return {
+                        start: input.selectionStart,
+                        end: input.selectionEnd
+                    };
                 var pos = {
-                    start: 0,
-                    end: 0
-                },
-                range = document.selection.createRange();
-                pos.start = 0 - range.duplicate().moveStart('character', -100000);
+                        start: 0,
+                        end: 0
+                    },
+                    range = document.selection.createRange();
+                pos.start = 0 - range.duplicate().moveStart("character", -100000);
                 pos.end = pos.start + range.text.length;
                 return pos;
             },
 
             //deprecated
-            unmaskedVal: function (el) {
-                return $(el).val().replace($.mask.fixedCharsRegG, '');
+            unmaskedVal: function(el) {
+                return $(el).val().replace($.mask.fixedCharsRegG, "");
             }
 
         }
     });
 
     $.fn.extend({
-        setMask: function (options) {
+        setMask: function(options) {
             return $.mask.set(this, options);
         },
-        unsetMask: function () {
+        unsetMask: function() {
             return $.mask.unset(this);
         },
         //deprecated
-        unmaskedVal: function () {
+        unmaskedVal: function() {
             return $.mask.unmaskedVal(this[0]);
         }
     });

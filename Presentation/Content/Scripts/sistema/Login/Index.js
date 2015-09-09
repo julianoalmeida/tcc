@@ -1,12 +1,12 @@
 ﻿
-$(document).ready(function () {
+$(document).ready(function() {
 
-    $("#semCadastro").click(function () {
+    $("#semCadastro").click(function() {
         var msg = "Favor entrar em contato com o Adm do Sistema.";
         ExibirDialogConfirmacao(msg);
     });
 
-    $("#btnLogar").click(function () {
+    $("#btnLogar").click(function() {
         Logar();
         return false;
     });
@@ -16,13 +16,13 @@ $(document).ready(function () {
 function ExibirDialogConfirmacao(msg) {
 
     bootbox.dialog({
-        message: '<div class="text-warning">' + msg + '</div>',
-        title: '<h2 class="text-warning"><span class="icon-exclamation-sign"></span> Aviso</h2>',
+        message: "<div class=\"text-warning\">" + msg + "</div>",
+        title: "<h2 class=\"text-warning\"><span class=\"icon-exclamation-sign\"></span> Aviso</h2>",
         buttons: {
             main: {
                 label: "Confirmar",
                 className: "btn-primary",
-                callback: function () {
+                callback: function() {
                     bootbox.hideAll();
                 }
             },
@@ -35,18 +35,17 @@ function ExibirDialogConfirmacao(msg) {
 function Logar() {
 
     $.ajax({
-        url: rootUrl + 'Login/Logar',
-        dataType: 'json',
-        type: 'post',
+        url: rootUrl + "Login/Logar",
+        dataType: "json",
+        type: "post",
         cache: false,
         async: false,
         data: { login: $("#Login").val(), senha: $("#Password").val() },
-        success: function (retorno) {
+        success: function(retorno) {
 
             if (retorno.retorno == 1) {
                 window.location.href = rootUrl + "Base/Index";
-            }
-            else {
+            } else {
                 var msg = "Dados inválidos!";
                 ExibirDialogConfirmacao(msg);
             }

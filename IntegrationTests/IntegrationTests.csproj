@@ -58,7 +58,6 @@
     <Compile Include="BaseTests.cs" />
     <Compile Include="EnumTests\ClassTimeEnumTest.cs" />
     <Compile Include="EnumTests\EducationEnumTest.cs" />
-    <Compile Include="EnumTests\MaritalStatusEnumTest.cs" />
     <Compile Include="EnumTests\SexEnumTest.cs" />
     <Compile Include="ExtensionTests\IEnumerableExtensionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

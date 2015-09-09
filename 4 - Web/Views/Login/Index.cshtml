@@ -1,44 +1,53 @@
-﻿@using Entidades;
-@model  User
+﻿<div style="clear: both">&nbsp;</div>
 
-@{
-    Layout = "~/Views/Shared/LayoutSemMenu.cshtml";
+@if (!string.IsNullOrEmpty((string)TempData["Error"]))
+{
+    <div class="alert alert-warning center" style="margin: 4% auto">
+        <strong>Erro!</strong> Dados inválidos , favor verificar.
+    </div>
 }
 
-@section body{
-    <br />
-    @using (Html.BeginForm())
-    {
-        <div class="fundo">
-            <fieldset>
-                <legend title="">Home</legend>
+<article style="margin-top:3%">
+    <div class="col-sm-6 col-md-4 col-md-offset-4">
+        <div class="panel-body">
 
-                <div class="componentesCentro">
-                    <label for="Login">Login</label>
-                    @Html.TextBoxFor(a => a.Login, new { @class = "span3", autocomplete = "off", onpaste = "return false", ondrop = "return false" })
+            @using (Html.BeginForm("Login", "Login", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
 
-                    <label for="Password">Password</label>
-                    @Html.PasswordFor(a => a.Password, new { @class = "span3", maxlength = "20", autocomplete = "off", onpaste = "return false", ondrop = "return false" })
+                <figure class="row center">
+                    <img src="~/Content/Images/lock-circle.png" alt="image" style="width: 200px; height: 200px" />
+                </figure>
+
+                <div class="col-sm-12 col-md-10  col-md-offset-1 ">
+                    <section class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="glyphicon glyphicon-user"></i>
+                            </span>
+                            @Html.TextBox("login", null, new { @class = "form-control", autocomplete = "off", onpaste = "return false", ondrop = "return false", placeholder = "Login", required = "required" })
+                        </div>
+                    </section>
+                    <section class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="glyphicon glyphicon-lock"></i>
+                            </span>
+                            @Html.Password("password", null, new { @class = "form-control", maxlength = "20", autocomplete = "off", onpaste = "return false", ondrop = "return false", placeholder = "Senha", required = "required" })
+                        </div>
+                    </section>
+                    <section class="form-group">
+                        <input type="submit" class="btn btn-lg btn-primary btn-block" value="Entrar">
+                    </section>
                 </div>
-
-                <div class="componentesCentro">
-
-                    <input type="submit" name="submitButton" id="btnLogar" value="Acessar" class="btn btn btn-primary" />
-                </div>
-
-                <div class="clear">&nbsp;</div>
-
-                <div class="componentesCentro">
-                    <a href="javascript:;" id="semCadastro">Ainda não sou cadastrado</a>
-                </div>
-            </fieldset>
+            }
         </div>
-    }
 
-}
+        <footer>
+            <hgroup>
+                <h5 class="center">Sem conta ? @Html.ActionLink("Clique aqui", "CreateAccount")</h5>
+            </hgroup>
+        </footer>
 
-@section Scripts{
-    @Scripts.Render("~/Content/Scripts/sistema/Login/Index.js")
-}
-
-
+    </div>
+</article>

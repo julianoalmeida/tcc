@@ -1,6 +1,4 @@
-﻿@using Entidades
-
-@model Class
+﻿@model Entidades.Class
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -26,7 +24,9 @@
             <div class="tab-content">
                 <div class="tab-pane active" id="convidado">
                     <fieldset>
-                        <div class="alert alert-info camposObrigatorio"><span class="icon-info-sign"></span>Os campos marcados com (*) são de preenchimento obrigatório</div>
+                        <div class="alert alert-info camposObrigatorio">
+                            <span class="icon-info-sign"></span>Os campos marcados com (*) são de preenchimento obrigatório
+                        </div>
 
                         <form action="#" method="post" id="formTurma" name="inserir" class="clearfix form-horizontal">
 
@@ -35,65 +35,60 @@
 
                             <fieldset>
                                 <div class="row-fluid">
-                                    <div class="span12">
-                                        <fieldset class="interno">
-                                            <legend>Dados Cadastrais</legend>
-                                            <div class="row-fluid">
-                                                <div class="span6">
-                                                    <div class="control-group">
-                                                        <div class="controls span9">
-                                                            <label for="Description"><span class="camposObrigatorio">*</span> Name Class :</label>
-                                                            @Html.TextBoxFor(c => c.Description, new { @class = "span10 required", maxlength = "150", autocomplete = "off" })
-                                                            <span class="text-error hide">
+                                <div class="span12">
+                                    <fieldset class="interno">
+                                        <legend>Dados Cadastrais</legend>
+                                        <div class="row-fluid">
+                                            <div class="span6">
+                                                <div class="control-group">
+                                                    <div class="controls span9">
+                                                        <label for="Description"><span class="camposObrigatorio">*</span> Name Class :</label>
+                                                        @Html.TextBoxFor(c => c.Description, new {@class = "span10 required", maxlength = "150", autocomplete = "off"})
+                                                        <span class="text-error hide">
                                                                 <br />
                                                                 O campo Name da Class é de preenchimento obrigatório.</span>
-                                                        </div>
                                                     </div>
-
-                                                    <div class="control-group">
-                                                        <div class="controls span9">
-                                                            <label for="ClassTime"><span class="camposObrigatorio">*</span> ClassTime :</label>
-                                                            @Html.DropDownListFor(a => a.ClassTime, null, new { @class = "span10 required" })
-                                                            <span class="text-error hide">
-                                                                <br>
-                                                                O campo ClassTime é de preenchimento obrigatório.</span>
-                                                        </div>
-                                                    </div>
-
-
-
-
-
                                                 </div>
 
-                                                <div class="span6">
-
-                                                    <div class="control-group">
-                                                        <div class="controls span9">
-                                                            <label for="Capacidade"><span class="camposObrigatorio">*</span> Capacidade de Alunos:</label>
-                                                            @Html.TextBox("Capacidade", "20", new { @class = "span2", @maxlength = "2", @disabled = "disabled" })
-                                                        </div>
+                                                <div class="control-group">
+                                                    <div class="controls span9">
+                                                        <label for="ClassTime"><span class="camposObrigatorio">*</span> ClassTime :</label>
+                                                        @Html.DropDownListFor(a => a.ClassTime, null, new {@class = "span10 required"})
+                                                        <span class="text-error hide">
+                                                                <br>
+                                                                O campo ClassTime é de preenchimento obrigatório.</span>
                                                     </div>
+                                                </div>
 
-                                                    <div class="control-group">
-                                                        <div class="controls span9">
-                                                            <label for="idTeacher"><span class="camposObrigatorio">*</span> Teacher :</label>
-                                                            @Html.DropDownListFor(a => a.Teacher.Id, @docentes, new { @class = "span10 required", @id = "idDocente" })
-                                                            <span class="text-error hide">
+
+                                            </div>
+
+                                            <div class="span6">
+
+                                                <div class="control-group">
+                                                    <div class="controls span9">
+                                                        <label for="Capacidade"><span class="camposObrigatorio">*</span> Capacidade de Alunos:</label>
+                                                        @Html.TextBox("Capacidade", "20", new {@class = "span2", @maxlength = "2", @disabled = "disabled"})
+                                                    </div>
+                                                </div>
+
+                                                <div class="control-group">
+                                                    <div class="controls span9">
+                                                        <label for="idTeacher"><span class="camposObrigatorio">*</span> Teacher :</label>
+                                                        @Html.DropDownListFor(a => a.Teacher.Id, @docentes, new {@class = "span10 required", @id = "idDocente"})
+                                                        <span class="text-error hide">
                                                                 <br>
                                                                 O campo Teacher é de preenchimento obrigatório.</span>
-                                                        </div>
                                                     </div>
-
                                                 </div>
 
                                             </div>
-                                        </fieldset>
 
-                                    </div>
+                                        </div>
+                                    </fieldset>
+
+                                </div>
                             </fieldset>
-
-
 
 
                             <div class="row-fluid">
@@ -105,7 +100,7 @@
                                                 <div class="row-fluid control-group shuffle">
                                                     <div class="span5">
                                                         <div class="discenteObrigatorio">Discentes</div>
-                                                        @Html.DropDownList("DiscentesNaoSelecionados", @discentesNaoVinculados, new { @multiple = "multiple", @size = "7", @class = "span12" })
+                                                        @Html.DropDownList("DiscentesNaoSelecionados", @discentesNaoVinculados, new {@multiple = "multiple", @size = "7", @class = "span12"})
                                                     </div>
 
                                                     <div class="span2 text-center">
@@ -127,7 +122,7 @@
 
                                                     <div class="span5">
                                                         <div class="discenteObrigatorio">* Discentes Vinculados</div>
-                                                        @Html.DropDownList("DiscentesSelecionados", null, new { @multiple = "multiple", @size = "7", @class = "span12" })
+                                                        @Html.DropDownList("DiscentesSelecionados", null, new {@multiple = "multiple", @size = "7", @class = "span12"})
                                                         <span class="text-error hide">O campo Discentes Vinculados é de preenchimento obrigatório.</span>
                                                     </div>
                                                 </div>
@@ -146,9 +141,6 @@
                 <a id="btnCancelar" class="btn" href="#">Cancelar</a>
             </div>
         </div>
-
-
-
 
 
     </section>

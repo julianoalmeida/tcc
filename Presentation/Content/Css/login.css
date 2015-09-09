@@ -1,70 +1,140 @@
-root { 
-    display: block;
-}
-html,body{
-    min-width: 100%;
-    width: 100%;
-    min-height: 100%;
+root { display: block; }
+
+html, body {
     height: 100%;
-    padding:0;
-    position: relative;
-}
-html,body,input,select,textarea,button{font-family: 'Coda',Arial,sans-serif;}
-body.login{position: relative;}
-body.login #background{
-    position: absolute;
-    top:0;left:0;
-    min-width:100%;
     min-height: 100%;
-    background: url(../images/background/bg-login-4.jpg) top center;
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
+    min-width: 100%;
+    padding: 0;
+    position: relative;
+    width: 100%;
 }
-body.login #login{
+
+html, body, input, select, textarea, button { font-family: 'Coda', Arial, sans-serif; }
+
+body.login { position: relative; }
+
+body.login #background {
+    background: url(../images/background/bg-login-4.jpg) top center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    left: 0;
+    min-height: 100%;
+    min-width: 100%;
     position: absolute;
-    top:50%;left:50%;
-    max-width:350px;
-    margin-left:-175px;
-    margin-top:-275px;    
+    top: 0;
+}
+
+body.login #login {
+    left: 50%;
+    margin-left: -175px;
+    margin-top: -275px;
+    max-width: 350px;
     padding: 10px;
+    position: absolute;
+    top: 50%;
     z-index: 999;
 }
-body.login #login figure {margin-left: 10px;margin-right: 10px;margin-bottom: 25px;}
-body.login #login figure.sistema{
-	color:black;font-size:25px;text-align:left;
-	margin:0 0 10px 0;
-}
-body.login #login figure.sistema img{width:60px;padding: 0 10px 0 0;}
-body.login #login figure.sistema span{display:block;}
-body.login #login figure.sistema span.versao{font-size:12px;margin:0px 0 10px;}
-body.login #login figure.sistema img + span{margin:10px 0px 0;font-size: 20px;font-weight: bold;padding-top:3px;}
-body.login #login form {margin-bottom: 10px;padding: 10px;margin-top: -20px;}
-body.login #login form .input-prepend input[type=text],
-body.login #login form .input-prepend input[type=password]{
-    width: 83%;font-size: 17px;height: 30px;line-height: 30px;}
-body.login #login form .add-on{height:30px;width: 32px;}
-body.login #login form .add-on img{height: 30px;width: 30px;}
-body.login #login form + hr{border-top: 1px solid white;margin: 5px 10px;}
-body.login #login > div {padding: 10px;color: white;}
-body.login #login > div a{color:#fff;font-size: 17px;cursor:pointer;}
-.input-prepend{display: block;}
-hr{margin:10px 0;border:0;border-top:1px solid black;}
 
-@media (max-width: 767px){
-    body.login{padding:0;}
+body.login #login figure {
+    margin-bottom: 25px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
-@media (max-width: 979px) and (min-width: 768px){
+
+body.login #login figure.sistema {
+    color: black;
+    font-size: 25px;
+    margin: 0 0 10px 0;
+    text-align: left;
 }
-@media (max-width: 480px){
-    body.login #login{
-        width:245px;
-        margin-left:-130px;
-        top:10%;
-        margin-top:0;
+
+body.login #login figure.sistema img {
+    padding: 0 10px 0 0;
+    width: 60px;
+}
+
+body.login #login figure.sistema span { display: block; }
+
+body.login #login figure.sistema span.versao {
+    font-size: 12px;
+    margin: 0px 0 10px;
+}
+
+body.login #login figure.sistema img + span {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px 0px 0;
+    padding-top: 3px;
+}
+
+body.login #login form {
+    margin-bottom: 10px;
+    margin-top: -20px;
+    padding: 10px;
+}
+
+body.login #login form .input-prepend input[type=text],
+body.login #login form .input-prepend input[type=password] {
+    font-size: 17px;
+    height: 30px;
+    line-height: 30px;
+    width: 83%;
+}
+
+body.login #login form .add-on {
+    height: 30px;
+    width: 32px;
+}
+
+body.login #login form .add-on img {
+    height: 30px;
+    width: 30px;
+}
+
+body.login #login form + hr {
+    border-top: 1px solid white;
+    margin: 5px 10px;
+}
+
+body.login #login > div {
+    color: white;
+    padding: 10px;
+}
+
+body.login #login > div a {
+    color: #fff;
+    cursor: pointer;
+    font-size: 17px;
+}
+
+.input-prepend { display: block; }
+
+hr {
+    border: 0;
+    border-top: 1px solid black;
+    margin: 10px 0;
+}
+
+@media (max-width: 767px) {
+    body.login { padding: 0; }
+}
+
+@media (max-width: 979px) and (min-width: 768px) {
+}
+
+@media (max-width: 480px) {
+    body.login #login {
+        margin-left: -130px;
+        margin-top: 0;
+        top: 10%;
+        width: 245px;
     }
-	body.login #login figure.sistema img{width:45px;margin-top:-5px;}
+
+    body.login #login figure.sistema img {
+        margin-top: -5px;
+        width: 45px;
+    }
+
     body.login #login form .input-prepend input[type=text],
-    body.login #login form .input-prepend input[type=password]{
-        width: 76%;
-    }
+    body.login #login form .input-prepend input[type=password] { width: 76%; }
 }

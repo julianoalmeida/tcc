@@ -1,12 +1,11 @@
 ﻿@using Web.Controllers
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <title>Testes MVC</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
     @Styles.Render("~/Content/css")
     @Styles.Render("~/Content/css/font")
@@ -15,103 +14,107 @@
 
 <body class="clearfix">
 
-    <div id="logoSistema">
+<div id="logoSistema">
+</div>
+
+<header class="container-fluid">
+    <div class="row-fluid clearfix">
+        <div id="perfil" class="span text-right">
+            <ul>
+                <li class="clearfix hidden-phone">
+                    <a href="~/Home/Index">
+                        Home
+                    </a>
+                </li>
+                <li class="dropdown clearfix">
+                    <a id="lista-sistemas-scroll" class="dropdown-toggle" data-toggle="dropdown" href="javascript:;">
+                        <img class="hidden-phone hidden-tablet" src="~/Content/Images/sistemas/branco/SINCER.png"/>
+                        Cadastro <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu sistemas margin-cadastro">
+
+                        <li id="nano" class="nano">
+                            <div class="content">
+                                @if (BaseController.LoggedUserAccessCode == (int) AccessProfileEnum.Administrador)
+                                {
+                                    <figure style="border-left: 5px solid #808080;">
+                                        <a href="~/Administrador/Index" class="clearfix">
+                                            <span class="nome">Adm</span>
+                                            <span class="desc">Cadastro/Manutenção</span>
+                                        </a>
+                                    </figure>
+                                }
+                                @if (BaseController.LoggedUserAccessCode == (int) AccessProfileEnum.Administrador || BaseController.LoggedUserAccessCode == (int) AccessProfileEnum.Docente)
+                                {
+                                    <figure style="border-left: 5px solid #808080;">
+                                        <a href="~/Docente/Index" class="clearfix">
+                                            <span class="nome">Teacher</span>
+                                            <span class="desc">Cadastro/Manutenção</span>
+                                        </a>
+                                    </figure>
+                                }
+                                @if (BaseController.LoggedUserAccessCode == (int) AccessProfileEnum.Administrador || BaseController.LoggedUserAccessCode == (int) AccessProfileEnum.Discente)
+                                {
+                                    <figure style="border-left: 5px solid #808080;">
+                                        <a href="~/Discente/Index" class="clearfix">
+                                            <span class="nome">Student</span>
+                                            <span class="desc">Cadastro/Manutenção</span>
+                                        </a>
+                                    </figure>
+                                }
+                                @if (BaseController.LoggedUserAccessCode == (int) AccessProfileEnum.Administrador)
+                                {
+                                    <figure style="border-left: 5px solid #808080;">
+                                        <a href="~/Turma/Index" class="clearfix">
+                                            <span class="nome">Class</span>
+                                            <span class="desc">Class</span>
+                                        </a>
+                                    </figure>
+                                }
+                            </div>
+                        </li>
+                    </ul>
+
+                </li>
+                <li class="dropdown clearfix">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        Perfil <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu float-rigth">
+                        <li class="clearfix">
+                            <img src="~/Content/Images/user/generic.png" class="hidden-phone img-perfil" alt="Imagem do usuário"/>
+
+                            <span class="nome">Name</span>
+                            <span id="nomeLogado" class="desc">@BaseController.LoggedUserName</span>
+
+                            <span class="nome">Perfil</span>
+                            <span id="PerfilLogado" class="desc">@BaseController.LoggedUserName</span>
+
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a id="btnSairSistema" href="#">Sair</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
     </div>
-
-    <header class="container-fluid">
-        <div class="row-fluid clearfix">
-            <div id="perfil" class="span text-right">
-                <ul>
-                    <li class="clearfix hidden-phone">
-                        <a href="~/Home/Index">Home
-                        </a>
-                    </li>
-                    <li class="dropdown clearfix">
-                        <a id="lista-sistemas-scroll" class="dropdown-toggle" data-toggle="dropdown" href="javascript:;">
-                            <img class="hidden-phone hidden-tablet" src="~/Content/Images/sistemas/branco/SINCER.png" />
-                            Cadastro <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu sistemas margin-cadastro">
-
-                            <li id="nano" class="nano">
-                                <div class="content">
-                                    @if (BaseController.LoggedUserAccessCode == (int)AccessProfileEnum.Administrador)
-                                    {
-                                        <figure style="border-left: 5px solid #808080;">
-                                            <a href="~/Administrador/Index" class="clearfix">
-                                                <span class="nome">Adm</span>
-                                                <span class="desc">Cadastro/Manutenção</span>
-                                            </a>
-                                        </figure>
-                                    }
-                                    @if (BaseController.LoggedUserAccessCode == (int)AccessProfileEnum.Administrador || BaseController.LoggedUserAccessCode == (int)AccessProfileEnum.Docente)
-                                    {
-                                        <figure style="border-left: 5px solid #808080;">
-                                            <a href="~/Docente/Index" class="clearfix">
-                                                <span class="nome">Teacher</span>
-                                                <span class="desc">Cadastro/Manutenção</span>
-                                            </a>
-                                        </figure>
-                                    }
-                                    @if (BaseController.LoggedUserAccessCode == (int)AccessProfileEnum.Administrador || BaseController.LoggedUserAccessCode == (int)AccessProfileEnum.Discente)
-                                    {
-                                        <figure style="border-left: 5px solid #808080;">
-                                            <a href="~/Discente/Index" class="clearfix">
-                                                <span class="nome">Student</span>
-                                                <span class="desc">Cadastro/Manutenção</span>
-                                            </a>
-                                        </figure>
-                                    }
-                                    @if (BaseController.LoggedUserAccessCode == (int)AccessProfileEnum.Administrador)
-                                    {
-                                        <figure style="border-left: 5px solid #808080;">
-                                            <a href="~/Turma/Index" class="clearfix">
-                                                <span class="nome">Class</span>
-                                                <span class="desc">Class</span>
-                                            </a>
-                                        </figure>
-                                    }
-                                </div>
-                            </li>
-                        </ul>
-
-                    </li>
-                    <li class="dropdown clearfix">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Perfil <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu float-rigth">
-                            <li class="clearfix">
-                                <img src="~/Content/Images/user/generic.png" class="hidden-phone img-perfil" alt="Imagem do usuário" />
-
-                                <span class="nome">Name</span>
-                                <span id="nomeLogado" class="desc">@BaseController.LoggedUserName</span>
-
-                                <span class="nome">Perfil</span>
-                                <span id="PerfilLogado" class="desc">@BaseController.LoggedUserName</span>
-
-                            </li>
-                            <li class="divider"></li>
-                            <li><a id="btnSairSistema" href="#">Sair</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </header>
+</header>
 
 
-    <section>
-        <div class="container-fluid">
-            @RenderSection("body", required: true)
-        </div>
-    </section>
+<section>
+    <div class="container-fluid">
+        @RenderSection("body", true)
+    </div>
+</section>
 
-    @Scripts.Render("~/Content/Scripts")
+@Scripts.Render("~/Content/Scripts")
 
-    <script>
-        var rootUrl = "@Url.Content("~")";        
-    </script>
+<script>
+    var rootUrl = "@Url.Content("~")";
+</script>
 
-    @RenderSection("scripts", required: false)
+@RenderSection("scripts", false)
 </body>
 </html>

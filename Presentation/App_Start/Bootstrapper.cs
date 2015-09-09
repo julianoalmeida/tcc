@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Web;
+using System.Web.Mvc;
 using Autofac;
 using Autofac.Integration.Mvc;
 using AutoFacConfig;
@@ -22,14 +23,14 @@ namespace Web
 
             // Registra os controllers no container pelo seu próprio tipo concreto
             // Registrando no container os controllers
-            var controllers = typeof(HomeController).Assembly;
+            var controllers = typeof (HomeController).Assembly;
 
             builder.RegisterAssemblyTypes(controllers)
                 .Where(t => t.Namespace == "Web.Controllers")
                 .AsSelf();
 
             #endregion
-            
+
             builder.RegisterFilterProvider();
 
             var container = builder.Build();
@@ -37,7 +38,7 @@ namespace Web
 
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
 
-            System.Web.HttpContext.Current.Application["DependencyResolver"] = DependencyResolver.Current;
+            HttpContext.Current.Application["DependencyResolver"] = DependencyResolver.Current;
         }
     }
 }

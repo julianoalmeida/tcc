@@ -1,9 +1,9 @@
-﻿using Comum;
-using Entidades;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Comum;
+using Entidades;
 using Entidades.Enums;
 using Negocio;
 
@@ -11,18 +11,6 @@ namespace Web.Controllers
 {
     public class DocenteController : BaseController
     {
-        #region ATRIBUTOS
-
-        private readonly IPersonBusiness _servicoPerson;
-        private readonly ITeacherBusiness _servicoTeacher;
-        private readonly IUserBusiness _servicoUser;
-        private readonly ICityBusiness _servicoCity;
-        private readonly IStateBusiness _servicoState;
-        private readonly ICourseBusiness _servicoCourse;
-        private const string DISCIPLINA = "Courses";
-
-        #endregion
-
         #region CONSTRUTOR
 
         public DocenteController(IPersonBusiness person,
@@ -36,6 +24,19 @@ namespace Web.Controllers
             _servicoState = state;
             _servicoCourse = courses;
         }
+
+        #endregion
+
+        #region ATRIBUTOS
+
+        private readonly IPersonBusiness _servicoPerson;
+        private readonly ITeacherBusiness _servicoTeacher;
+        private readonly IUserBusiness _servicoUser;
+        private readonly ICityBusiness _servicoCity;
+        private readonly IStateBusiness _servicoState;
+        private readonly ICourseBusiness _servicoCourse;
+        private const string DISCIPLINA = "Courses";
+
         #endregion
 
         #region ACTIONS
@@ -57,7 +58,7 @@ namespace Web.Controllers
             }
             else
             {
-                model = new Teacher { Person = new Person() };
+                model = new Teacher {Person = new Person()};
             }
 
             var disciplinas = model.Courses;
@@ -81,7 +82,7 @@ namespace Web.Controllers
 
 
         /// <summary>
-        /// Método Responsavel por Popular as DropDownList com os valores cadastrados na base de dados
+        ///     Método Responsavel por Popular as DropDownList com os valores cadastrados na base de dados
         /// </summary>
         /// <param name="model">Teacher Atual</param>
         private void CarregarDropDowns(Teacher model)
@@ -95,8 +96,10 @@ namespace Web.Controllers
 
             if (model.Id > 0)
             {
-                var cidades = _servicoCity.SelectWithFilter(a => a.State.Code.Equals(model.Person.Address.State)).ToList();
-                ViewBag.Cidades = BuildListSelectListItemWith(cidades, "Name", "Id", model.Person.Address.CityId.ToString());
+                var cidades =
+                    _servicoCity.SelectWithFilter(a => a.State.Code.Equals(model.Person.Address.State)).ToList();
+                ViewBag.Cidades = BuildListSelectListItemWith(cidades, "Name", "Id",
+                    model.Person.Address.CityId.ToString());
 
                 var estados = _servicoState.GetAll().ToList();
                 ViewBag.Estados = BuildListSelectListItemWith(estados, "Name", "Code", model.Person.Address.State);
@@ -106,7 +109,6 @@ namespace Web.Controllers
                 ViewBag.Cidades = BuildListSelectListItemWith(new List<City>(), "Description", "Id");
                 ViewBag.Estados = BuildListSelectListItemWith(_servicoState.GetAll(), "Name", "Code");
             }
-
         }
 
         #endregion
@@ -117,7 +119,7 @@ namespace Web.Controllers
         {
             var paginaAtual = Convert.ToInt32(Request.Params[Constants.START_PAGE]);
 
-            var docente = new Teacher { Person = new Person { Name = Nome } };
+            var docente = new Teacher {Person = new Person {Name = Nome}};
 
             var docentes = _servicoTeacher.SelectWithPagination(docente, paginaAtual);
 
@@ -155,7 +157,7 @@ namespace Web.Controllers
 
             keepTempData();
 
-            return Json(new { duplicado = duplicado });
+            return Json(new {duplicado});
         }
 
         public JsonResult ListarCidades(string siglaEstado)
@@ -171,7 +173,9 @@ namespace Web.Controllers
             var retorno = 1;
 
             var login = GetFormatedUserLoginAndPassword(teacher.Person);
-            var mensagem = teacher.Id == 0 ? Messages.SUCCESSFULLY_INSERTED_RECORD + login : Messages.SUCCESSFULLY_UPDATED_RECORD + login;
+            var mensagem = teacher.Id == 0
+                ? Messages.SUCCESSFULLY_INSERTED_RECORD + login
+                : Messages.SUCCESSFULLY_UPDATED_RECORD + login;
 
             try
             {
@@ -181,8 +185,9 @@ namespace Web.Controllers
                     teacher.Courses.Add(_servicoCourse.GetById(item.Id));
                 }
 
-                var usuario = _servicoUser.SelectWithFilter(a => a.Person.Id == teacher.Person.Id).FirstOrDefault() ?? new User { Person = new Person() };
-                BuildLoggedUser(teacher.Person, usuario, (int)AccessProfileEnum.Docente);
+                var usuario = _servicoUser.SelectWithFilter(a => a.Person.Id == teacher.Person.Id).FirstOrDefault() ??
+                              new User {Person = new Person()};
+                BuildLoggedUser(teacher.Person, usuario, (int) AccessProfileEnum.Docente);
 
                 _servicoPerson.ValidadePerson(teacher.Person);
 
@@ -198,7 +203,7 @@ namespace Web.Controllers
                 mensagem = GetErrorMessageFromExceptionType(ex);
             }
 
-            return Json(new { retorno, msg = mensagem, docenteID = teacher.Id });
+            return Json(new {retorno, msg = mensagem, docenteID = teacher.Id});
         }
 
         public JsonResult Excluir(int id)
@@ -216,7 +221,7 @@ namespace Web.Controllers
                 sucesso = false;
             }
 
-            return Json(new { retorno = sucesso });
+            return Json(new {retorno = sucesso});
         }
 
         public JsonResult ExcluirDisciplina(int idDisciplina)
@@ -230,6 +235,5 @@ namespace Web.Controllers
         }
 
         #endregion
-
     }
 }

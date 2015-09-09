@@ -6,7 +6,7 @@ namespace Data
 {
     public interface IUserData : INHibernateRepository<User>
     {
-        User GetLoggedUser(string login, string senha);
+        User GetByCredentials(string login, string senha);
     }
 
     public class UserData : NHibernateRepository<User>, IUserData
@@ -15,8 +15,8 @@ namespace Data
             : base(session)
         { }
         
-        public User GetLoggedUser(string login, string senha)
-        {
+        public User GetByCredentials(string login, string senha)
+        {   
             return GetAll()
                 .Where(a => a.Login.Equals(login)).FirstOrDefault(a => a.Password.Equals(senha));
         }

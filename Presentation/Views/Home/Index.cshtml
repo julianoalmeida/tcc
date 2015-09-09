@@ -1,12 +1,11 @@
-﻿@using Entidades;
-@model  User
+﻿@model User
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @section body{
-    <br />
+    <br/>
     <div class="fundo">
         <fieldset>
             <legend title="">
@@ -15,7 +14,7 @@
 
 
             <h2 style="text-align: center">Sistema de Controle Escolar</h2>
-            
+
             <center>
                 <h1>
                     <span class="label label-danger">Test</span>
@@ -24,14 +23,11 @@
                 </h1>
             </center>
             <h1>
-                <center><img id="logoTdd" src="~/Content/Images/background/tdd.png"/></center>
+                <center>
+                    <img id="logoTdd" src="~/Content/Images/background/tdd.png"/>
+                </center>
             </h1>
-            <hr />
-
-
-
-
-
+            <hr/>
 
 
         </fieldset>
@@ -43,5 +39,3 @@
 @section Scripts{
     @Scripts.Render("~/Content/Scripts/sistema/Home/Index.js")
 }
-
-

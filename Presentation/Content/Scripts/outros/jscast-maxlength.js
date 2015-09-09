@@ -4,18 +4,18 @@
 * Exemplo: $(SELETOR).maxLength( { limit : 500 } );
 */
 jQuery.fn.extend({
-    maxLength: function (opts) {
+    maxLength: function(opts) {
         var defaults = {
-            limit: 10
-        },
-        options = $.extend(defaults, opts),
-        $textAreas = $(this);
+                limit: 10
+            },
+            options = $.extend(defaults, opts),
+            $textAreas = $(this);
 
-        $textAreas.each(function () {
+        $textAreas.each(function() {
             var $textArea = $(this);
-            $textArea.on('keyup keypress keydown change mouseover', function (event) {
+            $textArea.on("keyup keypress keydown change mouseover", function(event) {
                 var valor = $textArea.val();
-                var isIE = (typeof window.ActiveXObject != 'undefined');
+                var isIE = (typeof window.ActiveXObject != "undefined");
                 // Caso o navegador seja o IE keyCode é a chave, caso contrário a chave é which.
                 var key = isIE ? event.keyCode : event.which;
                 var lineBreaks = 0;

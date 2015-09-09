@@ -40,10 +40,7 @@ namespace Negocio
 
             else if (person.Sex == 0)
                 hasError = true;
-
-            else if (person.MaritalState == 0)
-                hasError = true;
-
+            
             else if (string.IsNullOrEmpty(person.MobileNumber.RemoveMaskCharacters()))
                 hasError = true;
 
@@ -68,20 +65,14 @@ namespace Negocio
 
         public void ValidadePerson(Person person)
         {
-            var databasePerson = _personData.SelectWithFilter(a => a.Cpf.Equals(person.Cpf))
-                                            .FirstOrDefault();
+            //ValidateDuplicatedPerson(person, databasePerson);
+            //ValidateRequiredFields(person);
 
-            ValidateDuplicatedPerson(person, databasePerson);
-            ValidateRequiredFields(person);
-
-            if (ValidaDataAtualFutura(person.BirthDate.Value))
-                throw new FutureDateException();
-
-            if (!IsValidCpf(person.Cpf))
-                throw new CpfException();
-
-            if (!IsValidEmail(person.Email))
-                throw new EmailException();
+            //if (ValidaDataAtualFutura(person.BirthDate.Value))
+            //    throw new FutureDateException();
+            
+            //if (!IsValidEmail(person.Email))
+            //    throw new EmailException();
         }
 
         private static void ValidateDuplicatedPerson(Person person, Person databasePerson)

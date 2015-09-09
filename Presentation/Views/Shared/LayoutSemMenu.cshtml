@@ -3,8 +3,8 @@
 <head>
     <title>Testes MVC</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
 
     @Styles.Render("~/Content/css")
@@ -14,22 +14,22 @@
 
 <body class="clearfix">
 
-    <section>
-        <div class="container-fluid">
-            @RenderSection("body", required: true)
-        </div>
-    </section>
+<section>
+    <div class="container-fluid">
+        @RenderSection("body", true)
+    </div>
+</section>
 
-    @Scripts.Render("~/Content/Scripts")
+@Scripts.Render("~/Content/Scripts")
 
-    <script>
-        var rootUrl = "@Url.Content("~")";        
-    </script>
+<script>
+    var rootUrl = "@Url.Content("~")";
+</script>
 
-    @* <script>
+@* <script>
         $(document).ready(function () { });
     </script>*@
 
-    @RenderSection("scripts", required: false)
+@RenderSection("scripts", false)
 </body>
 </html>

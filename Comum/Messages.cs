@@ -21,5 +21,7 @@
         public const string REGISTER_ALREADY_IN_PLACE = "Registro já existente.";
 
         public const string REQUIRED_FIELDS = "Existem campos de preenchimento obrigatório.";
+
+        public const string USER_NOT_FOUND = "Usuário não encontrado";
     }
 }

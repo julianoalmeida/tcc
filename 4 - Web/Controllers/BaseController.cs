@@ -21,7 +21,7 @@ namespace _4___Web.Controllers
             var loggedUser = TempData[Constants.LOGGED_USER] as User;
 
             LoggedUserProfileAccessCode = loggedUser.AccessCode;
-            LoggerUserProfileName = loggedUser.Name;
+            LoggerUserProfileName = loggedUser.Login;
             TempData.Keep(Constants.LOGGED_USER);
 
             return RedirectToAction("Index", "Home");
@@ -65,7 +65,7 @@ namespace _4___Web.Controllers
 
         private static string BuildLoggedUserLogin(Person person)
         {
-            return string.Concat(person.Name.RemoveEmptySpaces(), person.Cpf.GetTwoLastCharacters());
+            return string.Concat(person.Name.RemoveEmptySpaces(), person.User.Login.GetTwoLastCharacters());
         }
 
         protected string GetFormatedUserLoginAndPassword(Person person)

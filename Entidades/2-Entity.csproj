@@ -72,7 +72,6 @@
     <Compile Include="Address.cs" />
     <Compile Include="BaseEntity.cs" />
     <Compile Include="Enums\EducationEnum.cs" />
-    <Compile Include="Enums\MaritalStatusEnum.cs" />
     <Compile Include="Enums\AccessProfileEnum.cs" />
     <Compile Include="Enums\SexEnum.cs" />
     <Compile Include="Enums\ClassesTimeEnum.cs" />

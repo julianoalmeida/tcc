@@ -8,7 +8,7 @@ namespace Data.Map
         public ClassMap()
         {
             Table("TURMA");
-            Id(a => a.Id, "ID");
+            Id(a => a.Id, "Id");
             Map(a => a.Description, "Descricao").Not.Nullable();
             Map(a => a.Capacity, "Capacidade").Not.Nullable();
             Map(a => a.ClassTime, "Turno").Nullable();            

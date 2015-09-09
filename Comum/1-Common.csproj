@@ -47,6 +47,7 @@
     <Compile Include="Exceptions\FutureDateException.cs" />
     <Compile Include="Exceptions\EmailException.cs" />
     <Compile Include="Exceptions\DuplicatedEntityException.cs" />
+    <Compile Include="Exceptions\UserNotfoundException.cs" />
     <Compile Include="Exceptions\VincularDisciplinaException.cs" />
     <Compile Include="Messages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

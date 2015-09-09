@@ -1,10 +1,10 @@
-﻿using Comum;
-using Entidades;
-using Entidades.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Comum;
+using Entidades;
+using Entidades.Enums;
 using Negocio;
 using NHibernate.Util;
 
@@ -13,11 +13,11 @@ namespace Web.Controllers
     [ValidateInput(false)]
     public class AdministradorController : BaseController
     {
-        private readonly IPersonBusiness _personBusiness;
         private readonly IAdmBusiness _admBusiness;
-        private readonly IUserBusiness _usesBusiness;
         private readonly ICityBusiness _cityBusiness;
+        private readonly IPersonBusiness _personBusiness;
         private readonly IStateBusiness _stateBusiness;
+        private readonly IUserBusiness _usesBusiness;
 
         public AdministradorController(IPersonBusiness person,
             IAdmBusiness adm, IUserBusiness user, ICityBusiness city,
@@ -47,7 +47,7 @@ namespace Web.Controllers
         {
             var paginaAtual = int.Parse(Request.Params[Constants.START_PAGE]);
 
-            var adm = new Adm { Person = new Person { Name = Nome } };
+            var adm = new Adm {Person = new Person {Name = Nome}};
 
             var retorno = _admBusiness.SelectWithPagination(adm, paginaAtual);
 
@@ -78,7 +78,7 @@ namespace Web.Controllers
                 mensagem = GetErrorMessageFromExceptionType(ex);
             }
 
-            return Json(new { mensagem, administradorId = adm.Id });
+            return Json(new {mensagem, administradorId = adm.Id});
         }
 
         public JsonResult Excluir(int id)
@@ -87,7 +87,8 @@ namespace Web.Controllers
             try
             {
                 var administrador = _admBusiness.GetById(id);
-                var usuario = _usesBusiness.SelectWithFilter(a => a.Person.Id == administrador.Person.Id).FirstOrDefault();
+                var usuario =
+                    _usesBusiness.SelectWithFilter(a => a.Person.Id == administrador.Person.Id).FirstOrDefault();
                 _usesBusiness.Remove(usuario.Id);
                 _admBusiness.Remove(id);
             }
@@ -96,7 +97,7 @@ namespace Web.Controllers
                 sucesso = false;
             }
 
-            return Json(new { retorno = sucesso });
+            return Json(new {retorno = sucesso});
         }
 
         private void ValidateAndSave(Adm adm)

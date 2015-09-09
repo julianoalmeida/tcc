@@ -1,5 +1,5 @@
-﻿using Comum;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
+using Comum;
 using Negocio;
 
 namespace Web.Controllers
@@ -7,6 +7,7 @@ namespace Web.Controllers
     public class LoginController : Controller
     {
         private readonly IUserBusiness _user;
+
         public LoginController(IUserBusiness user)
         {
             _user = user;
@@ -30,7 +31,7 @@ namespace Web.Controllers
                 result = 2;
 
             TempData.Keep(Constants.LOGGED_USER);
-            return Json(new { retorno = result });
+            return Json(new {retorno = result});
         }
 
         public ActionResult Sair()

@@ -1,9 +1,9 @@
-﻿using Comum;
-using Entidades;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Comum;
+using Entidades;
 using Entidades.Enums;
 using Negocio;
 
@@ -11,16 +11,6 @@ namespace Web.Controllers
 {
     public class DiscenteController : BaseController
     {
-        #region INJEÇÃO
-
-        private IPersonBusiness _servicoPerson;
-        private IStudentBusiness _servicoStudent;
-        private IUserBusiness _servicoUser;
-        private ICityBusiness _servicoCity;
-        private IStateBusiness _servicoState;
-
-        #endregion
-
         #region CONSTRUTOR
 
         public DiscenteController(IPersonBusiness person,
@@ -33,6 +23,52 @@ namespace Web.Controllers
             _servicoCity = city;
             _servicoState = state;
         }
+
+        #endregion
+
+        #region METODOS AUXILIARES
+
+        /// <summary>
+        ///     Método Responsavel por Popular as DropDownList com os valores cadastrados na base de dados
+        /// </summary>
+        /// <param name="model">Teacher Atual</param>
+        private void CarregarDropDowns(Student model)
+        {
+            if (model.Id > 0)
+            {
+                ViewBag.EstadoCivil = BuildListItemfromEnum<MaritalStatusEnum>(model.Person.MaritalState.ToString());
+                ViewBag.Sexo = BuildListItemfromEnum<SexEnum>(model.Person.Sex.ToString());
+
+                var cidades =
+                    _servicoCity.SelectWithFilter(a => a.State.Code.Equals(model.Person.Address.State)).ToList();
+                ViewBag.Cidades = BuildListSelectListItemWith(cidades, "Name", "Id",
+                    model.Person.Address.CityId.ToString());
+
+                var estados = _servicoState.GetAll().ToList();
+                ViewBag.Estados = BuildListSelectListItemWith(estados, "Name", "Code", model.Person.Address.State);
+
+                ViewBag.Escolaridades = BuildListItemfromEnum<EducationEnum>(model.Education.ToString());
+            }
+            else
+            {
+                ViewBag.EstadoCivil = BuildListItemfromEnum<MaritalStatusEnum>(string.Empty);
+                ViewBag.Sexo = BuildListItemfromEnum<SexEnum>(string.Empty);
+                ViewBag.Cidades = BuildListSelectListItemWith(new List<City>(), "Description", "Id");
+                ViewBag.Estados = BuildListSelectListItemWith(_servicoState.GetAll().ToList(), "Name", "Code");
+                ViewBag.Escolaridades = BuildListItemfromEnum<EducationEnum>(model.Education.ToString());
+            }
+        }
+
+        #endregion
+
+        #region INJEÇÃO
+
+        private readonly IPersonBusiness _servicoPerson;
+        private readonly IStudentBusiness _servicoStudent;
+        private readonly IUserBusiness _servicoUser;
+        private readonly ICityBusiness _servicoCity;
+        private readonly IStateBusiness _servicoState;
+
         #endregion
 
         #region ACTIONS
@@ -60,46 +96,13 @@ namespace Web.Controllers
 
         #endregion
 
-        #region METODOS AUXILIARES
-
-        /// <summary>
-        /// Método Responsavel por Popular as DropDownList com os valores cadastrados na base de dados
-        /// </summary>
-        /// <param name="model">Teacher Atual</param>
-        private void CarregarDropDowns(Student model)
-        {
-            if (model.Id > 0)
-            {
-                ViewBag.EstadoCivil = BuildListItemfromEnum<MaritalStatusEnum>(model.Person.MaritalState.ToString());
-                ViewBag.Sexo = BuildListItemfromEnum<SexEnum>(model.Person.Sex.ToString());
-
-                var cidades = _servicoCity.SelectWithFilter(a => a.State.Code.Equals(model.Person.Address.State)).ToList();
-                ViewBag.Cidades = BuildListSelectListItemWith(cidades, "Name", "Id", model.Person.Address.CityId.ToString());
-
-                var estados = _servicoState.GetAll().ToList();
-                ViewBag.Estados = BuildListSelectListItemWith(estados, "Name", "Code", model.Person.Address.State);
-
-                ViewBag.Escolaridades = BuildListItemfromEnum<EducationEnum>(model.Education.ToString());
-            }
-            else
-            {
-                ViewBag.EstadoCivil = BuildListItemfromEnum<MaritalStatusEnum>(string.Empty);
-                ViewBag.Sexo = BuildListItemfromEnum<SexEnum>(string.Empty);
-                ViewBag.Cidades = BuildListSelectListItemWith(new List<City>(), "Description", "Id");
-                ViewBag.Estados = BuildListSelectListItemWith(_servicoState.GetAll().ToList(), "Name", "Code");
-                ViewBag.Escolaridades = BuildListItemfromEnum<EducationEnum>(model.Education.ToString());
-            }
-        }
-
-        #endregion
-
         #region REQUISICOES_AJAX
 
         public JsonResult ListarPaginado(string Nome)
         {
             var paginaAtual = Convert.ToInt32(Request.Params[Constants.START_PAGE]);
 
-            var discente = new Student { Person = new Person { Name = Nome } };
+            var discente = new Student {Person = new Person {Name = Nome}};
 
             var discentes = _servicoStudent.SelectWithPagination(discente, paginaAtual);
 
@@ -120,12 +123,15 @@ namespace Web.Controllers
         public JsonResult Salvar(Student student)
         {
             var login = GetFormatedUserLoginAndPassword(student.Person);
-            var mensagem = student.Id == 0 ? Messages.SUCCESSFULLY_INSERTED_RECORD + login : Messages.SUCCESSFULLY_UPDATED_RECORD + login;
+            var mensagem = student.Id == 0
+                ? Messages.SUCCESSFULLY_INSERTED_RECORD + login
+                : Messages.SUCCESSFULLY_UPDATED_RECORD + login;
 
             try
             {
-                var usuario = _servicoUser.SelectWithFilter(a => a.Person.Id == student.Person.Id).FirstOrDefault() ?? new User { Person = new Person() };
-                BuildLoggedUser(student.Person, usuario, (int)AccessProfileEnum.Discente);
+                var usuario = _servicoUser.SelectWithFilter(a => a.Person.Id == student.Person.Id).FirstOrDefault() ??
+                              new User {Person = new Person()};
+                BuildLoggedUser(student.Person, usuario, (int) AccessProfileEnum.Discente);
 
                 _servicoPerson.ValidadePerson(student.Person);
 
@@ -142,12 +148,11 @@ namespace Web.Controllers
                 mensagem = GetErrorMessageFromExceptionType(ex);
             }
 
-            return Json(new { mensagem, studentID = student.Id });
+            return Json(new {mensagem, studentID = student.Id});
         }
 
         public JsonResult Excluir(int id)
         {
-
             var sucesso = true;
             try
             {
@@ -161,10 +166,9 @@ namespace Web.Controllers
                 sucesso = false;
             }
 
-            return Json(new { retorno = sucesso });
+            return Json(new {retorno = sucesso});
         }
 
         #endregion
-
     }
 }

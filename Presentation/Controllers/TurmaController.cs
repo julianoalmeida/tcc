@@ -1,10 +1,10 @@
-﻿using Comum;
+﻿using System;
+using System.Linq;
+using System.Web.Mvc;
+using Comum;
+using Comum.Exceptions;
 using Entidades;
 using Entidades.Enums;
-using System;
-using System.Web.Mvc;
-using System.Linq;
-using Comum.Exceptions;
 using Negocio;
 using NHibernate.Util;
 
@@ -63,14 +63,15 @@ namespace Web.Controllers
                     discente =>
                         todosDiscentesCadastrados.RemoveAll(discenteCadastrado => discente.Id == discenteCadastrado.Id));
 
-            ViewBag.DiscentesNaoSelecionados = BuildListSelectListItemWith(todosDiscentesCadastrados, "Person.Name", "Id");
+            ViewBag.DiscentesNaoSelecionados = BuildListSelectListItemWith(todosDiscentesCadastrados, "Person.Name",
+                "Id");
 
             ViewBag.DiscentesSelecionados = BuildListSelectListItemWith(discentesSelecionados, "Person.Name", "Id");
         }
 
         public JsonResult ListarPaginado(string nome, int? turno)
         {
-            var turma = new Class { Description = nome, ClassTime = turno.HasValue ? turno.Value : 0 };
+            var turma = new Class {Description = nome, ClassTime = turno.HasValue ? turno.Value : 0};
 
             var paginaAtual = Convert.ToInt32(Request.Params[Constants.START_PAGE]);
 
@@ -98,7 +99,7 @@ namespace Web.Controllers
             }
             catch (Exception e)
             {
-                jsonResult = e.GetType() == typeof(DuplicatedEntityException)
+                jsonResult = e.GetType() == typeof (DuplicatedEntityException)
                     ? BuildJson(0, Messages.REGISTER_ALREADY_IN_PLACE)
                     : BuildJson(0, Messages.CLASS_STUDENT_OVERFLOW);
             }
@@ -108,7 +109,7 @@ namespace Web.Controllers
 
         private JsonResult BuildJson(int retorno, string msg)
         {
-            return Json(new { sucesso = retorno, msg });
+            return Json(new {sucesso = retorno, msg});
         }
 
         public JsonResult Excluir(int id)

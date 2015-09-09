@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using Comum;
 using Data;
@@ -14,11 +12,12 @@ using _4___Web.Controllers;
 namespace UnitTests.Controllers
 {
     [TestFixture]
-    public class LoginControllerTest
+    public class LoginControllerTest : BaseControllerTest
     {
         private IUserBusiness _userBusiness;
         private LoginController _loginController;
         private readonly Mock<IUserData> _userData = new Mock<IUserData>();
+        private const string INVALID_CREDENTIALS = "invalid credentials";
 
         [SetUp]
         public void BeforeScenario()
@@ -28,7 +27,7 @@ namespace UnitTests.Controllers
 
         [TestCase("", "")]
         [TestCase("", "password")]
-        [TestCase("not found login", "not found password")]
+        [TestCase(INVALID_CREDENTIALS, INVALID_CREDENTIALS)]
         public void RedirectToLoginIfProvidedCredentialIsNullOrCantFoundUser(string login, string password)
         {
             const string EXPECTED_ACTION_NAME = "Index";
@@ -79,21 +78,24 @@ namespace UnitTests.Controllers
             AssertListItensAreEquals(expectedAccessProfilesList, ViewDataAccessProfileList);
         }
 
-        private static void AssertListItensAreEquals(List<SelectListItem> firstList, IEnumerable<SelectListItem> secondList)
+        [Test]
+        public void RedirectToLoginIfCanCreateUser()
         {
-            firstList.ForEach(item => secondList.Any(SelectListItemEqualsCondition(item)));
-        }
+            const string EXPECTED_ACTION_NAME = "Index";
+            const string EXPECTED_CONTROLLER_NAME = "Login";
 
-        private static RedirectToRouteResult GetRedirectToRouteResultWith(ActionResult actionResult)
-        {
-            return (RedirectToRouteResult)actionResult;
-        }
+            var result = GetRedirectToRouteResultWith(_loginController.CreateAccount(new Person()));
 
+            Assert.That(result.RouteValues["action"], Is.EqualTo(EXPECTED_ACTION_NAME));
+            Assert.That(result.RouteValues["controller"], Is.EqualTo(EXPECTED_CONTROLLER_NAME));
+            Assert.That(_loginController.TempData[Constants.LOGGED_USER], Is.Null);
+        }
+        
         private void Setup()
         {
-            _userData.Setup(a => a.GetByCredentials("", "")).Returns(new User());
+            _userData.Setup(a => a.GetByCredentials(string.Empty, string.Empty)).Returns(new User());
 
-            _userData.Setup(a => a.GetByCredentials("not found login", "not found password")).Returns(new User());
+            _userData.Setup(a => a.GetByCredentials(INVALID_CREDENTIALS, INVALID_CREDENTIALS)).Returns(new User());
 
             _userData.Setup(a => a.GetByCredentials("login", "password"))
                      .Returns(new User
@@ -116,16 +118,9 @@ namespace UnitTests.Controllers
             Assert.That(user?.Password, Is.EqualTo(password));
         }
 
-        private IEnumerable<SelectListItem> ViewDataSexList => (_loginController.ViewData["Sex"] as List<SelectListItem>);
         private IEnumerable<SelectListItem> ViewDataAccessProfileList
-            => (_loginController.ViewData["AccessProfiles"] as List<SelectListItem>);
+            => ViewTadaToListSelectListItem(_loginController.ViewData["AccessProfiles"]);
 
-        private static Func<SelectListItem, bool> SelectListItemEqualsCondition(SelectListItem item)
-        {
-            return
-                a =>
-                    a.Value == item.Value && a.Selected == item.Selected && a.Text == item.Text &&
-                    a.Disabled == item.Disabled && a.Group == item.Group;
-        }
+        private IEnumerable<SelectListItem> ViewDataSexList => ViewTadaToListSelectListItem(_loginController.ViewData["Sex"]);
     }
 }

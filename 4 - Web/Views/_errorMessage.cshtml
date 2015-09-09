@@ -1,0 +1,7 @@
+﻿
+@if (!string.IsNullOrEmpty((string)TempData["Error"]))
+{
+    <div class="center">
+        <span class="alert-danger"><strong>Operação Inválida ! </strong>@TempData["Error"] </span>
+    </div>
+}

@@ -90,6 +90,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="BusinessRules\UserBusinessTest.cs" />
+    <Compile Include="Controllers\BaseControllerTest.cs" />
     <Compile Include="ExtensionsTests\EnumExtensionTest.cs" />
     <Compile Include="ExtensionsTests\ListExtensionTest.cs" />
     <Compile Include="ExtensionsTests\StringExtensionTests.cs" />

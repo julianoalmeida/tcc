@@ -10,9 +10,11 @@ namespace _4___Web.Controllers
     public class LoginController : BaseController
     {
         private readonly IUserBusiness _user;
-        public LoginController(IUserBusiness user)
+        private readonly IPersonBusiness _personBusiness;
+        public LoginController(IUserBusiness user, IPersonBusiness personBusiness)
         {
             _user = user;
+            _personBusiness = personBusiness;
         }
 
         [HttpGet]
@@ -45,23 +47,36 @@ namespace _4___Web.Controllers
             return View();
         }
 
-        private void BuildDropDownLists()
-        {
-            ViewData["Sex"] = BuildListItemfromEnum<SexEnum>(string.Empty);
-            ViewData["AccessProfiles"] = BuildListItemfromEnum<AccessProfileEnum>(string.Empty);
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateAccount(Person model)
         {
-            return RedirectToAction("Index", "Login");
+            var actionName = "Login";
+            try
+            {
+                _personBusiness.SaveAndReturn(model);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+                actionName = "CreateAccount";
+            }
+
+            return RedirectToAction(actionName, "Login");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Exit()
         {
             TempData[Constants.LOGGED_USER] = null;
             return RedirectToAction("Index", "Login");
+        }
+
+        private void BuildDropDownLists()
+        {
+            ViewData["Sex"] = BuildListItemfromEnum<SexEnum>(string.Empty);
+            ViewData["AccessProfiles"] = BuildListItemfromEnum<AccessProfileEnum>(string.Empty);
         }
     }
 }

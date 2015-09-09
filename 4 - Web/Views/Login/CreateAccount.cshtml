@@ -1,10 +1,6 @@
 ﻿@model Entidades.Person
 
-@{
-    ViewBag.Title = "CreateAccount";
-}
-
-<h2>CreateAccount</h2>
+@Html.Partial("~/Views/_errorMessage.cshtml")
 
 @using (Html.BeginForm("CreateAccount", "Login", FormMethod.Post))
 {

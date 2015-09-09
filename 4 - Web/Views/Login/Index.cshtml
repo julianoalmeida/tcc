@@ -1,11 +1,6 @@
 ﻿<div style="clear: both">&nbsp;</div>
 
-@if (!string.IsNullOrEmpty((string)TempData["Error"]))
-{
-    <div class="alert alert-warning center" style="margin: 4% auto">
-        <strong>Erro!</strong> Dados inválidos , favor verificar.
-    </div>
-}
+@Html.Partial("~/Views/_errorMessage.cshtml")
 
 <article style="margin-top:3%">
     <div class="col-sm-6 col-md-4 col-md-offset-4">

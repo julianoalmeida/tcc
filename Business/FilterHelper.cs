@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq.Expressions;
 using Entidades;
 
 namespace Negocio
@@ -72,7 +71,7 @@ namespace Negocio
                    && a.Id != entity.Person.Id;
         }
 
-        public static Expression<Func<Class, bool>> DuplicatedClassCondition(Class entity)
+        public static Func<Class, bool> DuplicatedClassCondition(Class entity)
         {
             return a => a.Description.ToLower().Equals(entity.Description.ToLower()) && a.Id != entity.Id;
         }

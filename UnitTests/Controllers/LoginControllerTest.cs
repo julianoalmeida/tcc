@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using Comum;
 using Data;
+using Data.BaseRepositories;
 using Entidades;
 using Entidades.Enums;
 using Moq;
@@ -19,7 +20,7 @@ namespace UnitTests.Controllers
         private IPersonBusiness _personBusiness;
         private LoginController _loginController;
         private readonly Mock<IUserData> _userData = new Mock<IUserData>();
-        private readonly Mock<IPersonData> _personData = new Mock<IPersonData>();
+        private readonly Mock<IBaseRepositoryRepository<Person>> _personData = new Mock<IBaseRepositoryRepository<Person>>();
         private const string INVALID_CREDENTIALS = "invalid credentials";
         private const string DUPLICATED_NAME = "DUPLICATED NAME";
         private DateTime _duplicatedDate = new DateTime(2000, 5, 5);
@@ -117,7 +118,7 @@ namespace UnitTests.Controllers
                     Name = "Name",
                     Id = 1,
                     MobileNumber = "999999999",
-                    Email = "teste@teste.com",
+                    Email = "test@test.com",
                     Sex = (int)SexEnum.Feminino
                 };
 
@@ -136,8 +137,8 @@ namespace UnitTests.Controllers
 
             _personData.Setup(a => a.SaveAndReturn(new Person())).Returns(new Person());
 
-            _userBusiness = new UserBusinessBusiness(_userData.Object);
-            _personBusiness = new PersonBusinessBusiness(_personData.Object);
+            _userBusiness = new UserBusiness(_userData.Object);
+            _personBusiness = new PersonBusiness(_personData.Object);
             _loginController = new LoginController(_userBusiness, _personBusiness);
         }
     }

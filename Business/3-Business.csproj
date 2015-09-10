@@ -67,11 +67,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdmBusiness.cs" />
-    <Compile Include="DomainBusiness.cs" />
+    <Compile Include="BaseTypes\DomainBusiness.cs" />
     <Compile Include="FilterHelper.cs" />
     <Compile Include="StudentBusiness.cs" />
     <Compile Include="TeacherBusiness.cs" />
-    <Compile Include="BaseBusiness.cs" />
+    <Compile Include="BaseTypes\BaseBusiness.cs" />
     <Compile Include="PersonBusiness.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ClassBusiness.cs" />

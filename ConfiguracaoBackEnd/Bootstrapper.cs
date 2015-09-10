@@ -5,7 +5,7 @@ using AutoFacConfig.Interceptadores;
 using Data.BaseRepositories;
 using Data.SetupSessionFactory;
 using Entidades;
-using Negocio;
+using Negocio.BaseTypes;
 using NHibernate;
 
 namespace AutoFacConfig
@@ -29,9 +29,10 @@ namespace AutoFacConfig
 
             RegisterBusinessAssembly(builder);
 
+            RegisterServiceTransactionInterceptor(builder);
+
             RegisterEntityAssembly(builder);
         }
-
 
         private static void RegisterNHibernatSectionAndFactory(ContainerBuilder builder)
         {
@@ -50,22 +51,22 @@ namespace AutoFacConfig
 
         private static void RegisterRepositoryAssembly(ContainerBuilder builder)
         {
-            builder.RegisterAssemblyTypes(typeof(BaseRepositoryRepository<>).Assembly)
-                .Where(t => t.Name.EndsWith("Data"))
-                .AsImplementedInterfaces();
+            builder.RegisterAssemblyTypes(typeof(IBaseRepositoryRepository<>).Assembly)
+                .AsImplementedInterfaces()
+                .AsSelf();
         }
 
         private static void RegisterBusinessAssembly(ContainerBuilder builder)
         {
             builder.RegisterAssemblyTypes(typeof(IBaseBusiness<>).Assembly)
-                .Where(t => t.Name.EndsWith("Business"))
                 .AsImplementedInterfaces()
                 .EnableInterfaceInterceptors()
                 .InterceptedBy(typeof(ServiceTransactionInterceptor));
+        }
 
-            builder.RegisterType<ServiceTransactionInterceptor>()
-                .InstancePerHttpRequest()
-                .AsSelf();
+        private static void RegisterServiceTransactionInterceptor(ContainerBuilder builder)
+        {
+            builder.RegisterType<ServiceTransactionInterceptor>().InstancePerHttpRequest().AsSelf();
         }
 
         private static void RegisterEntityAssembly(ContainerBuilder builder)

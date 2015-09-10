@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reflection;
-using System.Web;
+﻿using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
@@ -15,10 +13,7 @@ namespace _4___Web
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
             Bootstrapper.Run();
-
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
         }
     }
 }

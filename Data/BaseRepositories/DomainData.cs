@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using Entidades;
 using NHibernate;
 using NHibernate.Linq;
@@ -11,7 +10,7 @@ namespace Data.BaseRepositories
     public interface IDomainData<TEntity> where TEntity : BaseEntity
     {
         IEnumerable<TEntity> GetAll();
-        IEnumerable<TEntity> SelectWithFilter(Expression<Func<TEntity, bool>> filterCondition);
+        IEnumerable<TEntity> SelectWithFilter(Func<TEntity, bool> filterCondition);
     }
 
     public class DomainData<TEntity> : IDomainData<TEntity> where TEntity : BaseEntity
@@ -27,7 +26,7 @@ namespace Data.BaseRepositories
             return Session.Query<TEntity>();
         }
 
-        public IEnumerable<TEntity> SelectWithFilter(Expression<Func<TEntity, bool>> filterCondition)
+        public IEnumerable<TEntity> SelectWithFilter(Func<TEntity, bool> filterCondition)
         {
             return Session.Query<TEntity>().Where(filterCondition);
         }

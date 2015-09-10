@@ -4,19 +4,17 @@ using Entidades;
 using Comum.Exceptions;
 using Data;
 using Entidades.Extensions;
+using Negocio.BaseTypes;
 
 namespace Negocio
 {
     public interface IPersonBusiness : IBaseBusiness<Person> { }
 
-    public class PersonBusinessBusiness : BaseBusinessBusiness<Person>, IPersonBusiness
+    public class PersonBusiness : BaseBusiness<Person>, IPersonBusiness
     {
-        private readonly IPersonData _personData;
-        public PersonBusinessBusiness(IPersonData data)
+        public PersonBusiness(IPersonData data)
             : base(data)
-        {
-            _personData = data;
-        }
+        { }
 
         public override void Validate(Person person)
         {
@@ -59,7 +57,7 @@ namespace Negocio
                 new Regex(
                     @"^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$");
 
-            if (string.IsNullOrEmpty(email) || validEmail.IsMatch(email))
+            if (string.IsNullOrEmpty(email) || !validEmail.IsMatch(email))
                 throw new InvalidEmailException();
         }
 
@@ -88,7 +86,7 @@ namespace Negocio
 
         private void ValidateDuplicatedPerson(Person person)
         {
-            if (_personData.IsDuplicated(person))
+            if (IsDuplicated(FilterHelper.DuplicatedPersonCondition(person)))
                 throw new DuplicatedEntityException();
         }
     }

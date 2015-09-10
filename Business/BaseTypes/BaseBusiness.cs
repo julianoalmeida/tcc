@@ -1,9 +1,8 @@
-﻿using Entidades;
-using System;
-using System.Linq.Expressions;
+﻿using System;
 using Data.BaseRepositories;
+using Entidades;
 
-namespace Negocio
+namespace Negocio.BaseTypes
 {
     public interface IBaseBusiness<TEntity>
      where TEntity : BaseEntity
@@ -12,17 +11,18 @@ namespace Negocio
         TEntity GetById(int id);
         FilterResult<TEntity> GetAll();
         TEntity SaveAndReturn(TEntity entity);
-        FilterResult<TEntity> SelectWithFilter(Expression<Func<TEntity, bool>> filterCondition);
-        FilterResult<TEntity> SelectWithPagination(Expression<Func<TEntity, bool>> filterCondition, int startPage);
+        bool IsDuplicated(Func<TEntity, bool> duplicatedCondition);
+        FilterResult<TEntity> SelectWithFilter(Func<TEntity, bool> filterCondition);
+        FilterResult<TEntity> SelectWithPagination(Func<TEntity, bool> filterCondition, int startPage);
 
         void Validate(TEntity entity);
     }
 
-    public abstract class BaseBusinessBusiness<TEntidade> : IBaseBusiness<TEntidade>
+    public abstract class BaseBusiness<TEntidade> : IBaseBusiness<TEntidade>
          where TEntidade : BaseEntity
     {
         private readonly IBaseRepositoryRepository<TEntidade> _repository;
-        protected BaseBusinessBusiness(IBaseRepositoryRepository<TEntidade> repository)
+        protected BaseBusiness(IBaseRepositoryRepository<TEntidade> repository)
         {
             _repository = repository;
         }
@@ -40,6 +40,11 @@ namespace Negocio
             return _repository.SaveAndReturn(entidade);
         }
 
+        public bool IsDuplicated(Func<TEntidade, bool> duplicatedCondition)
+        {
+            return _repository.IsDuplicated(duplicatedCondition);
+        }
+
         public virtual TEntidade GetById(int id)
         {
             return _repository.GetById(id);
@@ -50,12 +55,12 @@ namespace Negocio
             return _repository.GetAll();
         }
 
-        public virtual FilterResult<TEntidade> SelectWithFilter(Expression<Func<TEntidade, bool>> filterCondition)
+        public virtual FilterResult<TEntidade> SelectWithFilter(Func<TEntidade, bool> filterCondition)
         {
             return _repository.SelectWithFilter(filterCondition);
         }
 
-        public FilterResult<TEntidade> SelectWithPagination(Expression<Func<TEntidade, bool>> filterCondition, int startPage)
+        public FilterResult<TEntidade> SelectWithPagination(Func<TEntidade, bool> filterCondition, int startPage)
         {
             return _repository.SelectWithPagination(filterCondition, startPage);
         }

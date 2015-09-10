@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using Comum;
 using Entidades;
 using NHibernate;
@@ -15,8 +14,9 @@ namespace Data.BaseRepositories
         TEntity GetById(int id);
         FilterResult<TEntity> GetAll();
         TEntity SaveAndReturn(TEntity entity);
-        FilterResult<TEntity> SelectWithFilter(Expression<Func<TEntity, bool>> filterCondition);
-        FilterResult<TEntity> SelectWithPagination(Expression<Func<TEntity, bool>> filterCondition, int startPage);
+        bool IsDuplicated(Func<TEntity, bool> duplicatedCondition);
+        FilterResult<TEntity> SelectWithFilter(Func<TEntity, bool> filterCondition);
+        FilterResult<TEntity> SelectWithPagination(Func<TEntity, bool> filterCondition, int startPage);
     }
 
     public abstract class BaseRepositoryRepository<T> : IBaseRepositoryRepository<T>
@@ -27,22 +27,16 @@ namespace Data.BaseRepositories
         {
             Session = session;
         }
-
-        public virtual T GetById(int id)
+        
+        public bool IsDuplicated(Func<T, bool> duplicatedCondition)
         {
-            return Session.Get<T>(id);
+            return Session.Query<T>().Where(duplicatedCondition).Any();
         }
-
-        public virtual FilterResult<T> GetAll()
+        
+        public virtual void Remove(int id)
         {
-            var result = Session.Query<T>();
-            return BuildFilterResult(result, result.Count());
-        }
-
-        public virtual FilterResult<T> SelectWithFilter(Expression<Func<T, bool>> filterCondition)
-        {
-            var result = Session.Query<T>().Where(filterCondition);
-            return BuildFilterResult(result, result.Count());
+            var entity = GetById(id);
+            Session.Delete(entity);
         }
 
         public T SaveAndReturn(T entity)
@@ -57,16 +51,27 @@ namespace Data.BaseRepositories
             return entityToSave;
         }
 
-        public virtual void Remove(int id)
+        public virtual T GetById(int id)
         {
-            var entity = GetById(id);
-            Session.Delete(entity);
+            return Session.Get<T>(id);
         }
 
-        public FilterResult<T> SelectWithPagination(Expression<Func<T, bool>> filterCondition, int startPage)
+        public virtual FilterResult<T> GetAll()
+        {
+            var result = Session.Query<T>();
+            return BuildFilterResult(result, result.Count());
+        }
+
+        public FilterResult<T> SelectWithPagination(Func<T, bool> filterCondition, int startPage)
         {
             var result = SelectWithFilter(filterCondition);
             return BuildFilterResult(Paginate(result.Values, startPage), result.Values.Count());
+        }
+
+        public virtual FilterResult<T> SelectWithFilter(Func<T, bool> filterCondition)
+        {
+            var result = Session.Query<T>().Where(filterCondition);
+            return BuildFilterResult(result, result.Count());
         }
 
         private static IEnumerable<T> Paginate(IEnumerable<T> list, int startPage)

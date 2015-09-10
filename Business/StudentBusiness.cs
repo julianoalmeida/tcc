@@ -1,55 +1,48 @@
-﻿using Entidades;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+using Entidades;
 using Comum.Exceptions;
-using Data;
+using Data.BaseRepositories;
+using Negocio.BaseTypes;
 
 namespace Negocio
 {
-    public interface IStudentBusiness : IBaseBusiness<Student>
-    {
-        int Total(Student docente);
-        string BuildRegistrationNumber(Student student);
-        bool IsEducationFieldFilled(Student student);
-        List<Student> SelectWithPagination(Student docente, int paginaAtual);
-    }
+    public interface IStudentBusiness : IBaseBusiness<Student> { }
 
-    public class StudentBusinessBusiness : BaseBusinessBusiness<Student>, IStudentBusiness
+    public class StudentBusiness : BaseBusiness<Student>, IStudentBusiness
     {
-        private readonly IStudentData _studentData;
-        public StudentBusinessBusiness(IStudentData studentData)
-            : base(studentData)
+        private readonly IPersonBusiness _personBusiness;
+        public StudentBusiness(IBaseRepositoryRepository<Student> repotirory, IPersonBusiness personBusiness)
+            : base(repotirory)
         {
-            _studentData = studentData;
+            _personBusiness = personBusiness;
         }
 
-        public int Total(Student entity)
+        public override void Validate(Student entity)
         {
-            return _studentData.Total(entity);
+            _personBusiness.Validate(entity.Person);
+            ValidateRequiredFields(entity);
         }
 
-        public List<Student> SelectWithPagination(Student entity, int paginaAtual)
+        public override Student SaveAndReturn(Student entity)
         {
-            return _studentData.SelectWithPagination(entity, paginaAtual);
+            entity.RegistrationNumber = BuildRegistrationNumber(entity);
+            return base.SaveAndReturn(entity);
         }
 
         public string BuildRegistrationNumber(Student entity)
         {
             const int MAX_ID = 1;
-
-            var lastDiscentAdded = _studentData.GetAll().Values.ToList().LastOrDefault();
+            var lastDiscentAdded = GetAll().Values.ToList().LastOrDefault();
 
             return lastDiscentAdded != null
                  ? BuildRegistrationNumberPlusOne(entity, lastDiscentAdded)
                  : FormatRegistrationNumber(entity, MAX_ID);
         }
-        
-        public bool IsEducationFieldFilled(Student entity)
-        {
-            if (entity.Education > 0)
-                return true;
 
-            throw new RequiredFieldException("Education");
+        private static void ValidateRequiredFields(Student entity)
+        {
+            if (entity.Education == 0)
+                throw new RequiredFieldException();
         }
 
         private static string FormatRegistrationNumber(Student entity, int maxId)
@@ -58,15 +51,10 @@ namespace Negocio
         }
 
         private static string BuildRegistrationNumberPlusOne(Student entity, Student lastDiscentAdded)
-        {   
+        {
             return lastDiscentAdded.Id == entity.Id
                 ? lastDiscentAdded.RegistrationNumber
                 : FormatRegistrationNumber(entity, lastDiscentAdded.Id + 1);
-        }
-
-        public override void Validate(Student entity)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

@@ -1,34 +1,18 @@
-﻿using System.Collections.Generic;
-using Data;
+﻿using Data;
 using Entidades;
+using Negocio.BaseTypes;
 
 namespace Negocio
 {
-    public interface IAdmBusiness : IBaseBusiness<Adm>
-    {
-        int Total(Adm adm);
-        List<Adm> SelectWithPagination(Adm adm, int startPage);
-    }
+    public interface IAdmBusiness : IBaseBusiness<Adm> { }
 
-    public class AdmBusinessBusiness : BaseBusinessBusiness<Adm>, IAdmBusiness
+    public class AdmBusiness : BaseBusiness<Adm>, IAdmBusiness
     {
-        private readonly IAdmData _admData;
         private readonly IPersonBusiness _personBusiness;
-        public AdmBusinessBusiness(IAdmData admData, IPersonBusiness personBusiness)
-            : base(admData)
+        public AdmBusiness(IAdmData repository, IPersonBusiness personBusiness)
+            : base(repository)
         {
-            _admData = admData;
             _personBusiness = personBusiness;
-        }
-
-        public int Total(Adm adm)
-        {
-            return _admData.Total(adm);
-        }
-
-        public List<Adm> SelectWithPagination(Adm adm, int startPage)
-        {
-            return _admData.SelectWithPagination(adm, startPage);
         }
 
         public override void Validate(Adm entity)

@@ -1,27 +1,19 @@
-﻿using System;
-using Entidades;
-using System.Collections.Generic;
+﻿using Entidades;
 using System.Linq;
-using System.Linq.Expressions;
 using Comum.Exceptions;
-using Data;
+using Data.BaseRepositories;
+using Negocio.BaseTypes;
 
 namespace Negocio
 {
-    public interface IClassBusiness : IBaseBusiness<Class>
-    {
-        int Total(Class model);
-        List<Class> SelectWithPagination(Class model, int startPage);
-    }
+    public interface IClassBusiness : IBaseBusiness<Class> { }
 
-    public class ClassBusinessBusiness : BaseBusinessBusiness<Class>, IClassBusiness
+    public class ClassBusiness : BaseBusiness<Class>, IClassBusiness
     {
-        private readonly IClassData _classData;
-        public ClassBusinessBusiness(IClassData classData)
-            : base(classData)
-        {
-            _classData = classData;
-        }
+
+        public ClassBusiness(IBaseRepositoryRepository<Class> repository)
+            : base(repository)
+        { }
 
         public override void Validate(Class entity)
         {
@@ -30,14 +22,10 @@ namespace Negocio
             ValidateTurmaIsNoteDuplicated(entity);
         }
 
-        public List<Class> SelectWithPagination(Class entity, int startPage)
+        public void ValidateTurmaIsNoteDuplicated(Class entity)
         {
-            return _classData.SelectWithPagination(entity, startPage);
-        }
-
-        public int Total(Class model)
-        {
-            return _classData.Total(model);
+            if (IsDuplicated(FilterHelper.DuplicatedClassCondition(entity)))
+                throw new DuplicatedEntityException();
         }
 
         private static void ValidateRequiredFields(Class entity)
@@ -56,26 +44,10 @@ namespace Negocio
             if (hasError) throw new RequiredFieldException();
         }
 
-        private void ValidateTurmaIsNoteDuplicated(Class entity)
-        {
-            var turma = _classData.SelectWithFilter(ClassFilterCondition(entity))
-                .Values.FirstOrDefault();
-
-            if (turma?.Id != entity.Id)
-                throw new DuplicatedEntityException();
-        }
-
-        private static Expression<Func<Class, bool>> ClassFilterCondition(Class entity)
-        {
-            return a => a.Description.ToLower().Equals(entity.Description.ToLower());
-        }
-
         private static void ValidateDiscenteAmoutBiggerThanZero(int totalDiscents)
         {
             if (totalDiscents > 20)
                 throw new TotalOfSpotsExceededException();
         }
-
-
     }
 }

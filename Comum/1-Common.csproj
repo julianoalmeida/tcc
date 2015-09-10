@@ -49,7 +49,6 @@
     <Compile Include="Exceptions\DuplicatedEntityException.cs" />
     <Compile Include="Exceptions\UserNotfoundException.cs" />
     <Compile Include="Exceptions\VincularDisciplinaException.cs" />
-    <Compile Include="IDependencyInjection.cs" />
     <Compile Include="Messages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

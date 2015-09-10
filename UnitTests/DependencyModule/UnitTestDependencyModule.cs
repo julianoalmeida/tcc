@@ -5,7 +5,7 @@ using Autofac;
 using Autofac.Integration.Mvc;
 using Data.BaseRepositories;
 using Entidades;
-using Negocio;
+using Negocio.BaseTypes;
 using _4___Web.Controllers;
 
 namespace UnitTests.DependencyModule
@@ -72,7 +72,7 @@ namespace UnitTests.DependencyModule
 
         private static void RegisterBusinessAssembly(ContainerBuilder builder)
         {
-            builder.RegisterAssemblyTypes(typeof(BaseBusinessBusiness<>).Assembly)
+            builder.RegisterAssemblyTypes(typeof(BaseBusiness<>).Assembly)
                 .Where(t => t.Name.EndsWith("Business"))
                 .AsImplementedInterfaces();
         }

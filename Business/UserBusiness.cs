@@ -1,6 +1,7 @@
 ﻿using Comum.Exceptions;
 using Data;
 using Entidades;
+using Negocio.BaseTypes;
 
 namespace Negocio
 {
@@ -9,10 +10,10 @@ namespace Negocio
         User GetByCredentials(string login, string password);
     }
 
-    public class UserBusinessBusiness : BaseBusinessBusiness<User>, IUserBusiness
+    public class UserBusiness : BaseBusiness<User>, IUserBusiness
     {
         private readonly IUserData _userData;
-        public UserBusinessBusiness(IUserData data)
+        public UserBusiness(IUserData data)
             : base(data)
         {
             _userData = data;

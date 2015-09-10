@@ -14,7 +14,6 @@ namespace Data.BaseRepositories
         TEntity GetById(int id);
         FilterResult<TEntity> GetAll();
         TEntity SaveAndReturn(TEntity entity);
-        bool IsDuplicated(Func<TEntity, bool> duplicatedCondition);
         FilterResult<TEntity> SelectWithFilter(Func<TEntity, bool> filterCondition);
         FilterResult<TEntity> SelectWithPagination(Func<TEntity, bool> filterCondition, int startPage);
     }
@@ -26,11 +25,6 @@ namespace Data.BaseRepositories
         protected BaseRepositoryRepository(ISession session)
         {
             Session = session;
-        }
-        
-        public bool IsDuplicated(Func<T, bool> duplicatedCondition)
-        {
-            return Session.Query<T>().Where(duplicatedCondition).Any();
         }
         
         public virtual void Remove(int id)

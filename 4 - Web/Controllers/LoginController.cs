@@ -43,8 +43,9 @@ namespace _4___Web.Controllers
         [HttpGet]
         public ActionResult CreateAccount()
         {
-            BuildDropDownLists();
-            return View();
+            var person = TempData["Person"] as Person ?? new Person();
+            BuildDropDownLists(person);
+            return View(person);
         }
 
         [HttpPost]
@@ -60,6 +61,7 @@ namespace _4___Web.Controllers
             {
                 actionName = "CreateAccount";
                 TempData[Constants.ERROR] = ex.Message;
+                TempData["Person"] = model;
             }
 
             return RedirectToAction(actionName, "Login");
@@ -73,10 +75,10 @@ namespace _4___Web.Controllers
             return RedirectToAction("Index", "Login");
         }
 
-        private void BuildDropDownLists()
+        private void BuildDropDownLists(Person person)
         {
-            ViewData["Sex"] = BuildListItemfromEnum<SexEnum>(string.Empty);
-            ViewData["AccessProfiles"] = BuildListItemfromEnum<AccessProfileEnum>(string.Empty);
+            ViewData["Sex"] = BuildListItemfromEnum<SexEnum>(person.Sex.ToString());
+            ViewData["AccessProfile"] = BuildListItemfromEnum<AccessProfileEnum>(person.User?.AccessCode.ToString());
         }
     }
 }

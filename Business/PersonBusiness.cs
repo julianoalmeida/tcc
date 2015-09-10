@@ -1,5 +1,5 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
+using Comum;
 using Entidades;
 using Comum.Exceptions;
 using Data;
@@ -12,14 +12,16 @@ namespace Negocio
 
     public class PersonBusiness : BaseBusiness<Person>, IPersonBusiness
     {
+        private readonly IPersonData _personData;
         public PersonBusiness(IPersonData data)
             : base(data)
-        { }
+        {
+            _personData = data;
+        }
 
         public override void Validate(Person person)
         {
             HasRequiredFieldNotFilled(person);
-            ValidateFutureDate(person.BirthDate);
             ValidateEmail(person.Email);
             ValidateAddress(person.Address);
             ValidateDuplicatedPerson(person);
@@ -32,9 +34,6 @@ namespace Negocio
             if (string.IsNullOrEmpty(person.Email))
                 hasError = true;
 
-            else if (!person.BirthDate.HasValue)
-                hasError = true;
-
             else if (person.Sex == 0)
                 hasError = true;
 
@@ -43,12 +42,6 @@ namespace Negocio
 
             if (hasError)
                 throw new RequiredFieldException();
-        }
-
-        private static void ValidateFutureDate(DateTime? date)
-        {
-            if (date == null || date.Value.Date > DateTime.Today.Date)
-                throw new InvalidDateException();
         }
 
         private static void ValidateEmail(string email)
@@ -86,8 +79,8 @@ namespace Negocio
 
         private void ValidateDuplicatedPerson(Person person)
         {
-            if (IsDuplicated(FilterHelper.DuplicatedPersonCondition(person)))
-                throw new DuplicatedEntityException();
+            if (_personData.IsDuplicated(person))
+                throw new DuplicatedEntityException(Messages.DUPLICATED_PERSON);
         }
     }
 }

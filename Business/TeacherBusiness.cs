@@ -1,6 +1,7 @@
 ﻿using Entidades;
 using System.Linq;
 using Comum.Exceptions;
+using Data;
 using Data.BaseRepositories;
 using Negocio.BaseTypes;
 
@@ -11,7 +12,7 @@ namespace Negocio
     public class TeacherBusiness : BaseBusiness<Teacher>, ITeacherBusiness
     {
         private readonly IPersonBusiness _personBusiness;
-        public TeacherBusiness(IBaseRepositoryRepository<Teacher> data, IPersonBusiness personBusiness)
+        public TeacherBusiness(ITeacherData data, IPersonBusiness personBusiness)
             : base(data)
         {
             _personBusiness = personBusiness;

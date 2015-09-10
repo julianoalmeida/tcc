@@ -1,7 +1,8 @@
 ﻿using Entidades;
 using System.Linq;
+using Comum;
 using Comum.Exceptions;
-using Data.BaseRepositories;
+using Data;
 using Negocio.BaseTypes;
 
 namespace Negocio
@@ -10,22 +11,25 @@ namespace Negocio
 
     public class ClassBusiness : BaseBusiness<Class>, IClassBusiness
     {
+        private readonly IClassData _repository;
 
-        public ClassBusiness(IBaseRepositoryRepository<Class> repository)
+        public ClassBusiness(IClassData repository)
             : base(repository)
-        { }
+        {
+            _repository = repository;
+        }
 
         public override void Validate(Class entity)
         {
             ValidateRequiredFields(entity);
             ValidateDiscenteAmoutBiggerThanZero(entity.Students.Count);
-            ValidateTurmaIsNoteDuplicated(entity);
+            ValidateDuplicatedClass(entity);
         }
 
-        public void ValidateTurmaIsNoteDuplicated(Class entity)
+        public void ValidateDuplicatedClass(Class entity)
         {
-            if (IsDuplicated(FilterHelper.DuplicatedClassCondition(entity)))
-                throw new DuplicatedEntityException();
+            if (_repository.IsDuplicated(entity))
+                throw new DuplicatedEntityException(Messages.DUPLICATED_CLASS);
         }
 
         private static void ValidateRequiredFields(Class entity)

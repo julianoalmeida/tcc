@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Entidades;
 using Comum.Exceptions;
-using Data.BaseRepositories;
+using Data;
 using Negocio.BaseTypes;
 
 namespace Negocio
@@ -11,7 +11,7 @@ namespace Negocio
     public class StudentBusiness : BaseBusiness<Student>, IStudentBusiness
     {
         private readonly IPersonBusiness _personBusiness;
-        public StudentBusiness(IBaseRepositoryRepository<Student> repotirory, IPersonBusiness personBusiness)
+        public StudentBusiness(IStudentData repotirory, IPersonBusiness personBusiness)
             : base(repotirory)
         {
             _personBusiness = personBusiness;

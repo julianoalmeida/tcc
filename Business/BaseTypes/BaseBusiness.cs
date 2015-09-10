@@ -11,7 +11,6 @@ namespace Negocio.BaseTypes
         TEntity GetById(int id);
         FilterResult<TEntity> GetAll();
         TEntity SaveAndReturn(TEntity entity);
-        bool IsDuplicated(Func<TEntity, bool> duplicatedCondition);
         FilterResult<TEntity> SelectWithFilter(Func<TEntity, bool> filterCondition);
         FilterResult<TEntity> SelectWithPagination(Func<TEntity, bool> filterCondition, int startPage);
 
@@ -38,11 +37,6 @@ namespace Negocio.BaseTypes
         {
             Validate(entidade);
             return _repository.SaveAndReturn(entidade);
-        }
-
-        public bool IsDuplicated(Func<TEntidade, bool> duplicatedCondition)
-        {
-            return _repository.IsDuplicated(duplicatedCondition);
         }
 
         public virtual TEntidade GetById(int id)

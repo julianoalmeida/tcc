@@ -40,7 +40,7 @@ namespace _4___Web.Controllers
                 errorMessage = Messages.INVALID_DATE;
 
             else if (ex.GetType() == typeof(DuplicatedEntityException))
-                errorMessage = Messages.REGISTER_ALREADY_IN_PLACE;
+                errorMessage = Messages.DUPLICATED_CLASS;
 
             else if (ex.GetType() == typeof(CpfException))
                 errorMessage = Messages.INVALID_CPF;
@@ -60,7 +60,7 @@ namespace _4___Web.Controllers
 
         private static string BuildLoggedUserPassword(Person person)
         {
-            return string.Concat(person.Name.RemoveEmptySpaces(), person.BirthDate.Value.Year);
+            return string.Concat(person.Name.RemoveEmptySpaces(), DateTime.Now.Year);
         }
 
         private static string BuildLoggedUserLogin(Person person)

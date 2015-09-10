@@ -18,7 +18,9 @@
 
         public const string CLASS_STUDENT_OVERFLOW = "A quantidade de discente vinculados é maior que a quantidade de vagas disponíveis.";
 
-        public const string REGISTER_ALREADY_IN_PLACE = "Registro já existente.";
+        public const string DUPLICATED_PERSON = "Já existe uma pessoa cadastrada com esse nome e email.";
+
+        public const string DUPLICATED_CLASS = "Turma já cadastrada";
 
         public const string REQUIRED_FIELDS = "Existem campos de preenchimento obrigatório.";
 

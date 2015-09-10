@@ -68,7 +68,6 @@
   <ItemGroup>
     <Compile Include="AdmBusiness.cs" />
     <Compile Include="BaseTypes\DomainBusiness.cs" />
-    <Compile Include="FilterHelper.cs" />
     <Compile Include="StudentBusiness.cs" />
     <Compile Include="TeacherBusiness.cs" />
     <Compile Include="BaseTypes\BaseBusiness.cs" />

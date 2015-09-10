@@ -1,4 +1,5 @@
-﻿using Entidades;
+﻿using System.Linq;
+using Entidades;
 using NHibernate;
 
 namespace Data
@@ -16,7 +17,9 @@ namespace Data
 
         public bool IsDuplicated(Person person)
         {
-            throw new System.NotImplementedException();
+            return
+                GetAll()
+                    .Any(a => a.Name == person.Name && a.BirthDate?.Date == person.BirthDate?.Date && a.Id != person.Id);
         }
     }
 }

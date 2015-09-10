@@ -1,20 +1,54 @@
-﻿using Autofac;
-using Autofac.Extras.DynamicProxy2;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Web;
+using System.Web.Mvc;
+using Autofac;
 using Autofac.Integration.Mvc;
-using AutoFacConfig.Interceptadores;
-using Comum;
 using Data;
-using Data.SetupSessionFactory;
 using Entidades;
 using Negocio;
 using Negocio.RequiredFieldValidators;
-using NHibernate;
+using _4___Web.Controllers;
 
-namespace AutoFacConfig
+namespace UnitTests.DependencyModule
 {
-    public class ContainerHelper
+    public class UnitTestDependencyModule
     {
-        public static ContainerBuilder ObterContainerBuilder()
+        public static void Run()
+        {
+            RegisterContainer();
+        }
+
+        private static void RegisterContainer()
+        {
+            var builder = ObterContainerBuilder();
+
+            RegisterWebAssembly(builder);
+            builder.RegisterFilterProvider();
+            SetupAutofacDependencyResolver(builder.Build());
+        }
+
+        private static void SetupAutofacDependencyResolver(ILifetimeScope container)
+        {
+            DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+
+            HttpContext.Current = new HttpContext(
+                                  new HttpRequest("", "http://tempuri.org", ""),
+                                  new HttpResponse(new StringWriter()));
+
+            HttpContext.Current.Application["DependencyResolver"] = DependencyResolver.Current;
+        }
+
+        private static void RegisterWebAssembly(ContainerBuilder builder)
+        {
+            var controllers = typeof(HomeController).Assembly;
+            builder.RegisterAssemblyTypes(controllers)
+                .Where(t => t.Namespace == "_4___Web.Controllers")
+                .AsSelf();
+        }
+
+        private static ContainerBuilder ObterContainerBuilder()
         {
             var builder = new ContainerBuilder();
 
@@ -25,8 +59,6 @@ namespace AutoFacConfig
 
         private static void RegisterAssemblies(ContainerBuilder builder)
         {
-            RegisterNHibernatSectionAndFactory(builder);
-
             RegisterRepositoryAssembly(builder);
 
             RegisterBusinessAssembly(builder);
@@ -42,21 +74,6 @@ namespace AutoFacConfig
                .AsImplementedInterfaces();
         }
 
-        private static void RegisterNHibernatSectionAndFactory(ContainerBuilder builder)
-        {
-            builder.Register(x => FluentSessionFactoryFactory.GetSessionFactory("thread_static", "coonStringTcc"))
-                .SingleInstance();
-
-            builder.RegisterType<NHibernateInterceptor>().SingleInstance().AsSelf();
-
-            builder.Register(x =>
-            {
-                var session = x.Resolve<ISessionFactory>().OpenSession(x.Resolve<NHibernateInterceptor>());
-                session.FlushMode = FlushMode.Commit;
-                return session;
-            }).InstancePerHttpRequest().OnRelease(x => x.Dispose());
-        }
-
         private static void RegisterRepositoryAssembly(ContainerBuilder builder)
         {
             builder.RegisterAssemblyTypes(typeof(NHibernateRepository<>).Assembly)
@@ -68,13 +85,7 @@ namespace AutoFacConfig
         {
             builder.RegisterAssemblyTypes(typeof(BaseBusiness<>).Assembly)
                 .Where(t => t.Name.EndsWith("Business"))
-                .AsImplementedInterfaces()
-                .EnableInterfaceInterceptors()
-                .InterceptedBy(typeof(ServiceTransactionInterceptor));
-
-            builder.RegisterType<ServiceTransactionInterceptor>()
-                .InstancePerHttpRequest()
-                .AsSelf();
+                .AsImplementedInterfaces();
         }
 
         private static void RegisterEntityAssembly(ContainerBuilder builder)
@@ -82,13 +93,6 @@ namespace AutoFacConfig
             builder.RegisterAssemblyTypes(typeof(BaseEntity).Assembly)
                 .Where(t => t.BaseType == typeof(BaseEntity))
                 .AsSelf();
-        }
-
-        public static IContainer ResolveSectionFactory(ContainerBuilder builder)
-        {
-            var container = builder.Build();
-            container.Resolve<ISessionFactory>();
-            return container;
         }
     }
 }

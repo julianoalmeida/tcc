@@ -33,8 +33,8 @@ namespace _4___Web.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Error"] = ex.Message;
                 controllerName = "Login";
+                TempData[Constants.ERROR] = ex.Message;
             }
 
             return RedirectToAction("Index", controllerName);
@@ -51,15 +51,15 @@ namespace _4___Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateAccount(Person model)
         {
-            var actionName = "Login";
+            var actionName = "Index";
             try
             {
                 _personBusiness.SaveAndReturn(model);
             }
             catch (Exception ex)
             {
-                TempData["Error"] = ex.Message;
                 actionName = "CreateAccount";
+                TempData[Constants.ERROR] = ex.Message;
             }
 
             return RedirectToAction(actionName, "Login");

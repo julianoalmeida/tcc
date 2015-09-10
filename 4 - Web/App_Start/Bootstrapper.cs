@@ -2,7 +2,6 @@
 using Autofac;
 using Autofac.Integration.Mvc;
 using AutoFacConfig;
-using NHibernate;
 using _4___Web.Controllers;
 
 namespace _4___Web
@@ -20,20 +19,13 @@ namespace _4___Web
 
             RegisterWebAssembly(builder);
             builder.RegisterFilterProvider();
-            SetupAutofacDependencyResolver(ResolveSectionFactory(builder));
+            SetupAutofacDependencyResolver(ContainerHelper.ResolveSectionFactory(builder));
         }
 
         private static void SetupAutofacDependencyResolver(ILifetimeScope container)
         {
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
             System.Web.HttpContext.Current.Application["DependencyResolver"] = DependencyResolver.Current;
-        }
-
-        private static IContainer ResolveSectionFactory(ContainerBuilder builder)
-        {
-            var container = builder.Build();
-            container.Resolve<ISessionFactory>();
-            return container;
         }
 
         private static void RegisterWebAssembly(ContainerBuilder builder)

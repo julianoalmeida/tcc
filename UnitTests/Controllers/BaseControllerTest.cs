@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 namespace UnitTests.Controllers
 {
-    public class BaseControllerTest
+    public class BaseControllerTest : BaseTest
     {
         protected static void AssertListItensAreEquals(List<SelectListItem> firstList, IEnumerable<SelectListItem> secondList)
         {

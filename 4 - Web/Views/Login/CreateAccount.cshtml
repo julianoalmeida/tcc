@@ -1,7 +1,5 @@
 ﻿@model Entidades.Person
 
-@Html.Partial("~/Views/_errorMessage.cshtml")
-
 @using (Html.BeginForm("CreateAccount", "Login", FormMethod.Post))
 {
     @Html.AntiForgeryToken()

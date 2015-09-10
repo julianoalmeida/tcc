@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using Comum;
 using Data;
@@ -15,9 +16,13 @@ namespace UnitTests.Controllers
     public class LoginControllerTest : BaseControllerTest
     {
         private IUserBusiness _userBusiness;
+        private IPersonBusiness _personBusiness;
         private LoginController _loginController;
         private readonly Mock<IUserData> _userData = new Mock<IUserData>();
+        private readonly Mock<IPersonData> _personData = new Mock<IPersonData>();
         private const string INVALID_CREDENTIALS = "invalid credentials";
+        private const string DUPLICATED_NAME = "DUPLICATED NAME";
+        private DateTime _duplicatedDate = new DateTime(2000, 5, 5);
 
         [SetUp]
         public void BeforeScenario()
@@ -84,30 +89,11 @@ namespace UnitTests.Controllers
             const string EXPECTED_ACTION_NAME = "Index";
             const string EXPECTED_CONTROLLER_NAME = "Login";
 
-            var result = GetRedirectToRouteResultWith(_loginController.CreateAccount(new Person()));
+            var result = GetRedirectToRouteResultWith(_loginController.CreateAccount(ValidPerson));
 
             Assert.That(result.RouteValues["action"], Is.EqualTo(EXPECTED_ACTION_NAME));
             Assert.That(result.RouteValues["controller"], Is.EqualTo(EXPECTED_CONTROLLER_NAME));
             Assert.That(_loginController.TempData[Constants.LOGGED_USER], Is.Null);
-        }
-        
-        private void Setup()
-        {
-            _userData.Setup(a => a.GetByCredentials(string.Empty, string.Empty)).Returns(new User());
-
-            _userData.Setup(a => a.GetByCredentials(INVALID_CREDENTIALS, INVALID_CREDENTIALS)).Returns(new User());
-
-            _userData.Setup(a => a.GetByCredentials("login", "password"))
-                     .Returns(new User
-                     {
-                         AccessCode = (int)AccessProfileEnum.Adm,
-                         Id = 1,
-                         Login = "login",
-                         Password = "password"
-                     });
-
-            _userBusiness = new UserBusiness(_userData.Object);
-            _loginController = new LoginController(_userBusiness);
         }
 
         private void AssertTempdataLoggedUserHasValue(string login, string password)
@@ -122,5 +108,37 @@ namespace UnitTests.Controllers
             => ViewTadaToListSelectListItem(_loginController.ViewData["AccessProfiles"]);
 
         private IEnumerable<SelectListItem> ViewDataSexList => ViewTadaToListSelectListItem(_loginController.ViewData["Sex"]);
+
+        private static Person ValidPerson
+            =>
+                new Person
+                {
+                    BirthDate = DateTime.Now,
+                    Name = "Name",
+                    Id = 1,
+                    MobileNumber = "999999999",
+                    Email = "teste@teste.com",
+                    Sex = (int)SexEnum.Feminino
+                };
+
+        private void Setup()
+        {
+            _userData.Setup(a => a.GetByCredentials(string.Empty, string.Empty)).Returns(new User());
+            _userData.Setup(a => a.GetByCredentials(INVALID_CREDENTIALS, INVALID_CREDENTIALS)).Returns(new User());
+            _userData.Setup(a => a.GetByCredentials("login", "password"))
+                     .Returns(new User
+                     {
+                         AccessCode = (int)AccessProfileEnum.Adm,
+                         Id = 1,
+                         Login = "login",
+                         Password = "password"
+                     });
+
+            _personData.Setup(a => a.SaveAndReturn(new Person())).Returns(new Person());
+
+            _userBusiness = new UserBusiness(_userData.Object);
+            _personBusiness = new PersonBusiness(_personData.Object);
+            _loginController = new LoginController(_userBusiness, _personBusiness);
+        }
     }
 }

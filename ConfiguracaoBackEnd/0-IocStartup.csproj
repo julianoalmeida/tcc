@@ -97,6 +97,10 @@
       <Project>{56a3b91d-5aab-4da5-8588-931098dc87b4}</Project>
       <Name>3-Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Comum\1-Common.csproj">
+      <Project>{31c2d73f-09a3-4ba7-a1d8-888a37882281}</Project>
+      <Name>1-Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Data\1-Data.csproj">
       <Project>{c8eb8023-0f3d-4d4b-96e6-7a40d90268a4}</Project>
       <Name>1-Data</Name>

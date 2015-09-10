@@ -36,7 +36,7 @@ namespace _4___Web.Controllers
         {
             var errorMessage = string.Empty;
 
-            if (ex.GetType() == typeof(FutureDateException))
+            if (ex.GetType() == typeof(InvalidDateException))
                 errorMessage = Messages.INVALID_DATE;
 
             else if (ex.GetType() == typeof(DuplicatedEntityException))

@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Web;
 using System.Web.Mvc;
 using Autofac;
 using Autofac.Integration.Mvc;
-using Data;
+using Data.BaseRepositories;
 using Entidades;
 using Negocio;
-using Negocio.RequiredFieldValidators;
 using _4___Web.Controllers;
 
 namespace UnitTests.DependencyModule
@@ -64,26 +61,18 @@ namespace UnitTests.DependencyModule
             RegisterBusinessAssembly(builder);
 
             RegisterEntityAssembly(builder);
-
-            RegisterInterfaces(builder);
-        }
-
-        private static void RegisterInterfaces(ContainerBuilder builder)
-        {
-            builder.RegisterAssemblyTypes(typeof(IRequiredFieldsValidator).Assembly)
-               .AsImplementedInterfaces();
         }
 
         private static void RegisterRepositoryAssembly(ContainerBuilder builder)
         {
-            builder.RegisterAssemblyTypes(typeof(NHibernateRepository<>).Assembly)
+            builder.RegisterAssemblyTypes(typeof(BaseRepositoryRepository<>).Assembly)
                 .Where(t => t.Name.EndsWith("Data"))
                 .AsImplementedInterfaces();
         }
 
         private static void RegisterBusinessAssembly(ContainerBuilder builder)
         {
-            builder.RegisterAssemblyTypes(typeof(BaseBusiness<>).Assembly)
+            builder.RegisterAssemblyTypes(typeof(BaseBusinessBusiness<>).Assembly)
                 .Where(t => t.Name.EndsWith("Business"))
                 .AsImplementedInterfaces();
         }

@@ -67,14 +67,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdmBusiness.cs" />
-    <Compile Include="CityBusiness.cs" />
-    <Compile Include="RequiredFieldValidators\AddressRequiredFieldValidator.cs" />
-    <Compile Include="RequiredFieldValidators\IRequiredFieldsValidator.cs" />
-    <Compile Include="RequiredFieldValidators\PersonValidator.cs" />
+    <Compile Include="DomainBusiness.cs" />
+    <Compile Include="FilterHelper.cs" />
     <Compile Include="StudentBusiness.cs" />
-    <Compile Include="CourseBusiness.cs" />
     <Compile Include="TeacherBusiness.cs" />
-    <Compile Include="StateBusiness.cs" />
     <Compile Include="BaseBusiness.cs" />
     <Compile Include="PersonBusiness.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

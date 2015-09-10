@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Adm.cs" />
     <Compile Include="City.cs" />
+    <Compile Include="FilterResult.cs" />
     <Compile Include="Student.cs" />
     <Compile Include="Courses.cs" />
     <Compile Include="Teacher.cs" />

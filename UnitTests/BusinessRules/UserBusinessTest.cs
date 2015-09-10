@@ -39,7 +39,7 @@ namespace UnitTests.BusinessRules
 
         public void SetupData()
         {
-            _userBusiness = new UserBusiness(_userData.Object);
+            _userBusiness = new UserBusinessBusiness(_userData.Object);
         }
     }
 }

@@ -45,7 +45,7 @@
     <Compile Include="Exceptions\TotalOfSpotsExceededException.cs" />
     <Compile Include="Exceptions\CpfException.cs" />
     <Compile Include="Exceptions\InvalidDateException.cs" />
-    <Compile Include="Exceptions\EmailException.cs" />
+    <Compile Include="Exceptions\InvalidEmailException.cs" />
     <Compile Include="Exceptions\DuplicatedEntityException.cs" />
     <Compile Include="Exceptions\UserNotfoundException.cs" />
     <Compile Include="Exceptions\VincularDisciplinaException.cs" />

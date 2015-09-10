@@ -1,51 +1,30 @@
 ﻿using Entidades;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text.RegularExpressions;
-using System.Web.Mvc;
-using Comum.Exceptions;
-using Data;
-using Negocio.RequiredFieldValidators;
+using Data.BaseRepositories;
 
 namespace Negocio
 {
-    public interface INegocioBase<TEntity>
+    public interface IBaseBusiness<TEntity>
      where TEntity : BaseEntity
     {
         void Remove(int id);
         TEntity GetById(int id);
-        IEnumerable<TEntity> GetAll();
+        FilterResult<TEntity> GetAll();
         TEntity SaveAndReturn(TEntity entity);
-        IEnumerable<TEntity> SelectWithFilter(Expression<Func<TEntity, bool>> filterCondition);
+        FilterResult<TEntity> SelectWithFilter(Expression<Func<TEntity, bool>> filterCondition);
+        FilterResult<TEntity> SelectWithPagination(Expression<Func<TEntity, bool>> filterCondition, int startPage);
+
+        void Validate(TEntity entity);
     }
 
-    public abstract class BaseBusiness<TEntidade> : INegocioBase<TEntidade>
+    public abstract class BaseBusinessBusiness<TEntidade> : IBaseBusiness<TEntidade>
          where TEntidade : BaseEntity
     {
-        private readonly INHibernateRepository<TEntidade> _repository;
-        private readonly IEnumerable<IRequiredFieldsValidator> _requiredFieldValidator;
-
-        protected BaseBusiness(INHibernateRepository<TEntidade> repository)
+        private readonly IBaseRepositoryRepository<TEntidade> _repository;
+        protected BaseBusinessBusiness(IBaseRepositoryRepository<TEntidade> repository)
         {
             _repository = repository;
-            _requiredFieldValidator = DependencyResolver.Current.GetServices<IRequiredFieldsValidator>();
-        }
-
-        public virtual TEntidade GetById(int id)
-        {
-            return _repository.GetById(id);
-        }
-
-        public virtual IEnumerable<TEntidade> GetAll()
-        {
-            return _repository.GetAll();
-        }
-
-        public virtual IEnumerable<TEntidade> SelectWithFilter(Expression<Func<TEntidade, bool>> filterCondition)
-        {
-            return _repository.SelectWithFilter(filterCondition);
         }
 
         public virtual void Remove(int id)
@@ -53,30 +32,33 @@ namespace Negocio
             _repository.Remove(id);
         }
 
+        public abstract void Validate(TEntidade entity);
+
         public virtual TEntidade SaveAndReturn(TEntidade entidade)
         {
-            HasRequiredFieldsNotFilled(entidade);
-
+            Validate(entidade);
             return _repository.SaveAndReturn(entidade);
         }
 
-        private void HasRequiredFieldsNotFilled(BaseEntity entity)
+        public virtual TEntidade GetById(int id)
         {
-            var validator = _requiredFieldValidator.Single(a => a.CanValidate(entity));
-
-            if (validator == null)
-                throw new MissingMemberException("Can't found any validator for this class");
-
-            validator.Validate(entity);
+            return _repository.GetById(id);
         }
 
-        protected bool IsValidEmail(string email)
+        public virtual FilterResult<TEntidade> GetAll()
         {
-            var validEmail =
-                new Regex(
-                    @"^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$");
-
-            return string.IsNullOrEmpty(email) || validEmail.IsMatch(email);
+            return _repository.GetAll();
         }
+
+        public virtual FilterResult<TEntidade> SelectWithFilter(Expression<Func<TEntidade, bool>> filterCondition)
+        {
+            return _repository.SelectWithFilter(filterCondition);
+        }
+
+        public FilterResult<TEntidade> SelectWithPagination(Expression<Func<TEntidade, bool>> filterCondition, int startPage)
+        {
+            return _repository.SelectWithPagination(filterCondition, startPage);
+        }
+
     }
 }

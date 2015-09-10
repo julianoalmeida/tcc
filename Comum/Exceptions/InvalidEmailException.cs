@@ -3,9 +3,9 @@
 namespace Comum.Exceptions
 {
     [Serializable]
-    public class EmailException : BaseException
+    public class InvalidEmailException : BaseException
     {
-        public EmailException()
+        public InvalidEmailException()
             : base(Messages.INVALID_EMAIL)
         { }
     }

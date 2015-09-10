@@ -6,17 +6,17 @@ using Data;
 
 namespace Negocio
 {
-    public interface ITeacherBusiness : INegocioBase<Teacher>
+    public interface ITeacherBusiness : IBaseBusiness<Teacher>
     {
         int Total(Teacher teacher);
         List<Teacher> SelectWithPagination(Teacher teacher, int paginaAtual);
         bool IsRequiredFieldsFilled(Teacher teacher);
     }
 
-    public class TeacherBusiness : BaseBusiness<Teacher>, ITeacherBusiness
+    public class TeacherBusinessBusiness : BaseBusinessBusiness<Teacher>, ITeacherBusiness
     {
         private readonly ITeacherData _teacherData;
-        public TeacherBusiness(ITeacherData data)
+        public TeacherBusinessBusiness(ITeacherData data)
             : base(data)
         {
             _teacherData = data;
@@ -51,6 +51,11 @@ namespace Negocio
         public bool IsRequiredFieldsFilled(Teacher entity)
         {
             return IsEscolaridadeFilled(entity) && IsDisciplinasFilled(entity);
+        }
+
+        public override void Validate(Teacher entity)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

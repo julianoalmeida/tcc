@@ -1,15 +1,16 @@
 ﻿using System.Linq;
+using Data.BaseRepositories;
 using Entidades;
 using NHibernate;
 
 namespace Data
 {
-    public interface IUserData : INHibernateRepository<User>
+    public interface IUserData : IBaseRepositoryRepository<User>
     {
         User GetByCredentials(string login, string senha);
     }
 
-    public class UserData : NHibernateRepository<User>, IUserData
+    public class UserData : BaseRepositoryRepository<User>, IUserData
     {
         public UserData(ISession session)
             : base(session)
@@ -17,8 +18,7 @@ namespace Data
         
         public User GetByCredentials(string login, string senha)
         {   
-            return GetAll()
-                .Where(a => a.Login.Equals(login)).FirstOrDefault(a => a.Password.Equals(senha));
+            return GetAll().Values.Where(a => a.Login.Equals(login)).FirstOrDefault(a => a.Password.Equals(senha));
         }
     }
 }

@@ -6,7 +6,7 @@ using Data;
 
 namespace Negocio
 {
-    public interface IStudentBusiness : INegocioBase<Student>
+    public interface IStudentBusiness : IBaseBusiness<Student>
     {
         int Total(Student docente);
         string BuildRegistrationNumber(Student student);
@@ -14,10 +14,10 @@ namespace Negocio
         List<Student> SelectWithPagination(Student docente, int paginaAtual);
     }
 
-    public class StudentBusiness : BaseBusiness<Student>, IStudentBusiness
+    public class StudentBusinessBusiness : BaseBusinessBusiness<Student>, IStudentBusiness
     {
         private readonly IStudentData _studentData;
-        public StudentBusiness(IStudentData studentData)
+        public StudentBusinessBusiness(IStudentData studentData)
             : base(studentData)
         {
             _studentData = studentData;
@@ -37,7 +37,7 @@ namespace Negocio
         {
             const int MAX_ID = 1;
 
-            var lastDiscentAdded = _studentData.GetAll().ToList().LastOrDefault();
+            var lastDiscentAdded = _studentData.GetAll().Values.ToList().LastOrDefault();
 
             return lastDiscentAdded != null
                  ? BuildRegistrationNumberPlusOne(entity, lastDiscentAdded)
@@ -62,6 +62,11 @@ namespace Negocio
             return lastDiscentAdded.Id == entity.Id
                 ? lastDiscentAdded.RegistrationNumber
                 : FormatRegistrationNumber(entity, lastDiscentAdded.Id + 1);
+        }
+
+        public override void Validate(Student entity)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

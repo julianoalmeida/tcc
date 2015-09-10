@@ -4,15 +4,15 @@ using Entidades;
 
 namespace Negocio
 {
-    public interface IUserBusiness : INegocioBase<User>
+    public interface IUserBusiness : IBaseBusiness<User>
     {
         User GetByCredentials(string login, string password);
     }
 
-    public class UserBusiness : BaseBusiness<User>, IUserBusiness
+    public class UserBusinessBusiness : BaseBusinessBusiness<User>, IUserBusiness
     {
         private readonly IUserData _userData;
-        public UserBusiness(IUserData data)
+        public UserBusinessBusiness(IUserData data)
             : base(data)
         {
             _userData = data;
@@ -39,6 +39,11 @@ namespace Negocio
         {
             if (string.IsNullOrEmpty(login) || string.IsNullOrEmpty(password))
                 throw new RequiredFieldException();
+        }
+
+        public override void Validate(User entity)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -4,19 +4,21 @@ using Entidades;
 
 namespace Negocio
 {
-    public interface IAdmBusiness : INegocioBase<Adm>
+    public interface IAdmBusiness : IBaseBusiness<Adm>
     {
         int Total(Adm adm);
         List<Adm> SelectWithPagination(Adm adm, int startPage);
     }
 
-    public class AdmBusiness : BaseBusiness<Adm>, IAdmBusiness
+    public class AdmBusinessBusiness : BaseBusinessBusiness<Adm>, IAdmBusiness
     {
         private readonly IAdmData _admData;
-        public AdmBusiness(IAdmData admData)
+        private readonly IPersonBusiness _personBusiness;
+        public AdmBusinessBusiness(IAdmData admData, IPersonBusiness personBusiness)
             : base(admData)
         {
             _admData = admData;
+            _personBusiness = personBusiness;
         }
 
         public int Total(Adm adm)
@@ -27,6 +29,11 @@ namespace Negocio
         public List<Adm> SelectWithPagination(Adm adm, int startPage)
         {
             return _admData.SelectWithPagination(adm, startPage);
+        }
+
+        public override void Validate(Adm entity)
+        {
+            _personBusiness.Validate(entity.Person);
         }
     }
 }

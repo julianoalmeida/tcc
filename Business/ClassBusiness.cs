@@ -1,25 +1,33 @@
-﻿using Entidades;
+﻿using System;
+using Entidades;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Comum.Exceptions;
 using Data;
 
 namespace Negocio
 {
-    public interface IClassBusiness : INegocioBase<Class>
+    public interface IClassBusiness : IBaseBusiness<Class>
     {
         int Total(Class model);
-        void ValidateTurmaBusinessRules(Class entity);
         List<Class> SelectWithPagination(Class model, int startPage);
     }
 
-    public class ClassBusiness : BaseBusiness<Class>, IClassBusiness
+    public class ClassBusinessBusiness : BaseBusinessBusiness<Class>, IClassBusiness
     {
         private readonly IClassData _classData;
-        public ClassBusiness(IClassData classData)
+        public ClassBusinessBusiness(IClassData classData)
             : base(classData)
         {
             _classData = classData;
+        }
+
+        public override void Validate(Class entity)
+        {
+            ValidateRequiredFields(entity);
+            ValidateDiscenteAmoutBiggerThanZero(entity.Students.Count);
+            ValidateTurmaIsNoteDuplicated(entity);
         }
 
         public List<Class> SelectWithPagination(Class entity, int startPage)
@@ -32,37 +40,42 @@ namespace Negocio
             return _classData.Total(model);
         }
 
-        public void ValidateTurmaBusinessRules(Class entity)
+        private static void ValidateRequiredFields(Class entity)
         {
-            ValidateDiscenteAmoutBiggerThanZero(entity.Students.Count);
-            ValidateTurmaIsNoteDuplicated(entity);
-
-            if (string.IsNullOrEmpty(entity.Description))
-                throw new RequiredFieldException();
+            var hasError = string.IsNullOrEmpty(entity.Description);
 
             if (entity.ClassTime == 0)
-                throw new RequiredFieldException();
+                hasError = true;
 
             if (entity.Teacher.Id == 0)
-                throw new RequiredFieldException();
+                hasError = true;
 
             if (!entity.Students.Any())
-                throw new RequiredFieldException();
+                hasError = true;
+
+            if (hasError) throw new RequiredFieldException();
         }
 
         private void ValidateTurmaIsNoteDuplicated(Class entity)
         {
-            var turma = _classData.SelectWithFilter(a => a.Description.ToLower().Equals(entity.Description.ToLower()))
-                                  .FirstOrDefault();
+            var turma = _classData.SelectWithFilter(ClassFilterCondition(entity))
+                .Values.FirstOrDefault();
 
             if (turma?.Id != entity.Id)
                 throw new DuplicatedEntityException();
         }
-        
+
+        private static Expression<Func<Class, bool>> ClassFilterCondition(Class entity)
+        {
+            return a => a.Description.ToLower().Equals(entity.Description.ToLower());
+        }
+
         private static void ValidateDiscenteAmoutBiggerThanZero(int totalDiscents)
         {
             if (totalDiscents > 20)
                 throw new TotalOfSpotsExceededException();
         }
+
+
     }
 }

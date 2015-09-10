@@ -136,8 +136,8 @@ namespace UnitTests.Controllers
 
             _personData.Setup(a => a.SaveAndReturn(new Person())).Returns(new Person());
 
-            _userBusiness = new UserBusiness(_userData.Object);
-            _personBusiness = new PersonBusiness(_personData.Object);
+            _userBusiness = new UserBusinessBusiness(_userData.Object);
+            _personBusiness = new PersonBusinessBusiness(_personData.Object);
             _loginController = new LoginController(_userBusiness, _personBusiness);
         }
     }

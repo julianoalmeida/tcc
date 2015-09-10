@@ -2,12 +2,10 @@
 using Autofac.Extras.DynamicProxy2;
 using Autofac.Integration.Mvc;
 using AutoFacConfig.Interceptadores;
-using Comum;
-using Data;
+using Data.BaseRepositories;
 using Data.SetupSessionFactory;
 using Entidades;
 using Negocio;
-using Negocio.RequiredFieldValidators;
 using NHibernate;
 
 namespace AutoFacConfig
@@ -32,15 +30,8 @@ namespace AutoFacConfig
             RegisterBusinessAssembly(builder);
 
             RegisterEntityAssembly(builder);
-
-            RegisterInterfaces(builder);
         }
 
-        private static void RegisterInterfaces(ContainerBuilder builder)
-        {
-            builder.RegisterAssemblyTypes(typeof(IRequiredFieldsValidator).Assembly)
-               .AsImplementedInterfaces();
-        }
 
         private static void RegisterNHibernatSectionAndFactory(ContainerBuilder builder)
         {
@@ -59,14 +50,14 @@ namespace AutoFacConfig
 
         private static void RegisterRepositoryAssembly(ContainerBuilder builder)
         {
-            builder.RegisterAssemblyTypes(typeof(NHibernateRepository<>).Assembly)
+            builder.RegisterAssemblyTypes(typeof(BaseRepositoryRepository<>).Assembly)
                 .Where(t => t.Name.EndsWith("Data"))
                 .AsImplementedInterfaces();
         }
 
         private static void RegisterBusinessAssembly(ContainerBuilder builder)
         {
-            builder.RegisterAssemblyTypes(typeof(BaseBusiness<>).Assembly)
+            builder.RegisterAssemblyTypes(typeof(IBaseBusiness<>).Assembly)
                 .Where(t => t.Name.EndsWith("Business"))
                 .AsImplementedInterfaces()
                 .EnableInterfaceInterceptors()

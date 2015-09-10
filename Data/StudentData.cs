@@ -1,18 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Comum;
+using Data.BaseRepositories;
 using Entidades;
 using NHibernate;
 
 namespace Data
 {
-    public interface IStudentData : INHibernateRepository<Student>
+    public interface IStudentData : IBaseRepositoryRepository<Student>
     {
         int Total(Student docente);
         List<Student> SelectWithPagination(Student docente, int paginaAtual);
     }
 
-    public class StudentData : NHibernateRepository<Student>, IStudentData
+    public class StudentData : BaseRepositoryRepository<Student>, IStudentData
     {
         public StudentData(ISession session)
             : base(session)
@@ -31,11 +33,16 @@ namespace Data
         private IEnumerable<Student> Filter(Student student)
         {
             return
-                GetAll()
+                GetAll().Values
                     .Where(
-                        a =>
-                            string.IsNullOrEmpty(student.Person.Name) ||
-                            a.Person.Name.ToLower().Contains(student.Person.Name.ToLower()));
+                        StudentFilterCondition(student));
+        }
+
+        private static Func<Student, bool> StudentFilterCondition(Student student)
+        {
+            return a =>
+                string.IsNullOrEmpty(student.Person.Name) ||
+                a.Person.Name.ToLower().Contains(student.Person.Name.ToLower());
         }
     }
 }

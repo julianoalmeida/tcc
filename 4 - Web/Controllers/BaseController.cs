@@ -45,7 +45,7 @@ namespace _4___Web.Controllers
             else if (ex.GetType() == typeof(CpfException))
                 errorMessage = Messages.INVALID_CPF;
 
-            else if (ex.GetType() == typeof(EmailException))
+            else if (ex.GetType() == typeof(InvalidEmailException))
                 errorMessage = Messages.INVALID_EMAIL;
 
             return errorMessage;

@@ -9,12 +9,11 @@ namespace Data.Map
         {
             Table("ENDERECO");
             Id(x => x.Id, "Id");
-            Map(x => x.CityId, "IdCidade").Not.Nullable();
-            Map(x => x.StreetName, "Logradouro").Nullable();
+            Map(x => x.City, "IdCidade").Not.Nullable();
             Map(x => x.Neighborhood, "Bairro").Nullable();
             Map(x => x.ZipCode, "Cep").Update().Nullable();
             Map(a => a.Number, "NumeroCasa").Not.Nullable();
-            Map(a => a.Complement, "Complemento").Nullable();
+            Map(x => x.StreetName, "Logradouro").Nullable();
         }
     }
 }

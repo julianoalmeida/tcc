@@ -48,6 +48,7 @@
     <Compile Include="Exceptions\InvalidDateException.cs" />
     <Compile Include="Exceptions\InvalidEmailException.cs" />
     <Compile Include="Exceptions\DuplicatedEntityException.cs" />
+    <Compile Include="Exceptions\UnavailableWebServiceException.cs" />
     <Compile Include="Exceptions\UserNotfoundException.cs" />
     <Compile Include="Exceptions\VincularDisciplinaException.cs" />
     <Compile Include="Messages.cs" />

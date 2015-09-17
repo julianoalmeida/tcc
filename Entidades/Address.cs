@@ -1,26 +1,17 @@
-﻿using Entidades.Extensions;
-
-namespace Entidades
+﻿namespace Entidades
 {
     public class Address : BaseEntity
     {
+        public virtual string City { get; set; }
+
         public virtual string State { get; set; }
 
-        public virtual int CityId { get; set; }
+        public virtual string Number { get; set; }
+
+        public virtual string ZipCode { get; set; }
 
         public virtual string StreetName { get; set; }
 
         public virtual string Neighborhood { get; set; }
-
-        public virtual string Number { get; set; }
-
-        public virtual string Complement { get; set; }
-
-        private string _zipCode;
-        public virtual string ZipCode
-        {
-            get { return _zipCode.RemoveMaskCharacters(); }
-            set { _zipCode = value; }
-        }
     }
 }

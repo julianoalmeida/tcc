@@ -54,13 +54,10 @@
     <Compile Include="BaseRepositories\DomainData.cs" />
     <Compile Include="ClassData.cs" />
     <Compile Include="Map\AdmMap.cs" />
-    <Compile Include="Map\CityMap.cs" />
     <Compile Include="Map\StudentMap.cs" />
     <Compile Include="Map\CourseMap.cs" />
     <Compile Include="Map\TeacherMap.cs" />
     <Compile Include="Map\AddressMap.cs" />
-    <Compile Include="Map\StateMap.cs" />
-    <Compile Include="Map\CountryMap.cs" />
     <Compile Include="Map\PersonMap.cs" />
     <Compile Include="Map\ClassMap.cs" />
     <Compile Include="PersonData.cs" />

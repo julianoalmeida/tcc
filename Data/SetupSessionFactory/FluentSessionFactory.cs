@@ -5,7 +5,7 @@ using NHibernate.Cfg;
 
 namespace Data.SetupSessionFactory
 {
-    public class FluentSessionFactoryFactory
+    public class FluentSessionFactory
     {   
         public static ISessionFactory GetSessionFactory(string currentSessionContextClass, string connectionStringKey)
         {
@@ -15,7 +15,7 @@ namespace Data.SetupSessionFactory
                     MsSqlConfiguration.MsSql2012                                                 
                     .ShowSql()                                                                  
                     .ConnectionString(c => c.FromConnectionStringWithKey(connectionStringKey))) 
-                .Mappings(m => m.FluentMappings.AddFromAssembly(typeof(FluentSessionFactoryFactory).Assembly))
+                .Mappings(m => m.FluentMappings.AddFromAssembly(typeof(FluentSessionFactory).Assembly))
                 .ExposeConfiguration(x => x.SetProperty(Environment.CurrentSessionContextClass, currentSessionContextClass))
                 .Cache(x => x.UseQueryCache()) 
                 .BuildSessionFactory(); 

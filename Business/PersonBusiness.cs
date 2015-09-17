@@ -60,7 +60,7 @@ namespace Negocio
 
             var hasError = string.IsNullOrEmpty(address.State);
 
-            if (address.CityId == 0)
+            if (string.IsNullOrEmpty(address.City))
                 hasError = true;
 
             else if (string.IsNullOrEmpty(address.StreetName))

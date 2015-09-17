@@ -25,5 +25,7 @@
         public const string REQUIRED_FIELDS = "Existem campos de preenchimento obrigatório.";
 
         public const string USER_NOT_FOUND = "Usuário não encontrado";
+
+        public const string UNAVAILABLE_WS = "O serviço {0} está indisponivel no momento. Favor tentar novamente mais tarde.";
     }
 }

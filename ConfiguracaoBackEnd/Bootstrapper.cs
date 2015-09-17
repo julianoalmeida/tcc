@@ -36,7 +36,7 @@ namespace AutoFacConfig
 
         private static void RegisterNHibernatSectionAndFactory(ContainerBuilder builder)
         {
-            builder.Register(x => FluentSessionFactoryFactory.GetSessionFactory("thread_static", "coonStringTcc"))
+            builder.Register(x => FluentSessionFactory.GetSessionFactory("thread_static", "coonStringTcc"))
                 .SingleInstance();
 
             builder.RegisterType<NHibernateInterceptor>().SingleInstance().AsSelf();

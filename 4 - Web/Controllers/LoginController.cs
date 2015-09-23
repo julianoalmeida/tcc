@@ -19,7 +19,7 @@ namespace _4___Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public new ActionResult Index() => View();
+        public new ActionResult Index() => View(nameof(Index));
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -37,31 +37,31 @@ namespace _4___Web.Controllers
                 TempData[Constants.ERROR] = ex.Message;
             }
 
-            return RedirectToAction("Index", controllerName);
+            return RedirectToAction(nameof(Index), controllerName);
         }
 
         [HttpGet]
         public ActionResult CreateAccount()
         {
-            var person = TempData["Person"] as Person ?? new Person();
+            var person = TempData[nameof(Person)] as Person ?? new Person();
             BuildDropDownLists(person);
-            return View(person);
+            return View(nameof(CreateAccount), person);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateAccount(Person model)
         {
-            var actionName = "Index";
+            var actionName = nameof(Index);
             try
             {
                 _personBusiness.SaveAndReturn(model);
             }
             catch (Exception ex)
             {
-                actionName = "CreateAccount";
+                actionName = nameof(CreateAccount);
                 TempData[Constants.ERROR] = ex.Message;
-                TempData["Person"] = model;
+                TempData[nameof(Person)] = model;
             }
 
             return RedirectToAction(actionName, "Login");
@@ -72,13 +72,13 @@ namespace _4___Web.Controllers
         public ActionResult Exit()
         {
             TempData[Constants.LOGGED_USER] = null;
-            return RedirectToAction("Index", "Login");
+            return RedirectToAction(nameof(Index), "Login");
         }
 
         private void BuildDropDownLists(Person person)
         {
             ViewData["Sex"] = BuildListItemfromEnum<SexEnum>(person.Sex.ToString());
-            ViewData["AccessProfile"] = BuildListItemfromEnum<AccessProfileEnum>(person.User?.AccessCode.ToString());
+            ViewData["AccessCode"] = BuildListItemfromEnum<AccessProfileEnum>(person.User?.AccessCode.ToString());
         }
     }
 }

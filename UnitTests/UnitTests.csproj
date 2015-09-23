@@ -105,9 +105,9 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="BaseTest.cs" />
     <Compile Include="BusinessRules\UserBusinessTest.cs" />
-    <Compile Include="Controllers\BaseControllerTest.cs" />
+    <Compile Include="Controllers\AdmControllerTest.cs" />
+    <Compile Include="Controllers\BaseControllerHelper.cs" />
     <Compile Include="DependencyModule\UnitTestDependencyModule.cs" />
     <Compile Include="ExtensionsTests\EnumExtensionTest.cs" />
     <Compile Include="ExtensionsTests\ListExtensionTest.cs" />
@@ -115,7 +115,6 @@
     <Compile Include="Controllers\LoginControllerTest.cs" />
     <Compile Include="FluentSectionFactory\FluentSectionFactoryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebServiceTests\AddressBusinessTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

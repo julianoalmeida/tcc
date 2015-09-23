@@ -3,11 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using NUnit.Framework;
+using UnitTests.DependencyModule;
 
 namespace UnitTests.Controllers
 {
-    public class BaseControllerTest : BaseTest
+    public class BaseControllerHelper 
     {
+        public BaseControllerHelper()
+        {
+            UnitTestDependencyModule.Run();
+        }
+
         protected static void AssertListItensAreEquals(List<SelectListItem> firstList, IEnumerable<SelectListItem> secondList)
         {
             firstList.ForEach(item => Assert.IsTrue(secondList.Any(SelectListItemEqualsCondition(item))));

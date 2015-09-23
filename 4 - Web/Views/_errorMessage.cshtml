@@ -1,6 +1,6 @@
 ﻿@using Comum
 
-@if (!string.IsNullOrEmpty((string)TempData["Error"]))
+@if (!string.IsNullOrEmpty((string)TempData[Constants.ERROR]))
 {
     <div class="center">
         <span class="alert-danger"><strong>Operação Inválida ! </strong>@TempData[Constants.ERROR]</span>

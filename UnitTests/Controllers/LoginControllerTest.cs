@@ -12,7 +12,7 @@ using _4___Web.Controllers;
 namespace UnitTests.Controllers
 {
     [TestFixture]
-    public class LoginControllerTest : BaseControllerTest
+    public class LoginControllerTest : BaseControllerHelper
     {
         private IUserBusiness _userBusiness;
         private IPersonBusiness _personBusiness;
@@ -27,14 +27,14 @@ namespace UnitTests.Controllers
         {
             Setup();
         }
-
+        
         [TestCase("", "")]
         [TestCase("", "password")]
         [TestCase("login", "")]
         [TestCase(INVALID_CREDENTIALS, INVALID_CREDENTIALS)]
         public void RedirectToLoginIfProvidedCredentialIsNullOrCantFoundUser(string login, string password)
         {
-            const string EXPECTED_ACTION_NAME = "Index";
+            const string EXPECTED_ACTION_NAME = nameof(_loginController.Index);
             const string EXPECTED_CONTROLLER_NAME = "Login";
 
             var result = GetRedirectToRouteResultWith(_loginController.Login(login, password));
@@ -47,7 +47,7 @@ namespace UnitTests.Controllers
         [Test]
         public void RedirectToHomePageIfFoundTheUser()
         {
-            const string EXPECTED_ACTION_NAME = "Index";
+            const string EXPECTED_ACTION_NAME = nameof(_loginController.Index);
             const string EXPECTED_CONTROLLER_NAME = "Home";
 
             var result = GetRedirectToRouteResultWith(_loginController.Login("login", "password"));
@@ -66,7 +66,7 @@ namespace UnitTests.Controllers
         [Test]
         public void RedirectToLoginWhenLeaveSystem()
         {
-            const string EXPECTED_ACTION_NAME = "Index";
+            const string EXPECTED_ACTION_NAME = nameof(_loginController.Index);
             const string EXPECTED_CONTROLLER_NAME = "Login";
 
             var result = GetRedirectToRouteResultWith(_loginController.Exit());
@@ -97,7 +97,7 @@ namespace UnitTests.Controllers
         [Test]
         public void RedirectToLoginIfCanCreateUser()
         {
-            const string EXPECTED_ACTION_NAME = "Index";
+            const string EXPECTED_ACTION_NAME = nameof(_loginController.Index);
             const string EXPECTED_CONTROLLER_NAME = "Login";
 
             var result = GetRedirectToRouteResultWith(_loginController.CreateAccount(ValidPerson));
@@ -113,7 +113,7 @@ namespace UnitTests.Controllers
         [TestCase("name", "mobile number", "email@email.com", 0)]
         public void RedirectToCreateUserIfCantSavePerson(string name, string mobileNumber, string email, int sex)
         {
-            const string EXPECTED_ACTION_NAME = "CreateAccount";
+            const string EXPECTED_ACTION_NAME = nameof(_loginController.CreateAccount);
             const string EXPECTED_CONTROLLER_NAME = "Login";
 
             var person = BuildPersonWith(name, mobileNumber, email, sex);
@@ -145,7 +145,7 @@ namespace UnitTests.Controllers
         [Test]
         public void RedirectToCreateUserIfProvidedPersonInformationAlreadyExistsInDatabase()
         {
-            const string EXPECTED_ACTION_NAME = "CreateAccount";
+            const string EXPECTED_ACTION_NAME = nameof(_loginController.CreateAccount);
             const string EXPECTED_CONTROLLER_NAME = "Login";
 
             var result = GetRedirectToRouteResultWith(_loginController.CreateAccount(_duplicatedPerson));
@@ -163,7 +163,7 @@ namespace UnitTests.Controllers
 
         private void AssertPersonTempDataIsEqualsToPerson(Person person)
         {
-            Assert.That(_loginController.TempData["Person"] as Person, Is.EqualTo(person));
+            Assert.That(_loginController.TempData[nameof(Person)] as Person, Is.EqualTo(person));
         }
 
         private void AssertTempdataLoggedUserHasValue(string login, string password)
@@ -180,7 +180,7 @@ namespace UnitTests.Controllers
         }
 
         private IEnumerable<SelectListItem> ViewDataAccessProfileList
-            => ViewTadaToListSelectListItem(_loginController.ViewData["AccessProfile"]);
+            => ViewTadaToListSelectListItem(_loginController.ViewData["AccessCode"]);
 
         private IEnumerable<SelectListItem> ViewDataSexList => ViewTadaToListSelectListItem(_loginController.ViewData["Sex"]);
 

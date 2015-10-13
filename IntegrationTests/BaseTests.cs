@@ -14,12 +14,19 @@ namespace IntegrationTests
         protected abstract void CreateJsonFile();
         protected abstract void CompareJsonFile();
 
-        private string _baseFolderPath = "D:/dev/tcc-2015/IntegrationTests/json-files/";
+        private string _baseFolderPath = "~/json-files/";
 
         [SetUp]
         public void Setup()
         {
+            CreateDirectoryIfDoesntExist(_baseFolderPath);
             _baseFolderPath = _baseFolderPath + FileName + ".json";
+        }
+
+        private static void CreateDirectoryIfDoesntExist(string folderName)
+        {
+            if (!Directory.Exists(folderName))
+                Directory.CreateDirectory(folderName);
         }
 
         [Test]
@@ -32,7 +39,8 @@ namespace IntegrationTests
         [Test]
         public void CompareRecordedFileAndSerializedResult()
         {
-            var recordedFile = File.ReadAllLines(_baseFolderPath).First();
+            var fullPath = Path.GetFullPath(_baseFolderPath);
+            var recordedFile = File.ReadAllLines(fullPath).First();
 
             if (string.IsNullOrEmpty(recordedFile))
                 throw new FileNotFoundException("file not found , please record the file before check it's integrity");

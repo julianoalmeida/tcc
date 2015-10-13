@@ -12,7 +12,7 @@ namespace Data.SetupSessionFactory
             
             return Fluently.Configure()
                 .Database(
-                    MsSqlConfiguration.MsSql2012                                                 
+                    MsSqlConfiguration.MsSql2008                                                 
                     .ShowSql()                                                                  
                     .ConnectionString(c => c.FromConnectionStringWithKey(connectionStringKey))) 
                 .Mappings(m => m.FluentMappings.AddFromAssembly(typeof(FluentSessionFactory).Assembly))
